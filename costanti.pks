@@ -60,6 +60,7 @@ body{
 
 #top-bar {
   display: flex;
+  justify-content: center;
   align-items: center;
   background-color: #0c0b07;
   padding: 1px;
@@ -79,7 +80,7 @@ body{
   font-weight: 500;
   letter-spacing: 0;
   line-height: 1em;
-  margin: 0;
+  margin: 1;
   opacity: 1;
   outline: 0;
   padding: 1.5em 2.2em;
