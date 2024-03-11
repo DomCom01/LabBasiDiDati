@@ -23,7 +23,7 @@ body{
   touch-action: manipulation;
   width: fit-content;
   word-break: break-word;
-  border: 10;
+  border: none;
   margin-left: 10px;
 }
 
@@ -59,20 +59,25 @@ body{
 }
 
 #top-bar {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: flex; /* Makes the top bar a flexbox container */
+  justify-content: space-between; /* Distributes buttons evenly */
+  align-items: center; /* Aligns buttons vertically */
   background-color: #0c0b07;
   padding: 1px;
+}
+
+.bottoniSinistra {
+  display: flex; /* Make the wrapper a flexbox container */
+  flex-shrink: 0; /* Prevent wrapper from shrinking */
 }
 
 /* CSS */
 .button-48 {
   appearance: none;
-  background-color: #FFFFFF;
+  background-color: #0c0b07;
   border-width: 0;
   box-sizing: border-box;
-  color: #000000;
+  color: #FFFFFF;
   cursor: pointer;
   display: inline-block;
   font-family: Clarkson,Helvetica,sans-serif;
@@ -81,6 +86,7 @@ body{
   letter-spacing: 0;
   line-height: 1em;
   margin: 1;
+  margin-right: 1px;
   opacity: 1;
   outline: 0;
   padding: 1.5em 2.2em;
@@ -100,7 +106,7 @@ body{
 .button-48:before {
   animation: opacityFallbackOut .5s step-end forwards;
   backface-visibility: hidden;
-  background-color: #EBEBEB;
+  background-color: #f0d685;
   clip-path: polygon(-1% 0, 0 0, -25% 100%, -1% 100%);
   content: "";
   height: 100%;
