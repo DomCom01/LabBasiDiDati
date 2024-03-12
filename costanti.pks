@@ -1,17 +1,14 @@
 create or replace PACKAGE costanti as
 
 stile constant varchar(32767) := '
-body{
-  margin: 0px;
-}
+
 .bottone {
   background: #cfab3a;
   border-radius: 999px;
   box-shadow: #f0d685 0 10px 20px -10px;
   box-sizing: border-box;
-  color: ##0c0b07;
+  color: #0c0b07;
   cursor: pointer;
-  font-family: Inter,Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
   font-size: 16px;
   font-weight: 700;
   line-height: 24px;
@@ -64,6 +61,10 @@ body{
   align-items: center; /* Aligns buttons vertically */
   background-color: #0c0b07;
   padding: 1px;
+  width:100%;
+  position: fixed;
+  top:0px;
+  left:0px;
 }
 
 .bottoniSinistra {
@@ -131,6 +132,123 @@ body{
   z-index: 1;
   position: relative;
 }
+
+/* Roba tabella */
+
+body{ 
+  width: 100vw;
+  min-height: 100vh;
+  margin: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Inter,Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
+}
+
+.container{
+  width: 70%;
+  height: 100%;
+  padding-top: 200px;
+}
+
+.tab{
+    border-collapse: collapse;
+    border-style: hidden;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.565);
+    border-radius: 5px;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.tab tr, td{
+    border: 1px solid rgba(0, 0, 0, 0.565);
+    height: 35px;
+    font-size: small;
+    text-align: center;
+}
+
+.tab td{
+    border-right: 0px solid white;
+    border-left: 0px solid white;
+}
+
+.tab tr:hover{
+    background-color: rgba(27, 26, 26, 0.065);
+}
+
+.tab th{
+    background-color: rgba(0, 0, 0, 0.241);
+    height: 45px;
+    font-size: large;
+}
+
+.tab th:first-child{
+    border-top-left-radius: 5px;
+}
+
+.tab th:last-child{
+    border-top-right-radius: 5px;
+}
+
+.tab td:last-child{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    border: 0px;
+}
+
+.tab img{
+    width: 15px;
+    height: 15px;
+}
+
+.inputTAB{
+    width: 100%;
+    table-layout: fixed;
+}
+
+.inputTAB td{
+    border-radius: 5px;
+    width: auto;
+}
+
+input, input[type=text]:focus{
+    outline: none !important;
+    border: 0px;
+    width: auto;
+    text-align: center;
+}
+
+.inputTAB td:last-child{
+    border: 1px solid black;
+    padding: 0px;
+}
+
+
+input[type=submit]{
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+    border-radius: 5px;
+    background-color: yellow;
+    font-size: large;
+}
+
+input[type=submit]:hover {
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+    border-radius: 5px;
+    background-color: rgb(227, 227, 0);
+    font-size: large;
+}
+
+form{
+    padding: 0px;
+    margin: 0px;
+}
+
+
 ';
 
 END costanti;

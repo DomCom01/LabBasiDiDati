@@ -83,16 +83,90 @@ end ChiudiDiv;
 procedure TopBar(saldo varchar2 default null) is
 BEGIN
 	gui.ApriDiv(ident => 'top-bar');
-	gui.Bottone(testo => 'clienti', classe => 'button-48'); 
 	/*if saldo is null then
 		gui.Bottone(testo => 'Saldo: 0.00 €', classe => 'bottone');
 	else
 		gui.Bottone(testo => 'Saldo: ' || saldo || '€', classe => 'bottone');
 	end if;*/
-	gui.Bottone(testo => 'prenotazioni', classe => 'button-48'); 
-	gui.Bottone(testo => 'taxi', classe => 'button-48'); 
-	gui.Bottone(testo => 'turni', classe => 'button-48'); 
+		gui.APRIDIV(ident => 'bottoneSinistra');
+			gui.Bottone(testo => 'clienti', classe => 'button-48'); 
+			gui.Bottone(testo => 'prenotazioni', classe => 'button-48'); 
+			gui.Bottone(testo => 'taxi', classe => 'button-48'); 
+			gui.Bottone(testo => 'turni', classe => 'button-48'); 
+		gui.CHIUDIDIV;
+
+		gui.Bottone(testo => 'Login', classe => 'bottone'); 
 	gui.ChiudiDiv();
 end TopBar;
+
+
+-- Procedura Tabella senza filtro provvisoria
+procedure ApriTabellaNonModificabile is
+begin
+	htp.prn('<table class="tab"> ');
+	--htp.prn('</table>');
+
+end ApriTabellaNonModificabile;
+
+procedure ApriHeaderTabella IS
+BEGIN
+	htp.prn('<thead>');
+	htp.prn('<tr>');
+end ApriHeaderTabella;
+
+procedure AggiungiHeaderTabella(elemento VARCHAR2 default '') IS
+BEGIN
+	htp.prn('<th>'|| elemento ||'</th>');
+end AggiungiHeaderTabella;
+
+procedure ChiudiHeaderTabella IS
+BEGIN
+	htp.prn('</thead>');
+end ChiudiHeaderTabella;
+
+procedure ApriBodyTabella IS
+BEGIN
+	htp.prn('<tbody>');
+end ApriBodyTabella;
+
+procedure ChiudiTabella IS
+BEGIN
+	htp.prn('</tbody>');
+	htp.prn('</table>');
+end ChiudiTabella;
+
+procedure AggiungiRigaTabella IS
+BEGIN
+	htp.prn('<tr>');
+end AggiungiRigaTabella;
+
+procedure ChiudiRigaTabella IS
+BEGIN
+	htp.prn('</tr>');
+end ChiudiRigaTabella;
+
+procedure AggiungiElementoTabella(elemento VARCHAR2 default '') IS
+BEGIN
+	htp.prn('<td>'|| elemento || '</td>');
+end AggiungiElementoTabella;
+
+procedure ApriFormFiltro(azione VARCHAR default '') IS
+begin
+	htp.prn('<form action="'|| azione ||'" method="get">
+            	<table class="inputTAB">
+                	<tr>');
+end ApriFormFiltro;
+
+procedure AggiungiCampoFormFilro(tipo VARCHAR2 default 'text',value VARCHAR2 default '',  placeholder VARCHAR2 default '') IS
+begin
+	htp.prn('<td> <input type="'||tipo||'" placeholder="'||placeholder||'" value="'||value||'"> </td>');
+end AggiungiCampoFormFilro;
+
+procedure chiudiFormFiltro IS
+begin
+	htp.prn('</tr> </table> </form>');
+end chiudiFormFiltro;
+
+
 
 end gui;
