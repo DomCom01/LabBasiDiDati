@@ -83,16 +83,21 @@ end ChiudiDiv;
 procedure TopBar(saldo varchar2 default null) is
 BEGIN
 	gui.ApriDiv(ident => 'top-bar');
-	gui.Bottone(testo => 'clienti', classe => 'button-48'); 
+	
 	/*if saldo is null then
 		gui.Bottone(testo => 'Saldo: 0.00 €', classe => 'bottone');
 	else
 		gui.Bottone(testo => 'Saldo: ' || saldo || '€', classe => 'bottone');
 	end if;*/
+	gui.apriDiv(classe => 'bottoniSinistra'); 
+	gui.Bottone(testo => 'clienti', classe => 'button-48'); 
 	gui.Bottone(testo => 'prenotazioni', classe => 'button-48'); 
 	gui.Bottone(testo => 'taxi', classe => 'button-48'); 
 	gui.Bottone(testo => 'turni', classe => 'button-48'); 
+	gui.chiudiDiv();
+
+	gui.Bottone(testo => 'login', classe => 'bottone2');
 	gui.ChiudiDiv();
-end TopBar;
+	end TopBar;
 
 end gui;
