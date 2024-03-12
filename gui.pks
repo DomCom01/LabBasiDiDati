@@ -34,4 +34,6 @@ procedure ApriFormFiltro(azione VARCHAR default '');
 procedure AggiungiCampoFormFilro(tipo VARCHAR2 default 'text',value VARCHAR2 default '',  placeholder VARCHAR2 default '');
 procedure chiudiFormFiltro;
 
+--procedure per Filtro Tabella
+
 end gui;
