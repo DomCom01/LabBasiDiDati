@@ -9,7 +9,7 @@ end Reindirizza;
 
 procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default 0) is
 begin
-	htp.htmlOpen;	
+	htp.htmlOpen;
 	htp.headOpen;
 	htp.title(titolo);
 	htp.print('
@@ -19,7 +19,6 @@ begin
 	htp.print('<style> ' || costanti.stile || '</style>');
  	htp.headClose; 
 	gui.ApriBody(idSessione);
-	gui.ChiudiBody;
     
 end ApriPagina;
 
@@ -98,26 +97,8 @@ BEGIN
 			gui.Bottone(testo => 'Turni', classe => 'button-48'); 
 		gui.CHIUDIDIV;
 
-		gui.APRIDIV(ident => 'bottoneDestra');
 		gui.Bottone(testo => 'Login', classe => 'bottone'); 
-		gui.CHIUDIDIV;
-
 	gui.ChiudiDiv();
-
-	gui.APRIDIV(classe => 'container');
-        gui.ApriBodyTabella(); 
-        gui.ApriTabellaNonModificabile();
-        gui.ApriHeaderTabella();     
-        gui.AggiungiHeaderTabella('Nome');
-        gui.AggiungiHeaderTabella('Cognome');
-        gui.AggiungiHeaderTabella('Telefono');
-        gui.AggiungiRigaTabella();
-        gui.AggiungiRigaTabella();
-        gui.AggiungiRigaTabella();
-        gui.ChiudiTabella();
-    gui.CHIUDIDIV();
-		
-	
 end TopBar;
 
 
@@ -199,26 +180,3 @@ begin
 end aggiungiParagrafo;
 
 end gui;
-
-
-/*    
-SCRIPT TABELLA
-
-Create or replace procedure prova is
-    BEGIN
-        gui.APRIPAGINA(titolo => 'taxi'); 
-        gui.APRIDIV(classe => 'container');
-        gui.ApriBodyTabella(); 
-        gui.ApriTabellaNonModificabile();
-        gui.ApriHeaderTabella();     
-        gui.AggiungiHeaderTabella('Nome');
-        gui.AggiungiHeaderTabella('Cognome');
-        gui.AggiungiHeaderTabella('Telefono');
-        gui.AggiungiRigaTabella();
-        gui.AggiungiRigaTabella();
-        gui.AggiungiRigaTabella();
-        gui.ChiudiTabella();
-        gui.CHIUDIDIV();
-
-    END;
-    **/

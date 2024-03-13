@@ -21,7 +21,7 @@ stile constant varchar(32767) := '
   width: fit-content;
   word-break: break-word;
   border: none;
-  margin-left: 10px;
+  margin-right: 20px;
 }
 
 .bottone2 {
@@ -70,11 +70,6 @@ stile constant varchar(32767) := '
 .bottoniSinistra {
   display: flex; /* Make the wrapper a flexbox container */
   flex-shrink: 0; /* Prevent wrapper from shrinking */
-}
-
-.bottoneDestra {
-  display : flex; 
-  margin right : 5px; 
 }
 
 /* CSS */
@@ -139,75 +134,76 @@ stile constant varchar(32767) := '
 }
 
 /* Roba tabella */
-
-body{ 
-  width: 100vw;
-  min-height: 100vh;
-  margin: 0px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: Inter,Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
-}
-
-.container{
-  width: 70%;
-  height: 100%;
-  padding-top: 200px;
-}
-
-.tab{
-    border-collapse: collapse;
-    border-style: hidden;
-    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.565);
-    border-radius: 5px;
-    width: 100%;
-    table-layout: fixed;
-}
-
-.tab tr, td{
-    border: 1px solid rgba(0, 0, 0, 0.565);
-    height: 35px;
-    font-size: small;
-    text-align: center;
-}
-
-.tab td{
-    border-right: 0px solid white;
-    border-left: 0px solid white;
-}
-
-.tab tr:hover{
-    background-color: rgba(27, 26, 26, 0.065);
-}
-
-.tab th{
-    background-color: rgba(0, 0, 0, 0.241);
-    height: 45px;
-    font-size: large;
-}
-
-.tab th:first-child{
-    border-top-left-radius: 5px;
-}
-
-.tab th:last-child{
-    border-top-right-radius: 5px;
-}
-
-.tab td:last-child{
+  body{ 
+    min-width: 100vw;
+    min-height: 100vh;
+    margin: 0px;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
     align-items: center;
-    border: 0px;
-}
-
-.tab img{
-    width: 15px;
-    height: 15px;
-}
-
-.inputTAB{
+    font-family: Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
+  }
+  
+  .container{
+    width: 70%;
+    height: 100%;
+    padding-top:5%;
+  }
+  
+  .tab{
+      border-collapse: collapse;
+      border-radius: 5px;
+      width: 100%;
+      table-layout: fixed;
+      border-style: hidden;
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.565);
+  }
+  
+  .tab tr, td{
+      border: 1px solid rgba(0, 0, 0, 0.565);
+      height: 35px;
+      font-size: small;
+      text-align: center;
+  }
+  
+  .tab td{
+      border-right: 0px solid white;
+      border-left: 0px solid white;
+  }
+  
+  .tab tr:hover{
+      background-color: rgba(27, 26, 26, 0.065);
+  }
+  
+  .tab th{
+      background-color: rgba(0, 0, 0, 0.241);
+      height: 45px;
+      font-size: large;
+  }
+  
+  .tab th:first-child{
+      border-top-left-radius: 5px;
+  }
+  
+  .tab th:last-child{
+      border-top-right-radius: 5px;
+  }
+  
+  .tab td:last-child{
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      border: 0px;
+  }
+  
+  .tab img{
+      width: 15px;
+      height: 15px;
+  }
+  
+  .inputTAB{
+    border-collapse: collapse;
+    border-radius: 5px;
     width: 100%;
     table-layout: fixed;
     border-style: hidden;
