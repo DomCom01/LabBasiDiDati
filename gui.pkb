@@ -29,6 +29,7 @@ begin
   gui.ApriDiv();
   gui.TopBar(); --Modificare if sotto per aggiungere TopBar con saldo e menu profilo se utente registrato, altrimenti niente
   gui.ChiudiDiv;
+  gui.ApriDiv('', 'container');
   /*if (idSessione = 0) then  -- Sessione di tipo 'Ospite'
 	modGUI.InserisciLoginERegistrati;
 	modGUI.ChiudiDiv;
@@ -42,6 +43,7 @@ end ApriBody;
 
 procedure ChiudiBody is
 begin
+	htp.prn('</div>');
 	htp.print('</body>');
 
 end ChiudiBody;
@@ -90,10 +92,10 @@ BEGIN
 		gui.Bottone(testo => 'Saldo: ' || saldo || '€', classe => 'bottone');
 	end if;*/
 		gui.APRIDIV(ident => 'bottoneSinistra');
-			gui.Bottone(testo => 'clienti', classe => 'button-48'); 
-			gui.Bottone(testo => 'prenotazioni', classe => 'button-48'); 
-			gui.Bottone(testo => 'taxi', classe => 'button-48'); 
-			gui.Bottone(testo => 'turni', classe => 'button-48'); 
+			gui.Bottone(testo => 'Clienti', classe => 'button-48'); 
+			gui.Bottone(testo => 'Prenotazioni', classe => 'button-48'); 
+			gui.Bottone(testo => 'Taxi', classe => 'button-48'); 
+			gui.Bottone(testo => 'Turni', classe => 'button-48'); 
 		gui.CHIUDIDIV;
 
 		gui.APRIDIV(ident => 'bottoneDestra');
@@ -186,7 +188,15 @@ begin
 	htp.prn('</tr> </table> </form>');
 end chiudiFormFiltro;
 
+procedure aggiungiIntestazione(testo VARCHAR2 default 'Intestazione', dimesione VARCHAR2 default 'h1', class VARCHAR2 default '') is
+begin
+	htp.prn('<'||dimesione||' class='||class||' >'||testo||'</'||dimesione||'>');
+end aggiungiIntestazione;
 
+procedure aggiungiParagrafo(testo VARCHAR2 default 'testo', class VARCHAR2 default '') is
+begin
+	htp.prn('<p class='||class||' >'||testo||'</p>');
+end aggiungiParagrafo;
 
 end gui;
 
