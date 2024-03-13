@@ -34,6 +34,8 @@ procedure ApriFormFiltro(azione VARCHAR default '');
 procedure AggiungiCampoFormFilro(tipo VARCHAR2 default 'text',value VARCHAR2 default '',  placeholder VARCHAR2 default '');
 procedure chiudiFormFiltro;
 
---procedure per Filtro Tabella
+--Procedure titoli e testi
+procedure aggiungiIntestazione(testo VARCHAR2 default 'Intestazione', dimesione VARCHAR2 default 'h1', class VARCHAR2 default '');
+procedure aggiungiParagrafo(testo VARCHAR2 default 'testo', class VARCHAR2 default '');
 
 end gui;
