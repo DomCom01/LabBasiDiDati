@@ -21,7 +21,7 @@ stile constant varchar(32767) := '
   width: fit-content;
   word-break: break-word;
   border: none;
-  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .bottone2 {
@@ -70,6 +70,11 @@ stile constant varchar(32767) := '
 .bottoniSinistra {
   display: flex; /* Make the wrapper a flexbox container */
   flex-shrink: 0; /* Prevent wrapper from shrinking */
+}
+
+.bottoneDestra {
+  display : flex; 
+  margin right : 5px; 
 }
 
 /* CSS */
@@ -145,8 +150,8 @@ body{
   font-family: Inter,Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
 }
 
-.container{
-  width: 70%;
+.container{ 
+  width: 100%;
   height: 100%;
   padding-top: 200px;
 }
