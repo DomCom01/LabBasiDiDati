@@ -1,6 +1,8 @@
 create or replace PACKAGE gui as
 
---TYPE vstring IS TABLE OF VARCHAR2(4000) INDEX BY BINARY_INTEGER; -- Tipo array di stringhe per la creazione delle tabelle
+TYPE StringArray IS VARRAY(10) OF VARCHAR2(15); -- Tipo array di stringhe
+
+emptyArray StringArray;
 
 procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default 0);
 
@@ -19,8 +21,9 @@ procedure ChiudiDiv;
 procedure TopBar(saldo varchar2 default null);
 
 -- Procedure per Tabella
-procedure ApriTabellaNonModificabile;
+procedure ApriTabella;
 PROCEDURE ApriHeaderTabella;
+procedure AggiungiHeadersTabella(elementi StringArray default emptyArray);
 procedure AggiungiHeaderTabella(elemento VARCHAR2 default '');
 procedure ChiudiHeaderTabella;
 procedure ApriBodyTabella;

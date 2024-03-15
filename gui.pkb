@@ -103,12 +103,10 @@ end TopBar;
 
 
 -- Procedura Tabella senza filtro provvisoria
-procedure ApriTabellaNonModificabile is
+procedure ApriTabella is
 begin
 	htp.prn('<table class="tab"> ');
-	--htp.prn('</table>');
-
-end ApriTabellaNonModificabile;
+end ApriTabella;
 
 procedure ApriHeaderTabella IS
 BEGIN
@@ -120,6 +118,13 @@ procedure AggiungiHeaderTabella(elemento VARCHAR2 default '') IS
 BEGIN
 	htp.prn('<th>'|| elemento ||'</th>');
 end AggiungiHeaderTabella;
+
+procedure AggiungiHeadersTabella(elementi StringArray default emptyArray) is
+begin
+	for i in 1..elementi.count loop
+		htp.prn('<th>'|| elementi(i) ||'</th>');
+	end loop;
+end AggiungiHeadersTabella;
 
 procedure ChiudiHeaderTabella IS
 BEGIN
