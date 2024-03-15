@@ -35,7 +35,11 @@ procedure AggiungiCampoFormFilro(tipo VARCHAR2 default 'text',value VARCHAR2 def
 procedure chiudiFormFiltro;
 
 --Procedure titoli e testi
-procedure aggiungiIntestazione(testo VARCHAR2 default 'Intestazione', dimesione VARCHAR2 default 'h1', class VARCHAR2 default '');
+procedure aggiungiIntestazione(testo VARCHAR2 default 'Intestazione', dimensione VARCHAR2 default 'h1', class VARCHAR2 default '');
 procedure aggiungiParagrafo(testo VARCHAR2 default 'testo', class VARCHAR2 default '');
 
+
+--Procedure per menu a tendina
+procedure menuIcon;
+procedure dropDownMenu;
 end gui;

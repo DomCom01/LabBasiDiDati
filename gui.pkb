@@ -82,6 +82,21 @@ begin
 
 end ChiudiDiv;
 
+/*PROCEDURE PER DROPDOWN MENU*/
+
+procedure menuIcon IS
+BEGIN
+	gui.APRIDIV(classe => 'icon');
+	htp.prn('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg>');
+	gui.ChiudiDiv;
+	END menuIcon;
+
+
+procedure dropDownMenu IS
+BEGIN
+	gui.menuIcon;
+end dropDownMenu;
+
 procedure TopBar(saldo varchar2 default null) is
 BEGIN
 	gui.ApriDiv(ident => 'top-bar');
@@ -90,7 +105,9 @@ BEGIN
 	else
 		gui.Bottone(testo => 'Saldo: ' || saldo || '€', classe => 'bottone');
 	end if;*/
+		
 		gui.APRIDIV(ident => 'bottoneSinistra');
+		gui.dropDownMenu;
 			gui.Bottone(testo => 'Clienti', classe => 'button-48'); 
 			gui.Bottone(testo => 'Prenotazioni', classe => 'button-48'); 
 			gui.Bottone(testo => 'Taxi', classe => 'button-48'); 
@@ -169,9 +186,9 @@ begin
 	htp.prn('</tr> </table> </form>');
 end chiudiFormFiltro;
 
-procedure aggiungiIntestazione(testo VARCHAR2 default 'Intestazione', dimesione VARCHAR2 default 'h1', class VARCHAR2 default '') is
+procedure aggiungiIntestazione(testo VARCHAR2 default 'Intestazione', dimensione VARCHAR2 default 'h1', class VARCHAR2 default '') is
 begin
-	htp.prn('<'||dimesione||' class='||class||' >'||testo||'</'||dimesione||'>');
+	htp.prn('<'||dimensione||' class='||class||' >'||testo||'</'||dimensione||'>');
 end aggiungiIntestazione;
 
 procedure aggiungiParagrafo(testo VARCHAR2 default 'testo', class VARCHAR2 default '') is
