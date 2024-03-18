@@ -72,14 +72,6 @@ stile constant varchar(32767) := '
   flex-shrink: 0; /* Prevent wrapper from shrinking */
 }
 
-.icon {
-  margin: 0 auto;
-	padding: 0;
-  width : 10%; 
-  fill: #FFFFFF; 
-  margin-left: 1px; 
-}
-
 /* CSS */
 
 .button-48 {
