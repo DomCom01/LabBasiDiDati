@@ -185,4 +185,16 @@ begin
 	htp.prn('<p class='||class||' >'||testo||'</p>');
 end aggiungiParagrafo;
 
+procedure Footer is
+BEGIN
+	htp.prn('<footer>');
+	gui.APRIDIV(ident => 'bottoneSinistra');
+		gui.Bottone(testo => 'Contattaci', classe => 'button-48'); 
+		gui.Bottone(testo => 'Su di noi', classe => 'button-48'); 
+		gui.Bottone(testo => 'Termini di servizio', classe => 'button-48'); 
+		gui.Bottone(testo => 'Privacy', classe => 'button-48'); 
+	gui.CHIUDIDIV;
+	htp.prn('</footer>');
+END Footer;
+
 end gui;

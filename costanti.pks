@@ -56,9 +56,9 @@ stile constant varchar(32767) := '
 }
 
 #top-bar {
-  display: flex; /* Makes the top bar a flexbox container */
-  justify-content: space-between; /* Distributes buttons evenly */
-  align-items: center; /* Aligns buttons vertically */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   background-color: #0c0b07;
   padding: 1px;
   width:100%;
@@ -144,11 +144,11 @@ stile constant varchar(32767) := '
     align-items: center;
     font-family: Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
   }
-  
-  .container{
+
+  .container {
     width: 70%;
     height: 100%;
-    padding-top:5%;
+    padding-top: 5%;
   }
   
   .tab{
@@ -258,6 +258,18 @@ stile constant varchar(32767) := '
     text-align:center;
   }
 
+/* FOOTER */
+#footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #0c0b07;
+  padding: 1px;
+  width:100%;
+
+  bottom: 0px;
+  left:0px;
+}
 ';
 
 END costanti;

@@ -41,4 +41,7 @@ procedure chiudiFormFiltro;
 procedure aggiungiIntestazione(testo VARCHAR2 default 'Intestazione', dimensione VARCHAR2 default 'h1', class VARCHAR2 default '');
 procedure aggiungiParagrafo(testo VARCHAR2 default 'testo', class VARCHAR2 default '');
 
+--Footer
+procedure Footer;
+
 end gui;
