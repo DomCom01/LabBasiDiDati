@@ -6,6 +6,11 @@ begin
 
 end Reindirizza;
 
+procedure Bootstrap is
+BEGIN
+	htp.prn ('<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">'); 
+	END Bootstrap; 
+
 
 procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default 0) is
 begin
@@ -16,6 +21,7 @@ begin
   		<meta charset="utf-8">
   		<meta name="viewport" content="width=device-width, initial-scale=1">
   	'); 
+	gui.Bootstrap;
 	htp.print('<style> ' || costanti.stile || '</style>');
  	htp.headClose; 
 	gui.ApriBody(idSessione);
@@ -113,7 +119,7 @@ procedure ApriHeaderTabella IS
 BEGIN
 	htp.prn('<thead>');
 	htp.prn('<tr>');
-end ApriHeaderTabella;
+end ApriHeaderTabella;	
 
 procedure AggiungiHeaderTabella(elemento VARCHAR2 default '') IS
 BEGIN
