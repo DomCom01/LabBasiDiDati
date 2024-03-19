@@ -6,12 +6,6 @@ begin
 
 end Reindirizza;
 
-procedure Bootstrap is
-BEGIN
-	htp.prn ('<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">'); 
-	END Bootstrap; 
-
-
 procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default 0) is
 begin
 	htp.htmlOpen;
@@ -21,20 +15,18 @@ begin
   		<meta charset="utf-8">
   		<meta name="viewport" content="width=device-width, initial-scale=1">
   	'); 
-	gui.Bootstrap;
 	htp.print('<style> ' || costanti.stile || '</style>');
  	htp.headClose; 
 	gui.ApriBody(idSessione);
+	gui.CHIUDIBODY; 
     
 end ApriPagina;
 
 procedure ApriBody(idSessione int default 0) is
 begin
   htp.print('<body>');
-  gui.ApriDiv();
-  gui.TopBar(); --Modificare if sotto per aggiungere TopBar con saldo e menu profilo se utente registrato, altrimenti niente
-  gui.ChiudiDiv;
   gui.ApriDiv('', 'container');
+  gui.TopBar(); --Modificare if sotto per aggiungere TopBar con saldo e menu profilo se utente registrato, altrimenti niente
   gui.ApriDiv('', 'contentContainer');
   /*if (idSessione = 0) then  -- Sessione di tipo 'Ospite'
 	modGUI.InserisciLoginERegistrati;
@@ -49,9 +41,9 @@ end ApriBody;
 
 procedure ChiudiBody is
 begin
-	htp.prn('</div>');
-	htp.prn('</div>');
-	gui.FOOTER;
+	htp.prn('</div>'); /*container*/
+	htp.prn('</div>'); /*content-container*/
+	gui.Footer;
 	htp.print('</body>');
 
 end ChiudiBody;
