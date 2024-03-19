@@ -2,6 +2,10 @@ create or replace PACKAGE costanti as
 
 stile constant varchar(32767) := '
 
+html{
+  margin:0px;
+}
+
 .bottone {
   background: #cfab3a;
   border-radius: 999px;
@@ -146,12 +150,14 @@ stile constant varchar(32767) := '
     display: flex;
     justify-content: center;
     align-items: center;
+    margin:0px;
   }
 
   .contentContainer{
     width: 70%;
     min-height: 82.7vh;
     padding-top: 10vh;
+    margin:0px;
   }
   
   .tab{
@@ -264,13 +270,13 @@ stile constant varchar(32767) := '
   /* FOOTER */
   #footer {
     display: flex;
-    align-self: end;
     justify-content: center;
     align-items: center;
     background-color: #0c0b07;
-    padding: 1px;
-    width:100vw;
-    position: absolute;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    margin:0px;
+    width:100%;
     left:0px;
     }
 
