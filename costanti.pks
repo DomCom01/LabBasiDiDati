@@ -56,9 +56,9 @@ stile constant varchar(32767) := '
 }
 
 #top-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  display: flex; /* Makes the top bar a flexbox container */
+  justify-content: space-between; /* Distributes buttons evenly */
+  align-items: center; /* Aligns buttons vertically */
   background-color: #0c0b07;
   padding: 1px;
   width:100%;
@@ -70,6 +70,7 @@ stile constant varchar(32767) := '
 .bottoniSinistra {
   display: flex; /* Make the wrapper a flexbox container */
   flex-shrink: 0; /* Prevent wrapper from shrinking */
+  height: 8vh;
 }
 
 /* CSS */
@@ -137,18 +138,20 @@ stile constant varchar(32767) := '
 /* Roba tabella */
   body{ 
     min-width: 100vw;
-    min-height: 100vh;
     margin: 0px;
+    font-family: Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
+  }
+  
+  .container{
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
   }
 
-  .container {
+  .contentContainer{
     width: 70%;
-    height: 100%;
-    padding-top: 5%;
+    min-height: 82.7vh;
+    padding-top: 10vh;
   }
   
   .tab{
@@ -258,18 +261,19 @@ stile constant varchar(32767) := '
     text-align:center;
   }
 
-/* FOOTER */
-#footer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #0c0b07;
-  padding: 1px;
-  width:100%;
+  /* FOOTER */
+  #footer {
+    display: flex;
+    align-self: end;
+    justify-content: center;
+    align-items: center;
+    background-color: #0c0b07;
+    padding: 1px;
+    width:100vw;
+    position: absolute;
+    left:0px;
+    }
 
-  bottom: 0px;
-  left:0px;
-}
 ';
 
 END costanti;

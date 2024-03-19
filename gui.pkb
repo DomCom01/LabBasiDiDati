@@ -29,6 +29,7 @@ begin
   gui.TopBar(); --Modificare if sotto per aggiungere TopBar con saldo e menu profilo se utente registrato, altrimenti niente
   gui.ChiudiDiv;
   gui.ApriDiv('', 'container');
+  gui.ApriDiv('', 'contentContainer');
   /*if (idSessione = 0) then  -- Sessione di tipo 'Ospite'
 	modGUI.InserisciLoginERegistrati;
 	modGUI.ChiudiDiv;
@@ -43,6 +44,8 @@ end ApriBody;
 procedure ChiudiBody is
 begin
 	htp.prn('</div>');
+	htp.prn('</div>');
+	gui.FOOTER;
 	htp.print('</body>');
 
 end ChiudiBody;
@@ -187,6 +190,7 @@ end aggiungiParagrafo;
 
 procedure Footer is
 BEGIN
+	gui.APRIDIV(ident => 'footer');
 	htp.prn('<footer>');
 	gui.APRIDIV(ident => 'bottoneSinistra');
 		gui.Bottone(testo => 'Contattaci', classe => 'button-48'); 
@@ -195,6 +199,7 @@ BEGIN
 		gui.Bottone(testo => 'Privacy', classe => 'button-48'); 
 	gui.CHIUDIDIV;
 	htp.prn('</footer>');
+	gui.CHIUDIDIV;
 END Footer;
 
 end gui;
