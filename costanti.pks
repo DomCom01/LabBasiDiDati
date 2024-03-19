@@ -2,6 +2,10 @@ create or replace PACKAGE costanti as
 
 stile constant varchar(32767) := '
 
+html{
+  margin:0px;
+}
+
 .bottone {
   background: #cfab3a;
   border-radius: 999px;
@@ -70,6 +74,7 @@ stile constant varchar(32767) := '
 .bottoniSinistra {
   display: flex; /* Make the wrapper a flexbox container */
   flex-shrink: 0; /* Prevent wrapper from shrinking */
+  height: 8vh;
 }
 
 /* CSS */
@@ -137,18 +142,22 @@ stile constant varchar(32767) := '
 /* Roba tabella */
   body{ 
     min-width: 100vw;
-    min-height: 100vh;
     margin: 0px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     font-family: Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
   }
   
   .container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin:0px;
+  }
+
+  .contentContainer{
     width: 70%;
-    height: 100%;
-    padding-top:5%;
+    min-height: 82.7vh;
+    padding-top: 10vh;
+    margin:0px;
   }
   
   .tab{
@@ -257,6 +266,19 @@ stile constant varchar(32767) := '
     margin:0px;
     text-align:center;
   }
+
+  /* FOOTER */
+  #footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #0c0b07;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    margin:0px;
+    width:100%;
+    left:0px;
+    }
 
 ';
 
