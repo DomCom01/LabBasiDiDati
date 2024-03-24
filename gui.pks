@@ -34,7 +34,7 @@ procedure AggiungiElementoTabella(elemento VARCHAR2 default '');
 
 --procedure per Filtro Tabella
 procedure ApriFormFiltro(azione VARCHAR default '');
-procedure AggiungiCampoFormFilro(tipo VARCHAR2 default 'text',value VARCHAR2 default '',  placeholder VARCHAR2 default '');
+procedure AggiungiCampoFormFiltro(tipo VARCHAR2 default 'text',valore VARCHAR2 default '',  placeholder VARCHAR2 default '');
 procedure chiudiFormFiltro;
 
 --Procedure titoli e testi

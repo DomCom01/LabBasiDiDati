@@ -188,10 +188,10 @@ begin
                 	<tr>');
 end ApriFormFiltro;
 
-procedure AggiungiCampoFormFilro(tipo VARCHAR2 default 'text',value VARCHAR2 default '',  placeholder VARCHAR2 default '') IS
+procedure AggiungiCampoFormFiltro(tipo VARCHAR2 default 'text',valore VARCHAR2 default '',  placeholder VARCHAR2 default '') IS
 begin
-	htp.prn('<td> <input type="'||tipo||'" placeholder="'||placeholder||'" value="'||value||'"> </td>');
-end AggiungiCampoFormFilro;
+	htp.prn('<td> <input type="'||tipo||'" placeholder="'||placeholder||'" value="'|| valore ||'"> </td>');
+end AggiungiCampoFormFiltro;
 
 procedure chiudiFormFiltro IS
 begin
