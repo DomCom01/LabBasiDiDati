@@ -203,6 +203,25 @@ begin
 	htp.prn('<td> <input type="'||tipo||'" placeholder="'||placeholder||'" value="'||value||'"> </td>');
 end AggiungiCampoFormFiltro;
 
+procedure ApriSelectFormFiltro(nome varchar2) IS
+begin
+	htp.prn('<td> <select name="'|| nome ||'"> ');
+end ApriSelectFormFiltro;
+
+procedure AggiungiOpzioneSelect(value VARCHAR2, selected BOOLEAN, testo VARCHAR2 default '') as
+BEGIN
+	if selected then
+		htp.prn('<option value="'|| value ||'" selected >' || testo ||' </option>');
+	else
+		htp.prn('<option value="'|| value ||'">' || testo ||' </option>');
+	end if;
+END AggiungiOpzioneSelect;
+
+procedure ChiudiSelectFormFiltro IS
+begin
+	htp.prn(' </select> </td> ');
+end ChiudiSelectFormFiltro;
+
 procedure chiudiFormFiltro IS
 begin
 	htp.prn('</tr> </table> </form>');

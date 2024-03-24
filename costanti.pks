@@ -148,174 +148,186 @@ html{
 }
 
 /* Roba tabella */
-  body{ 
-    width: 100vw;
-    margin: 0px;
-    font-family: Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
-  }
-  
-  .container{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin:0px;
-  }
+body{ 
+  width: 100vw;
+  margin: 0px;
+  font-family: Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
+}
 
-  .contentContainer{
-    width: 80%; /* Allargato per far entrare bene anche tabelle grandi */
-    min-height: 82.7vh;
-    padding-top: 10vh;
-    margin:0px;
-  }
-  
-  .tab{
-      border-collapse: collapse;
-      border-radius: 5px;
-      width: 100%;
-      table-layout: fixed;
-      border-style: hidden;
-      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.565);
-  }
-  
-  .tab tr, td{
-      border: 1px solid rgba(0, 0, 0, 0.565);
-      height: 35px;
-      font-size: small;
-      text-align: center;
-  }
-  
-  .tab td{
-      border-right: 0px solid white;
-      border-left: 0px solid white;
-  }
-  
-  .tab tr:hover{
-      background-color: rgba(27, 26, 26, 0.065);
-  }
-  
-  .tab th{
-      background-color: rgba(0, 0, 0, 0.241);
-      height: 45px;
-      font-size: large;
-  }
-  
-  .tab th:first-child{
-      border-top-left-radius: 5px;
-  }
-  
-  .tab th:last-child{
-      border-top-right-radius: 5px;
-  }
-  
-  .tab td:last-child{
-      display: flex;
-      justify-content: space-evenly;
-      align-items: center;
-      border: 0px;
-  }
-  
-  .tab img{
-      width: 15px;
-      height: 15px;
-  }
-  
-  .inputTAB{
+.container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin:0px;
+}
+
+.contentContainer{
+  width: 80%; /* Allargato per far entrare bene anche tabelle grandi */
+  min-height: 82.7vh;
+  padding-top: 10vh;
+  margin:0px;
+}
+
+.tab{
     border-collapse: collapse;
     border-radius: 5px;
     width: 100%;
     table-layout: fixed;
     border-style: hidden;
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.565);
+}
+
+.tab tr, td{
+    border: 1px solid rgba(0, 0, 0, 0.565);
+    height: 35px;
+    font-size: small;
+    text-align: center;
+}
+
+.tab td{
+    border-right: 0px solid white;
+    border-left: 0px solid white;
+}
+
+.tab tr:hover{
     background-color: rgba(27, 26, 26, 0.065);
-  }
-  
-  .inputTAB td{
-      border: 1px solid rgba(0, 0, 0, 0.565);
-      width: 100%;
-  }
-  
-  input, input[type=text]:focus{
-      outline: none !important;
-      border: 0px;
-      width: auto;
-      text-align: center;
-      background-color: transparent;
-  }
-  
-  .inputTAB td:last-child{
-      padding: 0px;
-  }
-  
-  
-  input[type=submit]{
-      height: 100%;
-      width: 100%;
-      margin: 0px;
-      border-radius: 0px 5px 5px 0px;
-      background-color: #f0d685;
-      font-size: large;
-  }
-  
-  input[type=submit]:hover {
-      height: 100%;
-      width: 100%;
-      margin: 0px;
-      border-radius: 0px 5px 5px 0px;
-      background-color: #cfab3a;
-      font-size: large;
-  }
-  
-  form{
-      padding: 0px;
-      margin: 0px;
-  }
+}
 
-  h1{
-    margin:0px;
-    text-align:center;
-  }
+.tab th{
+    background-color: rgba(0, 0, 0, 0.241);
+    height: 45px;
+    font-size: large;
+}
 
-  /* FOOTER */
-  #footer {
+.tab th:first-child{
+    border-top-left-radius: 5px;
+}
+
+.tab th:last-child{
+    border-top-right-radius: 5px;
+}
+
+.tab td:last-child{
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: center;
-    background-color: #0c0b07;
-    padding-top: 1px;
-    padding-bottom: 1px;
-    margin:0px;
-    width:100%;
-    left:0px;
-    margin-bottom : 0px; 
+    border: 0px;
+}
+
+.tab img{
+    width: 15px;
+    height: 15px;
+}
+
+.inputTAB{
+  
+  border-collapse: collapse;
+  border-radius: 5px;
+  width: 100%;
+  table-layout: fixed;
+  border-style: hidden;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.565);
+  background-color: rgba(27, 26, 26, 0.065);
+
+  select, select:focus{
+    outline: none !important;
+    margin: 0px;
+    border: 0px;
+    padding: 0px;
+    width: 100%;
+    background-color: transparent;
+    text-align: center;
+  }
+}
+
+.inputTAB td{
+  border: 1px solid rgba(0, 0, 0, 0.565);
+  width: 100%;
+}
+
+input, input:focus{
+  outline: none !important;
+  border: 0px;
+  width: auto;
+  text-align: center;
+  background-color: transparent;
+  width:100%;
+  padding:0px;
+}
+
+.inputTAB td:last-child{
+    padding: 0px;
+}
+
+input[type=submit]{
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+    border-radius: 0px 5px 5px 0px;
+    background-color: #f0d685;
+    font-size: large;
+}
+
+input[type=submit]:hover {
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+    border-radius: 0px 5px 5px 0px;
+    background-color: #cfab3a;
+    font-size: large;
+}
+
+form{
+    padding: 0px;
+    margin: 0px;
+}
+
+h1{
+  margin:0px;
+  text-align:center;
+}
+
+/* FOOTER */
+#footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #0c0b07;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  margin:0px;
+  width:100%;
+  left:0px;
+  margin-bottom : 0px; 
+}
+
+.message-box{
+  height: auto;
+  padding: 20px;
+  display: flex;
+  border-radius: 5px;
+  justify-content: space-between;
+  justify-items: center;
+
+  p{
+    padding: 0px;
+    margin: 0px;
+    align-self: center;
+    justify-self: center;
+    font-size: 1.2em;
   }
 
-  .message-box{
-    height: auto;
-    padding: 20px;
-    display: flex;
-    border-radius: 5px;
-    justify-content: space-between;
-    justify-items: center;
-
-    p{
-      padding: 0px;
-      margin: 0px;
-      align-self: center;
-      justify-self: center;
-      font-size: 1.2em;
-    }
-
-    .closeIcon{
-      cursor: pointer;
-    }
-
-    img{
-      height: 27px;
-      width: 27px;
-      cursor: pointer;
-    }
-
+  .closeIcon{
+    cursor: pointer;
   }
+
+  img{
+    height: 27px;
+    width: 27px;
+    cursor: pointer;
+  }
+
+}
 
 .error{
   border: 2px solid rgba(212, 1, 1, 0.749);
