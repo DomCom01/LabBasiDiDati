@@ -188,9 +188,9 @@ begin
                 	<tr>');
 end ApriFormFiltro;
 
-procedure AggiungiCampoFormFiltro(tipo VARCHAR2 default 'text',valore VARCHAR2 default '',  placeholder VARCHAR2 default '') IS
+procedure AggiungiCampoFormFiltro(tipo VARCHAR2 default 'text',valore VARCHAR2 default '',  placeholder VARCHAR2 default '', onclick VARCHAR2 default '') IS
 begin
-	htp.prn('<td> <input type="'||tipo||'" placeholder="'||placeholder||'" value="'|| valore ||'"> </td>');
+	htp.prn('<td> <input type="'||tipo||'" placeholder="'||placeholder||'" value="'|| valore ||'" onclick="'|| onclick ||'"> </td>');
 end AggiungiCampoFormFiltro;
 
 procedure chiudiFormFiltro IS
@@ -225,6 +225,11 @@ BEGIN
 		gui.chiudiDiv();
 	gui.chiudiDiv();
 END aggiungiDropdown;
+
+procedure aggiungiScript(testo VARCHAR2) is
+BEGIN
+	htp.prn('<script type="text/javascript">'|| testo ||'</script>');
+END aggiungiScript;
 
 procedure Footer is
 BEGIN

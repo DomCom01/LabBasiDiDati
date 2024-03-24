@@ -34,7 +34,7 @@ procedure AggiungiElementoTabella(elemento VARCHAR2 default '');
 
 --procedure per Filtro Tabella
 procedure ApriFormFiltro(azione VARCHAR default '');
-procedure AggiungiCampoFormFiltro(tipo VARCHAR2 default 'text',valore VARCHAR2 default '',  placeholder VARCHAR2 default '');
+procedure AggiungiCampoFormFiltro(tipo VARCHAR2 default 'text',valore VARCHAR2 default '',  placeholder VARCHAR2 default '', onclick VARCHAR2 default '');
 procedure chiudiFormFiltro;
 
 --Procedure titoli e testi
@@ -43,6 +43,9 @@ procedure aggiungiParagrafo(testo VARCHAR2 default 'testo', class VARCHAR2 defau
 
 --Dropdown con selezione multipla
 procedure aggiungiDropdown(testo VARCHAR2 default 'testo', opzioni stringArray default null);
+
+--Aggiungi uno script
+procedure aggiungiScript(testo VARCHAR2);
 
 --Footer
 procedure Footer;
