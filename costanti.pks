@@ -2,6 +2,10 @@ create or replace PACKAGE costanti as
 
 stile constant varchar(32767) := '
 
+html{
+  margin:0px;
+}
+
 .bottone {
   background: #cfab3a;
   border-radius: 999px;
@@ -56,9 +60,9 @@ stile constant varchar(32767) := '
 }
 
 #top-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  display: flex; /* Makes the top bar a flexbox container */
+  justify-content: space-between; /* Distributes buttons evenly */
+  align-items: center; /* Aligns buttons vertically */
   background-color: #0c0b07;
   padding: 1px;
   width:100%;
@@ -70,9 +74,8 @@ stile constant varchar(32767) := '
 .bottoniSinistra {
   display: flex; /* Make the wrapper a flexbox container */
   flex-shrink: 0; /* Prevent wrapper from shrinking */
+  height: 8vh;
 }
-
-/* CSS */
 
 .button-48 {
   appearance: none;
@@ -137,18 +140,22 @@ stile constant varchar(32767) := '
 /* Roba tabella */
   body{ 
     min-width: 100vw;
-    min-height: 100vh;
     margin: 0px;
+    font-family: Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
+  }
+  
+  .container{
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
+    margin:0px;
   }
 
-  .container {
+  .contentContainer{
     width: 70%;
-    height: 100%;
-    padding-top: 5%;
+    min-height: 82.7vh;
+    padding-top: 10vh;
+    margin:0px;
   }
   
   .tab{
@@ -229,7 +236,6 @@ stile constant varchar(32767) := '
       padding: 0px;
   }
   
-  
   input[type=submit]{
       height: 100%;
       width: 100%;
@@ -258,18 +264,123 @@ stile constant varchar(32767) := '
     text-align:center;
   }
 
-/* FOOTER */
-#footer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #0c0b07;
-  padding: 1px;
-  width:100%;
+  /* FOOTER */
+  #footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #0c0b07;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    margin:0px;
+    width:100%;
+    left:0px;
+    margin-bottom : 0px; 
+    }
 
-  bottom: 0px;
-  left:0px;
-}
+  /* DROPDOWN */
+
+  .dropdown {
+    position: relative;
+  }
+  
+  .dropbtn {
+    width: 101px;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #000000;
+    border: none;
+    cursor: pointer;
+    color: #FFFFFF;
+    font-size: 10px;
+    text-align: left;
+    font-family: arial;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+  }
+  
+  .dropdown-content {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100px;
+    z-index: 1;
+    display: none;
+    background-color: #f1f1f1;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    border: 1px solid #ddd;
+  }
+  
+  .text {
+    flex-grow: 1;
+    text-align: center;
+  }
+  
+  .arrow {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid #fff;
+    transform: rotate(-90deg);
+    transition: transform 0.3s;
+  }
+  
+  select {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background-color: transparent;
+    padding: 10px;
+    margin: 0;
+    box-sizing: border-box;
+    text-align: left;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    list-style: none;
+    outline: none;
+  }
+  
+  option {
+    width: 100%;
+    padding: 1px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  option:hover {
+    background-color: #ddd;
+  }
+  
+  option input[type="checkbox"] {
+    margin: 0 7px 0 0;
+    vertical-align: middle;
+  }
+  
+  option .tick {
+    display: none;
+  }
+  
+  option input[type="checkbox"]:checked + .tick {
+    display: inline-block;
+  }
+  
+  option .tick::before {
+    content: "";
+    display: block;
+    width: 5px;
+    height: 10px;
+    border-left: 2px solid #000;
+    border-bottom: 2px solid #000;
+    transform: rotate(45deg);
+  }
+
 ';
 
 END costanti;

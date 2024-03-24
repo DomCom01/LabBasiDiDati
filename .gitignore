@@ -1,1 +1,11 @@
 provapl.sql
+Test/js.js
+Test/style.css
+Test/index.html
+cancellazioneTurni.sql
+inserimentoTurni.sql
+ModificaTurni.sql
+Patente/visualizzazionePatenti.sql
+Turni/visualizzazioneTurni.sql
+grant.sql
+LabBasiDiDati.code-workspace

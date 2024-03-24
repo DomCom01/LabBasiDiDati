@@ -12,7 +12,7 @@ procedure ApriBody(idSessione int default 0);
 
 procedure ChiudiBody;
 
-procedure Bottone(testo varchar2 default '', nome varchar2 default '', valore varchar2 default '', ident varchar2 default '', classe varchar2 default '');
+procedure Bottone(testo varchar2 default '', nome varchar2 default '', valore varchar2 default '', ident varchar2 default '', classe varchar2 default '', onclick varchar2 default '');
 
 procedure ApriDiv(ident varchar2 default '', classe varchar2 default '');
 
@@ -40,6 +40,9 @@ procedure chiudiFormFiltro;
 --Procedure titoli e testi
 procedure aggiungiIntestazione(testo VARCHAR2 default 'Intestazione', dimensione VARCHAR2 default 'h1', class VARCHAR2 default '');
 procedure aggiungiParagrafo(testo VARCHAR2 default 'testo', class VARCHAR2 default '');
+
+--Dropdown con selezione multipla
+procedure aggiungiDropdown(testo VARCHAR2 default 'testo', opzioni stringArray default null);
 
 --Footer
 procedure Footer;
