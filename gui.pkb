@@ -6,7 +6,7 @@ begin
 
 end Reindirizza;
 
-procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default 0) is
+procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default 0, ruolo VARCHAR2 default 'Cl') is
 begin
 	htp.htmlOpen;
 	htp.headOpen;
@@ -16,18 +16,18 @@ begin
   		<meta name="viewport" content="width=device-width, initial-scale=1">
   	'); 
 	htp.print('<style> ' || costanti.stile || '</style>');
+	htp.print('<script type="text/javascript">' || costanti.scriptJS || '</script>'); -- Aggiunto script di base
  	htp.headClose; 
 	gui.ApriBody(idSessione);
-	visualizzazioneClienti; 
 	gui.CHIUDIBODY; 
     
 end ApriPagina;
 
-procedure ApriBody(idSessione int default 0) is	
+procedure ApriBody(idSessione int default 0) is
 begin
   htp.print('<body>');
-  gui.TopBar(); --Modificare if sotto per aggiungere TopBar con saldo e menu profilo se utente registrato, altrimenti niente
   gui.ApriDiv('', 'container');
+  gui.TopBar(); --Modificare if sotto per aggiungere TopBar con saldo e menu profilo se utente registrato, altrimenti niente
   gui.ApriDiv('', 'contentContainer');
     
   /*if (idSessione = 0) then  -- Sessione di tipo 'Ospite'
@@ -85,7 +85,7 @@ begin
 
 end ChiudiDiv;
 
-procedure TopBar(saldo varchar2 default null) is
+procedure TopBar(saldo varchar2 default null, ruolo VARCHAR2) is
 BEGIN
 	gui.ApriDiv(ident => 'top-bar');
 	/*if saldo is null then
@@ -93,15 +93,47 @@ BEGIN
 	else
 		gui.Bottone(testo => 'Saldo: ' || saldo || '€', classe => 'bottone');
 	end if;*/
-		
-		gui.APRIDIV(ident => 'bottoneSinistra');
+	gui.APRIDIV(ident => 'bottoneSinistra');
+
+	CASE ruolo
+
+    	when 'Cl' then --Cliente 
+
+			gui.Bottone(testo => 'Clienti', classe => 'button-48'); 
+			gui.Bottone(testo => 'Prenotazioni', classe => 'button-48'); 
+
+    	when 'A' THEN --Autista
+
+			gui.Bottone(testo => 'Prenotazioni', classe => 'button-48'); 
+			gui.Bottone(testo => 'Taxi', classe => 'button-48'); 
+			gui.Bottone(testo => 'Turni', classe => 'button-48');
+
+    	when 'AR' then --Autista Referente
+
+			gui.Bottone(testo => 'Prenotazioni', classe => 'button-48'); 
+			gui.Bottone(testo => 'Taxi', classe => 'button-48'); 
+			gui.Bottone(testo => 'Turni', classe => 'button-48');
+
+    	when 'O' then --Operatore
+
+			gui.Bottone(testo => 'Prenotazioni', classe => 'button-48');  
+			gui.Bottone(testo => 'Turni', classe => 'button-48');
+
+    	when 'M' then --Manager
+
 			gui.Bottone(testo => 'Clienti', classe => 'button-48'); 
 			gui.Bottone(testo => 'Prenotazioni', classe => 'button-48'); 
 			gui.Bottone(testo => 'Taxi', classe => 'button-48'); 
 			gui.Bottone(testo => 'Turni', classe => 'button-48'); 
-		gui.CHIUDIDIV;
 
-		gui.Bottone(testo => 'Login', classe => 'bottone'); 
+      	when 'Co' then --Contabile
+
+			gui.Bottone(testo => 'Taxi', classe => 'button-48'); 
+
+   	END CASE;
+	
+	gui.CHIUDIDIV;
+	gui.Bottone(testo => 'Login', classe => 'bottone'); 
 	gui.ChiudiDiv();
 end TopBar;
 
@@ -168,10 +200,10 @@ begin
                 	<tr>');
 end ApriFormFiltro;
 
-procedure AggiungiCampoFormFilro(tipo VARCHAR2 default 'text',value VARCHAR2 default '',  placeholder VARCHAR2 default '') IS
+procedure AggiungiCampoFormFiltro(tipo VARCHAR2 default 'text', nome varchar2, value VARCHAR2 default '',  placeholder VARCHAR2 default '') IS
 begin
 	htp.prn('<td> <input type="'||tipo||'" placeholder="'||placeholder||'" value="'||value||'"> </td>');
-end AggiungiCampoFormFilro;
+end AggiungiCampoFormFiltro;
 
 procedure chiudiFormFiltro IS
 begin
@@ -187,6 +219,23 @@ procedure aggiungiParagrafo(testo VARCHAR2 default 'testo', class VARCHAR2 defau
 begin
 	htp.prn('<p class='||class||' >'||testo||'</p>');
 end aggiungiParagrafo;
+
+-- Procedura per popup di errore/successo
+procedure AggiungiPopup(successo boolean, testo VARCHAR2 default 'Errore!') IS
+begin
+
+	if successo then 
+		htp.prn('<div id=1 class="message-box success">');
+			htp.prn('<p>'|| testo ||'</p>');
+			htp.prn('<p class="closeIcon" onclick="closeBox(1)">🅧</p>');
+		htp.prn('</div>');
+	else 
+		htp.prn('<div id=1 class="message-box error">');
+				htp.prn('<p>'|| testo ||'</p>');
+				htp.prn('<p class="closeIcon" onclick="closeBox(1)">🅧</p>');
+			htp.prn('</div>');
+	end if;
+end AggiungiPopup;
 
 procedure Footer is
 BEGIN

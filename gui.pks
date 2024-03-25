@@ -1,14 +1,14 @@
 create or replace PACKAGE gui as
 
-TYPE StringArray IS VARRAY(10) OF VARCHAR2(15); -- Tipo array di stringhe
+TYPE StringArray IS VARRAY(15) OF VARCHAR2(30); -- Tipo array di stringhe 
 
 emptyArray StringArray;
 
-procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default 0);
+procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default 0, ruolo VARCHAR2 default 'Cl');
 
 procedure Reindirizza(indirizzo varchar2);
 
-procedure ApriBody(idSessione int default 0);
+procedure ApriBody(idSessione int default 0, ruolo VARCHAR2);
 
 procedure ChiudiBody;
 
@@ -18,7 +18,9 @@ procedure ApriDiv(ident varchar2 default '', classe varchar2 default '');
 
 procedure ChiudiDiv;
 
-procedure TopBar(saldo varchar2 default null);
+procedure TopBar(saldo varchar2 default null, ruolo VARCHAR2);
+
+procedure AggiungiPopup(successo boolean, testo VARCHAR2 default 'Errore!');
 
 -- Procedure per Tabella
 procedure ApriTabella;
@@ -34,7 +36,7 @@ procedure AggiungiElementoTabella(elemento VARCHAR2 default '');
 
 --procedure per Filtro Tabella
 procedure ApriFormFiltro(azione VARCHAR default '');
-procedure AggiungiCampoFormFilro(tipo VARCHAR2 default 'text',value VARCHAR2 default '',  placeholder VARCHAR2 default '');
+procedure AggiungiCampoFormFiltro(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '');
 procedure chiudiFormFiltro;
 
 --Procedure titoli e testi

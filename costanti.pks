@@ -1,5 +1,13 @@
 create or replace PACKAGE costanti as
 
+scriptJS constant varchar(32767) := '
+
+function closeBox(id){
+  document.getElementById(id).classList.add("error-box-hidden");
+}
+
+';
+
 stile constant varchar(32767) := '
 
 html{
@@ -141,7 +149,7 @@ html{
 
 /* Roba tabella */
   body{ 
-    min-width: 100vw;
+    width: 100vw;
     margin: 0px;
     font-family: Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
   }
@@ -154,7 +162,7 @@ html{
   }
 
   .contentContainer{
-    width: 70%;
+    width: 80%; /* Allargato per far entrare bene anche tabelle grandi */
     min-height: 82.7vh;
     padding-top: 10vh;
     margin:0px;
@@ -279,7 +287,57 @@ html{
     width:100%;
     left:0px;
     margin-bottom : 0px; 
+  }
+
+  .message-box{
+    height: auto;
+    padding: 20px;
+    display: flex;
+    border-radius: 5px;
+    justify-content: space-between;
+    justify-items: center;
+
+    p{
+      padding: 0px;
+      margin: 0px;
+      align-self: center;
+      justify-self: center;
+      font-size: 1.2em;
     }
+
+    .closeIcon{
+      cursor: pointer;
+    }
+
+    img{
+      height: 27px;
+      width: 27px;
+      cursor: pointer;
+    }
+
+  }
+
+.error{
+  border: 2px solid rgba(212, 1, 1, 0.749);
+  background-color: rgba(255, 0, 0, 0.037);
+}
+
+.success{
+  border: 2px solid rgba(68, 212, 1, 0.749);
+  background-color: rgba(0, 255, 0, 0.037);
+}
+
+
+.error-box-hidden {
+  -webkit-animation: fadeOut 1s;
+  animation: fadeOut 1s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; height: 100%;}
+  100% { opacity: 0; display: none; height: 0%;} /* display block/none?*/
+}
 
     /*roba per form*/
 
