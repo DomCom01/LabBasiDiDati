@@ -218,6 +218,24 @@ begin
 	htp.prn('<p class='||class||' >'||testo||'</p>');
 end aggiungiParagrafo;
 
+procedure aggiungiDropdown(testo VARCHAR2 default 'testo', opzioni stringArray default null) is
+BEGIN
+	gui.apriDiv(classe => 'dropdown');
+		htp.prn('<button class="dropbtn" onclick="apriMenu()">');
+			htp.prn('<span class="text">'|| testo ||'</span>');
+			htp.prn('<span class="arrow"></span>');
+		htp.prn('</button>');
+		gui.apriDiv(ident => 'dropdown-content', classe => 'dropdown-content');
+		for i in 1..opzioni.count loop
+			gui.apriDiv(ident => 'option');
+				htp.prn('<input type="checkbox" id="'|| opzioni(i) ||'" />');
+				htp.prn('<label for="'|| opzioni(i) ||'">'|| opzioni(i) ||'</label>');
+			gui.chiudiDiv();
+		end loop;
+		gui.chiudiDiv();
+	gui.chiudiDiv();
+END aggiungiDropdown;
+
 -- Procedura per popup di errore/successo
 procedure AggiungiPopup(successo boolean, testo VARCHAR2 default 'Errore!') IS
 begin
