@@ -200,7 +200,7 @@ end ApriFormFiltro;
 
 procedure AggiungiCampoFormFiltro(tipo VARCHAR2 default 'text', nome varchar2, value VARCHAR2 default '',  placeholder VARCHAR2 default '') IS
 begin
-	htp.prn('<td> <input type="'||tipo||'" placeholder="'||placeholder||'" value="'||value||'"> </td>');
+	htp.prn('<td> <input type="'||tipo||'" name="'|| nome ||'" placeholder="'||placeholder||'" value="'||value||'"> </td>');
 end AggiungiCampoFormFiltro;
 
 procedure ApriSelectFormFiltro(nome varchar2) IS
