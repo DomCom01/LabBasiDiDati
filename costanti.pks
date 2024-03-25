@@ -258,43 +258,43 @@ body{
     background-color: transparent;
     text-align: center;
   }
-}
 
-.inputTAB td{
-  border: 1px solid rgba(0, 0, 0, 0.565);
-  width: 100%;
-}
+  .inputTAB td{
+    border: 1px solid rgba(0, 0, 0, 0.565);
+    width: 100%;
+  }
 
-input, input:focus{
-  outline: none !important;
-  border: 0px;
-  width: auto;
-  text-align: center;
-  background-color: transparent;
-  width:100%;
-  padding:0px;
-}
+  input, input:focus{
+    outline: none !important;
+    border: 0px;
+    width: auto;
+    text-align: center;
+    background-color: transparent;
+    width:100%;
+    padding:0px;
+  }
 
-.inputTAB td:last-child{
-    padding: 0px;
-}
-
-input[type=submit]{
+  input[type=submit]{
     height: 100%;
     width: 100%;
     margin: 0px;
     border-radius: 0px 5px 5px 0px;
     background-color: #f0d685;
     font-size: large;
-}
+  }
 
-input[type=submit]:hover {
+  input[type=submit]:hover {
     height: 100%;
     width: 100%;
     margin: 0px;
     border-radius: 0px 5px 5px 0px;
     background-color: #cfab3a;
     font-size: large;
+  }
+}
+
+.inputTAB td:last-child{
+    padding: 0px;
 }
 
 form{
