@@ -58,7 +58,6 @@ procedure Footer;
 procedure creaForm (titolo VARCHAR2 default ''); 
 procedure aggiungiForm (method VARCHAR2 default 'POST', classe VARCHAR2 default '', name VARCHAR2 default ''); 
 procedure chiudiForm; 
-PROCEDURE aggiungiTitolo(testo VARCHAR2 default ''); 
 /*
 procedure aggiungiInput (tipo varchar2 default 'text',id varchar2 default '', testo varchar2 default ''); 
 procedure aggiungiLabelForm (per varchar2 default '', form varchar2 default ''); 

@@ -258,43 +258,43 @@ body{
     background-color: transparent;
     text-align: center;
   }
-}
 
-.inputTAB td{
-  border: 1px solid rgba(0, 0, 0, 0.565);
-  width: 100%;
-}
+  .inputTAB td{
+    border: 1px solid rgba(0, 0, 0, 0.565);
+    width: 100%;
+  }
 
-input, input:focus{
-  outline: none !important;
-  border: 0px;
-  width: auto;
-  text-align: center;
-  background-color: transparent;
-  width:100%;
-  padding:0px;
-}
+  input, input:focus{
+    outline: none !important;
+    border: 0px;
+    width: auto;
+    text-align: center;
+    background-color: transparent;
+    width:100%;
+    padding:0px;
+  }
 
-.inputTAB td:last-child{
-    padding: 0px;
-}
-
-input[type=submit]{
+  input[type=submit]{
     height: 100%;
     width: 100%;
     margin: 0px;
     border-radius: 0px 5px 5px 0px;
     background-color: #f0d685;
     font-size: large;
-}
+  }
 
-input[type=submit]:hover {
+  input[type=submit]:hover {
     height: 100%;
     width: 100%;
     margin: 0px;
     border-radius: 0px 5px 5px 0px;
     background-color: #cfab3a;
     font-size: large;
+  }
+}
+
+.inputTAB td:last-child{
+    padding: 0px;
 }
 
 form{
@@ -370,6 +370,109 @@ h1{
   0% { opacity: 1; height: 100%;}
   100% { opacity: 0; display: none; height: 0%;} /* display block/none?*/
 }
+
+  /* DROPDOWN */
+
+  .dropdown {
+    position: relative;
+  }
+  
+  .dropbtn {
+    width: 101px;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #000000;
+    border: none;
+    cursor: pointer;
+    color: #FFFFFF;
+    font-size: 10px;
+    text-align: left;
+    font-family: arial;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+  }
+  
+  .dropdown-content {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100px;
+    z-index: 1;
+    display: none;
+    background-color: #f1f1f1;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    border: 1px solid #ddd;
+  }
+  
+  .text {
+    flex-grow: 1;
+    text-align: center;
+  }
+  
+  .arrow {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid #fff;
+    transform: rotate(-90deg);
+    transition: transform 0.3s;
+  }
+  
+  select {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background-color: transparent;
+    padding: 10px;
+    margin: 0;
+    box-sizing: border-box;
+    text-align: left;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    list-style: none;
+    outline: none;
+  }
+  
+  option {
+    width: 100%;
+    padding: 1px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  option:hover {
+    background-color: #ddd;
+  }
+  
+  option input[type="checkbox"] {
+    margin: 0 7px 0 0;
+    vertical-align: middle;
+  }
+  
+  option .tick {
+    display: none;
+  }
+  
+  option input[type="checkbox"]:checked + .tick {
+    display: inline-block;
+  }
+  
+  option .tick::before {
+    content: "";
+    display: block;
+    width: 5px;
+    height: 10px;
+    border-left: 2px solid #000;
+    border-bottom: 2px solid #000;
+    transform: rotate(45deg);
+  }
 
 ';
 
