@@ -6,7 +6,7 @@ begin
 
 end Reindirizza;
 
-procedure ApriBody(idSessione int default 0) is
+procedure ApriBody(idSessione int default 0,  ruolo VARCHAR2) is
 begin
   htp.print('<body>');
   gui.ApriDiv('', 'container');
@@ -36,7 +36,7 @@ begin
 	htp.print('<style> ' || costanti.stile || '</style>');
 	htp.print('<script type="text/javascript">' || costanti.scriptJS || '</script>'); -- Aggiunto script di base
  	htp.headClose; 
-	gui.ApriBody;
+	gui.ApriBody(ruolo => 'A');
 	gui.CHIUDIBODY; 
     
 end ApriPagina;
@@ -292,9 +292,9 @@ END Footer;
 
 /*Form*/
 procedure aggiungiTitolo (testo VARCHAR2 default '') IS
-	BEGIN
+BEGIN
 	htp.prn ('<h2>'||testo||'</h2>'); 
-	END aggiungiTitolo; 
+END aggiungiTitolo; 
 
 
 procedure aggiungiForm (method VARCHAR2 default 'POST', classe VARCHAR2 default '', name VARCHAR2 default '') IS
@@ -315,7 +315,7 @@ BEGIN
 	gui.aggiungiTitolo (titolo); 
 	gui.CHIUDIDIV; 
 
-	gui.AGGIUNGIFORM (method => 'POST', classe => 'signupForm', name => 'signupform'); 
+	gui.AGGIUNGIFORM (method => 'GET', classe => 'signupForm', name => 'signupform'); 
 	gui.CHIUDIFORM; 
 	
 
