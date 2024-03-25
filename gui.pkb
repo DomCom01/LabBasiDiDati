@@ -6,28 +6,11 @@ begin
 
 end Reindirizza;
 
-procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default 0, ruolo VARCHAR2 default 'Cl') is
-begin
-	htp.htmlOpen;
-	htp.headOpen;
-	htp.title(titolo);
-	htp.print('
-  		<meta charset="utf-8">
-  		<meta name="viewport" content="width=device-width, initial-scale=1">
-  	'); 
-	htp.print('<style> ' || costanti.stile || '</style>');
-	htp.print('<script type="text/javascript">' || costanti.scriptJS || '</script>'); -- Aggiunto script di base
- 	htp.headClose; 
-	gui.ApriBody(idSessione);
-	gui.CHIUDIBODY; 
-    
-end ApriPagina;
-
 procedure ApriBody(idSessione int default 0) is
 begin
   htp.print('<body>');
   gui.ApriDiv('', 'container');
-  gui.TopBar(); --Modificare if sotto per aggiungere TopBar con saldo e menu profilo se utente registrato, altrimenti niente
+  gui.TopBar(ruolo => ''); --Modificare if sotto per aggiungere TopBar con saldo e menu profilo se utente registrato, altrimenti niente
   gui.ApriDiv('', 'contentContainer');
     
   /*if (idSessione = 0) then  -- Sessione di tipo 'Ospite'
@@ -40,6 +23,23 @@ begin
   end if;*/
 
 end ApriBody;
+
+procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default 0, ruolo VARCHAR2 default 'Cl') is
+begin
+	htp.htmlOpen;
+	htp.headOpen;
+	htp.title(titolo);
+	htp.print('
+  		<meta charset="utf-8">
+  		<meta name="viewport" content="width=device-width, initial-scale=1">
+  	'); 
+	htp.print('<style> ' || costanti.stile || '</style>');
+	htp.print('<script type="text/javascript">' || costanti.scriptJS || '</script>'); -- Aggiunto script di base
+ 	htp.headClose; 
+	gui.ApriBody;
+	gui.CHIUDIBODY; 
+    
+end ApriPagina;
 
 procedure ChiudiBody is
 begin
@@ -88,6 +88,8 @@ end ChiudiDiv;
 procedure TopBar(saldo varchar2 default null, ruolo VARCHAR2) is
 BEGIN
 	gui.ApriDiv(ident => 'top-bar');
+	gui.aggiungiDropdown(); 
+
 	/*if saldo is null then
 		gui.Bottone(testo => 'Saldo: 0.00 €', classe => 'bottone');
 	else
@@ -269,13 +271,13 @@ BEGIN
 	gui.CHIUDIDIV;
 END Footer;
 
-/*Form
+/*Form*/
 procedure aggiungiTitolo (testo VARCHAR2 default '') IS
 	BEGIN
 	htp.prn ('<h2>'||testo||'</h2>'); 
 	END aggiungiTitolo; 
 
- 
+
 procedure aggiungiForm (method VARCHAR2 default 'POST', classe VARCHAR2 default '', name VARCHAR2 default '') IS
 BEGIN
 	htp.prn ('<form method="'||method||'" class="'||classe||'" name="'||name||'"'); 
@@ -299,7 +301,5 @@ BEGIN
 	
 
 END creaForm; 
-
-*/
 
 end gui;
