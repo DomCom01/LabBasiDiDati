@@ -38,6 +38,9 @@ procedure AggiungiElementoTabella(elemento VARCHAR2 default '');
 procedure ApriFormFiltro(azione VARCHAR default '');
 procedure AggiungiCampoFormFiltro(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '');
 procedure chiudiFormFiltro;
+procedure ApriSelectFormFiltro(nome varchar2);
+procedure AggiungiOpzioneSelect(value VARCHAR2, selected BOOLEAN, testo VARCHAR2 default '');
+procedure ChiudiSelectFormFiltro;
 
 --Procedure titoli e testi
 procedure aggiungiIntestazione(testo VARCHAR2 default 'Intestazione', dimensione VARCHAR2 default 'h1', class VARCHAR2 default '');
