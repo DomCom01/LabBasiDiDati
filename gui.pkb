@@ -18,16 +18,18 @@ begin
 	htp.print('<style> ' || costanti.stile || '</style>');
  	htp.headClose; 
 	gui.ApriBody(idSessione);
+	visualizzazioneClienti; 
 	gui.CHIUDIBODY; 
     
 end ApriPagina;
 
-procedure ApriBody(idSessione int default 0) is
+procedure ApriBody(idSessione int default 0) is	
 begin
   htp.print('<body>');
-  gui.ApriDiv('', 'container');
   gui.TopBar(); --Modificare if sotto per aggiungere TopBar con saldo e menu profilo se utente registrato, altrimenti niente
+  gui.ApriDiv('', 'container');
   gui.ApriDiv('', 'contentContainer');
+    
   /*if (idSessione = 0) then  -- Sessione di tipo 'Ospite'
 	modGUI.InserisciLoginERegistrati;
 	modGUI.ChiudiDiv;
@@ -199,5 +201,38 @@ BEGIN
 	htp.prn('</footer>');
 	gui.CHIUDIDIV;
 END Footer;
+
+/*Form
+procedure aggiungiTitolo (testo VARCHAR2 default '') IS
+	BEGIN
+	htp.prn ('<h2>'||testo||'</h2>'); 
+	END aggiungiTitolo; 
+
+ 
+procedure aggiungiForm (method VARCHAR2 default 'POST', classe VARCHAR2 default '', name VARCHAR2 default '') IS
+BEGIN
+	htp.prn ('<form method="'||method||'" class="'||classe||'" name="'||name||'"'); 
+	END aggiungiForm;
+
+procedure chiudiForm IS
+BEGIN
+	htp.prn ('</form>'); 
+	END chiudiForm;  
+
+
+procedure creaForm (titolo VARCHAR2 default '') IS
+BEGIN
+	gui.APRIDIV(classe => 'signupSection'); 
+	gui.APRIDIV(classe => 'info'); 
+	gui.aggiungiTitolo (titolo); 
+	gui.CHIUDIDIV; 
+
+	gui.AGGIUNGIFORM (method => 'POST', classe => 'signupForm', name => 'signupform'); 
+	gui.CHIUDIFORM; 
+	
+
+END creaForm; 
+
+*/
 
 end gui;
