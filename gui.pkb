@@ -3,7 +3,6 @@ create or replace PACKAGE BODY gui as
 procedure Reindirizza(indirizzo varchar2) is
 begin
 	htp.prn('<head><meta http-equiv="refresh" content="0;url=' || indirizzo || '"></head>');
-
 end Reindirizza;
 
 procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default 0, ruolo VARCHAR2 default 'Cl') is
@@ -285,5 +284,44 @@ BEGIN
 	htp.prn('</footer>');
 	gui.CHIUDIDIV;
 END Footer;
+
+/*Form*/
+procedure aggiungiForm (classe VARCHAR2 default '', name VARCHAR2 default '', url VARCHAR2 default '') IS
+BEGIN
+	htp.prn ('<form method="GET" class="'||classe||'" name="'||name||'" action="'||url||'"">'); 
+END aggiungiForm;
+
+procedure chiudiForm IS
+BEGIN
+	gui.CHIUDIDIV; 
+	htp.prn ('</form>'); 
+END chiudiForm;  
+
+
+procedure creaForm (titolo VARCHAR2 default '', url VARCHAR2 default '') IS
+BEGIN
+	gui.APRIDIV(classe => 'signupSection'); 
+	gui.APRIDIV(classe => 'info'); 
+	gui.aggiungiIntestazione(testo => titolo, dimensione => 'h2'); 
+	gui.CHIUDIDIV; 
+
+	gui.AGGIUNGIFORM (classe => 'signupForm', name => 'signupform'); 
+	
+END creaForm; 
+
+procedure AggiungiCampoForm(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false) as
+BEGIN
+	if required then
+		htp.prn('<input class="formField" type="'||tipo||'" name="'|| nome ||'" placeholder="'||placeholder||'" value="'||value||'" required>');
+	else 
+		htp.prn('<input class="formField" type="'||tipo||'" name="'|| nome ||'" placeholder="'||placeholder||'" value="'||value||'">');
+	end if;
+
+end AggiungiCampoForm ;
+
+procedure AggiungiLabel(target VARCHAR2, testo VARCHAR2) is
+begin
+	htp.prn('<label for="'||target||'"">'||testo||' </label>');
+end AggiungiLabel;
 
 end gui;
