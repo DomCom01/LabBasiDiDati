@@ -3,7 +3,6 @@ create or replace PACKAGE BODY gui as
 procedure Reindirizza(indirizzo varchar2) is
 begin
 	htp.prn('<head><meta http-equiv="refresh" content="0;url=' || indirizzo || '"></head>');
-
 end Reindirizza;
 
 procedure ApriBody(idSessione int default 0,  ruolo VARCHAR2) is
@@ -289,35 +288,5 @@ BEGIN
 	htp.prn('</footer>');
 	gui.CHIUDIDIV;
 END Footer;
-
-/*Form*/
-procedure aggiungiTitolo (testo VARCHAR2 default '') IS
-BEGIN
-	htp.prn ('<h2>'||testo||'</h2>'); 
-END aggiungiTitolo; 
-
-
-procedure aggiungiForm (method VARCHAR2 default 'POST', classe VARCHAR2 default '', name VARCHAR2 default '') IS
-BEGIN
-	htp.prn ('<form method="'||method||'" class="'||classe||'" name="'||name||'"'); 
-	END aggiungiForm;
-
-procedure chiudiForm IS
-BEGIN
-	htp.prn ('</form>'); 
-	END chiudiForm;  
-
-
-procedure creaForm (titolo VARCHAR2 default '') IS
-BEGIN
-	gui.APRIDIV(classe => 'signupSection'); 
-	gui.APRIDIV(classe => 'info'); 
-	gui.aggiungiTitolo (titolo); 
-	gui.CHIUDIDIV; 
-
-	gui.AGGIUNGIFORM (method => 'GET', classe => 'signupForm', name => 'signupform'); 
-	gui.CHIUDIFORM; 	
-
-END creaForm; 
 
 end gui;
