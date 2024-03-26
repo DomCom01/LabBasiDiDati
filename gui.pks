@@ -29,10 +29,12 @@ procedure AggiungiHeadersTabella(elementi StringArray default emptyArray);
 procedure AggiungiHeaderTabella(elemento VARCHAR2 default '');
 procedure ChiudiHeaderTabella;
 procedure ApriBodyTabella;
-procedure ChiudiTabella;
 procedure AggiungiRigaTabella;
 procedure ChiudiRigaTabella;
 procedure AggiungiElementoTabella(elemento VARCHAR2 default '');
+procedure AggiungiPulsanteInTabella(nome VARCHAR2 default '', collegamento VARCHAR2 default '');
+procedure ChiudiTabella;
+
 
 --procedure per Filtro Tabella
 procedure ApriFormFiltro(azione VARCHAR default '');
