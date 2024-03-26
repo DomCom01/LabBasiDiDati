@@ -53,23 +53,10 @@ procedure aggiungiDropdown(testo VARCHAR2 default 'testo', opzioni stringArray d
 procedure Footer;
 
 --Form
-
 procedure aggiungiForm(classe VARCHAR2 default '', name VARCHAR2 default '', url VARCHAR2 default '');
 procedure creaForm (titolo VARCHAR2 default '', url VARCHAR2 default '');
 procedure AggiungiCampoForm(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false);
 procedure AggiungiLabel(target VARCHAR2, testo VARCHAR2);
 PROCEDURE chiudiForm;
 
-
---form
-
-
-procedure creaForm (titolo VARCHAR2 default ''); 
-procedure aggiungiForm (method VARCHAR2 default 'POST', classe VARCHAR2 default '', name VARCHAR2 default ''); 
-procedure chiudiForm; 
-PROCEDURE aggiungiTitolo(testo VARCHAR2 default ''); 
-/*
-procedure aggiungiInput (tipo varchar2 default 'text',id varchar2 default '', testo varchar2 default ''); 
-procedure aggiungiLabelForm (per varchar2 default '', form varchar2 default ''); 
-*/
 end gui;

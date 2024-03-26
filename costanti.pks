@@ -371,108 +371,108 @@ h1{
   100% { opacity: 0; display: none; height: 0%;} /* display block/none?*/
 }
 
-  /* DROPDOWN */
+/* DROPDOWN */
 
-  .dropdown {
-    position: relative;
-  }
-  
-  .dropbtn {
-    width: 101px;
-    padding: 10px;
-    box-sizing: border-box;
-    background-color: #000000;
-    border: none;
-    cursor: pointer;
-    color: #FFFFFF;
-    font-size: 10px;
-    text-align: left;
-    font-family: arial;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: relative;
-  }
-  
-  .dropdown-content {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100px;
-    z-index: 1;
-    display: none;
-    background-color: #f1f1f1;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    border: 1px solid #ddd;
-  }
-  
-  .text {
-    flex-grow: 1;
-    text-align: center;
-  }
-  
-  .arrow {
-    display: inline-block;
-    width: 0;
-    height: 0;
-    border-left: 6px solid transparent;
-    border-right: 6px solid transparent;
-    border-top: 6px solid #fff;
-    transform: rotate(-90deg);
-    transition: transform 0.3s;
-  }
-  
-  select {
-    width: 100%;
-    height: 100%;
-    border: none;
-    background-color: transparent;
-    padding: 10px;
-    margin: 0;
-    box-sizing: border-box;
-    text-align: left;
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    appearance: none;
-    list-style: none;
-    outline: none;
-  }
-  
-  option {
-    width: 100%;
-    padding: 1px;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-  }
-  
-  option:hover {
-    background-color: #ddd;
-  }
-  
-  option input[type="checkbox"] {
-    margin: 0 7px 0 0;
-    vertical-align: middle;
-  }
-  
-  option .tick {
-    display: none;
-  }
-  
-  option input[type="checkbox"]:checked + .tick {
-    display: inline-block;
-  }
-  
-  option .tick::before {
-    content: "";
-    display: block;
-    width: 5px;
-    height: 10px;
-    border-left: 2px solid #000;
-    border-bottom: 2px solid #000;
-    transform: rotate(45deg);
-  }
+.dropdown {
+  position: relative;
+}
+
+.dropbtn {
+  width: 101px;
+  padding: 10px;
+  box-sizing: border-box;
+  background-color: #000000;
+  border: none;
+  cursor: pointer;
+  color: #FFFFFF;
+  font-size: 10px;
+  text-align: left;
+  font-family: arial;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+.dropdown-content {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100px;
+  z-index: 1;
+  display: none;
+  background-color: #f1f1f1;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  border: 1px solid #ddd;
+}
+
+.text {
+  flex-grow: 1;
+  text-align: center;
+}
+
+.arrow {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid #fff;
+  transform: rotate(-90deg);
+  transition: transform 0.3s;
+}
+
+select {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background-color: transparent;
+  padding: 10px;
+  margin: 0;
+  box-sizing: border-box;
+  text-align: left;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  list-style: none;
+  outline: none;
+}
+
+option {
+  width: 100%;
+  padding: 1px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+option:hover {
+  background-color: #ddd;
+}
+
+option input[type="checkbox"] {
+  margin: 0 7px 0 0;
+  vertical-align: middle;
+}
+
+option .tick {
+  display: none;
+}
+
+option input[type="checkbox"]:checked + .tick {
+  display: inline-block;
+}
+
+option .tick::before {
+  content: "";
+  display: block;
+  width: 5px;
+  height: 10px;
+  border-left: 2px solid #000;
+  border-bottom: 2px solid #000;
+  transform: rotate(45deg);
+}
 
 .signupSection{
 
@@ -504,8 +504,6 @@ h1{
 .formField:focus{
   border: 1px solid rgba(139, 96, 15, 0.648);
   box-shadow: rgba(139, 96, 15, 0.648) 0px 0px 5px;
-}
-
-';
+}'; 
 
 END costanti;
