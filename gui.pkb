@@ -316,8 +316,7 @@ BEGIN
 	gui.CHIUDIDIV; 
 
 	gui.AGGIUNGIFORM (method => 'GET', classe => 'signupForm', name => 'signupform'); 
-	gui.CHIUDIFORM; 
-	
+	gui.CHIUDIFORM; 	
 
 END creaForm; 
 
