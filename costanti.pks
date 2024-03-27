@@ -197,6 +197,15 @@ body{
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.565);
 }
 
+.tab button{
+  background-color: #000000; 
+	color: white; 
+	padding: 7px 20px;
+	border: none; 
+	border-radius: 10px; 
+	cursor: pointer;
+}
+
 .tab tr, td{
     border: 1px solid rgba(0, 0, 0, 0.565);
     height: 35px;
