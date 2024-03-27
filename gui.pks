@@ -8,9 +8,11 @@ procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int defa
 
 procedure Reindirizza(indirizzo varchar2);
 
+PROCEDURE aCapo;
+
 procedure ApriBody(idSessione int default 0, ruolo VARCHAR2);
 
-procedure ChiudiBody;
+procedure ChiudiPagina;
 
 procedure BottoneTopBar(testo varchar2 default '', nome varchar2 default '', valore varchar2 default '');
 

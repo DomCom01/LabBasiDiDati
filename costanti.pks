@@ -105,6 +105,11 @@ html{
   height: 8vh;
 }
 
+.bottoniDestra {
+  display: flex; /* Make the wrapper a flexbox container */
+  flex-shrink: 0; /* Prevent wrapper from shrinking */
+}
+
 /* CSS */
 
 .button-48 {

@@ -5,6 +5,11 @@ begin
 	htp.prn('<head><meta http-equiv="refresh" content="0;url=' || indirizzo || '"></head>');
 end Reindirizza;
 
+procedure aCapo is
+BEGIN
+	htp.prn('<br>');
+end aCapo;
+
 procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default 0, ruolo VARCHAR2 default 'Cl') is
 begin
 	htp.htmlOpen;
@@ -24,7 +29,8 @@ end ApriPagina;
 procedure ApriBody(idSessione int default 0, ruolo VARCHAR2) is
 begin
   htp.print('<body>');
-  gui.TopBar(null, ruolo); --Modificare if sotto per aggiungere TopBar con saldo e menu profilo se utente registrato, altrimenti niente
+  gui.TopBar('', ruolo); --Modificare if sotto per aggiungere TopBar con saldo e menu profilo se utente registrato, altrimenti niente
+						 --Saldo da aggiornare
   gui.ApriDiv('', 'container');
   gui.ApriDiv('', 'contentContainer');
   /*if (idSessione = 0) then  -- Sessione di tipo 'Ospite'
@@ -38,14 +44,14 @@ begin
 
 end ApriBody;
 
-procedure ChiudiBody is
+procedure ChiudiPagina is
 begin
 	htp.prn('</div>'); /*container*/
 	htp.prn('</div>'); /*content-container*/
 	gui.Footer;
 	htp.print('</body>');
 
-end ChiudiBody;
+end ChiudiPagina;
 
 procedure indirizzo(indirizzo VARCHAR2 default '') is
 begin
@@ -111,11 +117,7 @@ end ChiudiDiv;
 procedure TopBar(saldo varchar2 default null, ruolo VARCHAR2) is
 BEGIN
 	gui.ApriDiv(ident => 'top-bar');
-	/*if saldo is null then
-		gui.Bottone(testo => 'Saldo: 0.00 €', classe => 'bottone');
-	else
-		gui.Bottone(testo => 'Saldo: ' || saldo || '€', classe => 'bottone');
-	end if;*/
+
 	gui.APRIDIV(ident => 'bottoneSinistra');
 
 	CASE ruolo
@@ -156,7 +158,18 @@ BEGIN
    	END CASE;
 	
 	gui.CHIUDIDIV;
-	gui.BottonePrimario(testo => 'Login'); 
+	
+	gui.APRIDIV(classe=> 'bottoniDestra');
+	if saldo is not null then
+		gui.BottonePrimario(testo => 'Saldo: ' || saldo || '€');
+	end if;
+	if ruolo is null then
+		gui.BottonePrimario(testo => 'Login');
+	else 
+		gui.BottonePrimario(testo => 'Logout'); 
+	end if;
+	gui.CHIUDIDIV;
+
 	gui.ChiudiDiv();
 end TopBar;
 
