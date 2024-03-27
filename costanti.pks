@@ -264,7 +264,7 @@ body{
     width: 100%;
   }
 
-  input, input:focus{
+    input, input:focus{
     outline: none !important;
     border: 0px;
     width: auto;
@@ -495,6 +495,7 @@ option .tick::before {
   border-radius: 5px;
   border: 1px solid rgba(0, 0, 0, 0.298);
   padding-left: 10px;
+  padding-top : 10px; 
   box-shadow: rgba(0, 0, 0, 0.565) 0px 0px 3px;
   min-height: 40px;
   min-width: 150px;
@@ -504,6 +505,83 @@ option .tick::before {
 .formField:focus{
   border: 1px solid rgba(139, 96, 15, 0.648);
   box-shadow: rgba(139, 96, 15, 0.648) 0px 0px 5px;
-}'; 
+
+
+  //PROVA
+
+.group {
+  position: relative;
+  margin-bottom: 45px;
+}
+
+input {
+  font-size: 18px;
+  padding: 10px 10px 10px 5px;
+  display: block;
+  width: 300px;
+  border: none;
+  border-bottom: 1px solid #757575;
+}
+input:focus {
+  outline: none;
+}
+
+/* LABEL ======================================= */
+label {
+  color: #999;
+  font-size: 18px;
+  font-weight: normal;
+  position: absolute;
+  pointer-events: none;
+  left: 5px;
+  top: 10px;
+  transition: 0.2s ease all;
+  -moz-transition: 0.2s ease all;
+  -webkit-transition: 0.2s ease all;
+}
+
+/* active state */
+input:focus ~ label,
+input:valid ~ label {
+  top: -20px;
+  font-size: 14px;
+  color: #5264ae;
+}
+
+/* BOTTOM BARS ================================= */
+.bar {
+  position: relative;
+  display: block;
+  width: 300px;
+}
+
+.bar:before,
+.bar:after {
+  content: "";
+  height: 2px;
+  width: 0;
+  bottom: 1px;
+  position: absolute;
+  background: #5264ae;
+  transition: 0.2s ease all;
+  -moz-transition: 0.2s ease all;
+  -webkit-transition: 0.2s ease all;
+}
+.bar:before {
+  left: 50%;
+}
+.bar:after {
+  right: 50%;
+}
+
+/* active state */
+input:focus ~ .bar:before,
+input:focus ~ .bar:after {
+  width: 50%;
+}
+
+}';
+
+
 
 END costanti;

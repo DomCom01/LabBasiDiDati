@@ -297,7 +297,6 @@ BEGIN
 	htp.prn ('</form>'); 
 END chiudiForm;  
 
-
 procedure creaForm (titolo VARCHAR2 default '', url VARCHAR2 default '') IS
 BEGIN
 	gui.APRIDIV(classe => 'signupSection'); 
