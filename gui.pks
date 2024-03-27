@@ -32,7 +32,7 @@ procedure ApriBodyTabella;
 procedure AggiungiRigaTabella;
 procedure ChiudiRigaTabella;
 procedure AggiungiElementoTabella(elemento VARCHAR2 default '');
-procedure AggiungiPulsanteInTabella(nome VARCHAR2 default '', collegamento VARCHAR2 default '');
+procedure AggiungiPulsanteInTabella(nome1 VARCHAR2 default '', collegamento1 VARCHAR2 default '', nome2 VARCHAR2 default '', collegamento2 VARCHAR2 default '');
 procedure ChiudiTabella;
 
 

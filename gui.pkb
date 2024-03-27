@@ -185,15 +185,26 @@ BEGIN
 	htp.prn('</tr>');
 end ChiudiRigaTabella;
 
-procedure AggiungiPulsanteInTabella(nome VARCHAR2 default '', collegamento VARCHAR2 default '') IS
+procedure AggiungiPulsanteInTabella(nome1 VARCHAR2 default '', collegamento1 VARCHAR2 default '', nome2 VARCHAR2 default '', collegamento2 VARCHAR2 default '') IS
 BEGIN
-	htp.prn('<td><a href="'||collegamento||'" target="_blank">
+	htp.prn('<td><a href="'||collegamento1||'" target="_blank">
 	<button style="background-color: #000000; 
 	color: white; 
 	padding: 7px 20px; 
 	border: none; 
 	border-radius: 10px; 
-	cursor: pointer;">'|| nome ||'</button></a></td>');
+	cursor: pointer;">'|| nome1 ||'</button></a>');
+	if nome2 is not null then
+		htp.prn('<a href="'||collegamento2||'" target="_blank">
+		<button style="background-color: #000000; 
+		color: white; 
+		padding: 7px 20px; 
+		border: none; 
+		border-radius: 10px; 
+		cursor: pointer;">'|| nome2 ||'</button></a></td>');
+	else
+		htp.prn('</td>');
+	end if;
 END AggiungiPulsanteInTabella;
 
 procedure AggiungiElementoTabella(elemento VARCHAR2 default '') IS
