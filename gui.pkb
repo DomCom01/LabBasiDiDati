@@ -47,7 +47,17 @@ begin
 
 end ChiudiBody;
 
-procedure Bottone(testo varchar2 default '', nome varchar2 default '', valore varchar2 default '', ident varchar2 default '', classe varchar2 default '') is
+procedure indirizzo(indirizzo VARCHAR2 default '') is
+begin
+	htp.prn('<a href="'|| indirizzo ||'">');
+end indirizzo;
+
+procedure chiudiIndirizzo is
+begin
+	htp.prn('</a>');
+end chiudiIndirizzo;
+
+procedure BottoneTopBar(testo varchar2 default '', nome varchar2 default '', valore varchar2 default '') is
 begin
 	htp.prn('<button type="submit" ');
 	
@@ -55,13 +65,29 @@ begin
 		htp.prn('name="' || nome || '"  value="' || valore || '" ');
 	end if;
 	
-	htp.prn('id="' || ident || '" class="' || classe || '">');
-	htp.prn('<span class="text">'); --Span mi serve per mostrare il testo nel bottone della topbar e non sembra darmi problemi con gli altri
+	htp.prn(' class="button-48">');
+	htp.prn('<span class="text">'); 
 	htp.prn(testo);
 	htp.prn('</span>');
 	htp.prn('</button>');
 
-end Bottone;
+end BottoneTopBar;
+
+procedure BottonePrimario(testo varchar2 default '', nome varchar2 default '', valore varchar2 default '') is
+begin
+	htp.prn('<button type="submit" ');
+	
+	if ((nome != '' and nome is not null) and (valore != '' and valore is not null)) then
+		htp.prn('name="' || nome || '"  value="' || valore || '" ');
+	end if;
+	
+	htp.prn(' class="bottone">');
+	htp.prn('<span class="text">'); 
+	htp.prn(testo);
+	htp.prn('</span>');
+	htp.prn('</button>');
+
+end BottonePrimario;
 
 procedure ApriDiv(ident varchar2 default '', classe varchar2 default '') is
 begin
@@ -96,41 +122,41 @@ BEGIN
 
     	when 'Cl' then --Cliente 
 
-			gui.Bottone(testo => 'Clienti', classe => 'button-48'); 
-			gui.Bottone(testo => 'Prenotazioni', classe => 'button-48'); 
+			gui.BottoneTopBar(testo => 'Clienti'); 
+			gui.BottoneTopBar(testo => 'Prenotazioni'); 
 
     	when 'A' THEN --Autista
 
-			gui.Bottone(testo => 'Prenotazioni', classe => 'button-48'); 
-			gui.Bottone(testo => 'Taxi', classe => 'button-48'); 
-			gui.Bottone(testo => 'Turni', classe => 'button-48');
+			gui.BottoneTopBar(testo => 'Prenotazioni'); 
+			gui.BottoneTopBar(testo => 'Taxi'); 
+			gui.BottoneTopBar(testo => 'Turni');
 
     	when 'AR' then --Autista Referente
 
-			gui.Bottone(testo => 'Prenotazioni', classe => 'button-48'); 
-			gui.Bottone(testo => 'Taxi', classe => 'button-48'); 
-			gui.Bottone(testo => 'Turni', classe => 'button-48');
+			gui.BottoneTopBar(testo => 'Prenotazioni'); 
+			gui.BottoneTopBar(testo => 'Taxi'); 
+			gui.BottoneTopBar(testo => 'Turni');
 
     	when 'O' then --Operatore
 
-			gui.Bottone(testo => 'Prenotazioni', classe => 'button-48');  
-			gui.Bottone(testo => 'Turni', classe => 'button-48');
+			gui.BottoneTopBar(testo => 'Prenotazioni');  
+			gui.BottoneTopBar(testo => 'Turni');
 
     	when 'M' then --Manager
 
-			gui.Bottone(testo => 'Clienti', classe => 'button-48'); 
-			gui.Bottone(testo => 'Prenotazioni', classe => 'button-48'); 
-			gui.Bottone(testo => 'Taxi', classe => 'button-48'); 
-			gui.Bottone(testo => 'Turni', classe => 'button-48'); 
+			gui.BottoneTopBar(testo => 'Clienti'); 
+			gui.BottoneTopBar(testo => 'Prenotazioni'); 
+			gui.BottoneTopBar(testo => 'Taxi'); 
+			gui.BottoneTopBar(testo => 'Turni'); 
 
       	when 'Co' then --Contabile
 
-			gui.Bottone(testo => 'Taxi', classe => 'button-48'); 
+			gui.BottoneTopBar(testo => 'Taxi'); 
 
    	END CASE;
 	
 	gui.CHIUDIDIV;
-	gui.Bottone(testo => 'Login', classe => 'bottone'); 
+	gui.BottonePrimario(testo => 'Login'); 
 	gui.ChiudiDiv();
 end TopBar;
 
@@ -293,10 +319,10 @@ BEGIN
 	gui.APRIDIV(ident => 'footer');
 	htp.prn('<footer>');
 	gui.APRIDIV(ident => 'bottoneSinistra');
-		gui.Bottone(testo => 'Contattaci', classe => 'button-48'); 
-		gui.Bottone(testo => 'Su di noi', classe => 'button-48'); 
-		gui.Bottone(testo => 'Termini di servizio', classe => 'button-48'); 
-		gui.Bottone(testo => 'Privacy', classe => 'button-48'); 
+		gui.BottoneTopBar(testo => 'Contattaci'); 
+		gui.BottoneTopBar(testo => 'Su di noi'); 
+		gui.BottoneTopBar(testo => 'Termini di servizio'); 
+		gui.BottoneTopBar(testo => 'Privacy'); 
 	gui.CHIUDIDIV;
 	htp.prn('</footer>');
 	gui.CHIUDIDIV;

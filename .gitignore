@@ -6,3 +6,7 @@ Test/style.css
 Test/index.html
 login.sql
 .gitignore
+index.html
+style.css
+login.pks
+login.pkb

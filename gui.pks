@@ -12,7 +12,9 @@ procedure ApriBody(idSessione int default 0, ruolo VARCHAR2);
 
 procedure ChiudiBody;
 
-procedure Bottone(testo varchar2 default '', nome varchar2 default '', valore varchar2 default '', ident varchar2 default '', classe varchar2 default '');
+procedure BottoneTopBar(testo varchar2 default '', nome varchar2 default '', valore varchar2 default '');
+
+procedure BottonePrimario(testo varchar2 default '', nome varchar2 default '', valore varchar2 default '');
 
 procedure ApriDiv(ident varchar2 default '', classe varchar2 default '');
 
@@ -62,5 +64,8 @@ procedure AggiungiCampoForm(tipo VARCHAR2 default 'text', nome VARCHAR2, value V
 procedure AggiungiLabel(target VARCHAR2, testo VARCHAR2);
 PROCEDURE chiudiForm;
 
+--tag a
+procedure indirizzo(indirizzo VARCHAR2 default '');
+procedure chiudiIndirizzo;
 
 end gui;
