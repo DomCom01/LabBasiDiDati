@@ -29,10 +29,12 @@ procedure AggiungiHeadersTabella(elementi StringArray default emptyArray);
 procedure AggiungiHeaderTabella(elemento VARCHAR2 default '');
 procedure ChiudiHeaderTabella;
 procedure ApriBodyTabella;
-procedure ChiudiTabella;
 procedure AggiungiRigaTabella;
 procedure ChiudiRigaTabella;
 procedure AggiungiElementoTabella(elemento VARCHAR2 default '');
+procedure AggiungiPulsanteInTabella(collegamento1 VARCHAR2 default '', collegamento2 VARCHAR2 default '');
+procedure ChiudiTabella;
+
 
 --procedure per Filtro Tabella
 procedure ApriFormFiltro(azione VARCHAR default '');
@@ -52,14 +54,12 @@ procedure aggiungiDropdown(testo VARCHAR2 default 'testo', opzioni stringArray d
 --Footer
 procedure Footer;
 
---form
+--Form
 
+procedure aggiungiForm(classe VARCHAR2 default '', name VARCHAR2 default '', url VARCHAR2 default '');
+procedure creaForm (titolo VARCHAR2 default '', url VARCHAR2 default '');
+procedure AggiungiCampoForm(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false);
+procedure AggiungiLabel(target VARCHAR2, testo VARCHAR2);
+PROCEDURE chiudiForm;
 
-procedure creaForm (titolo VARCHAR2 default ''); 
-procedure aggiungiForm (method VARCHAR2 default 'POST', classe VARCHAR2 default '', name VARCHAR2 default ''); 
-procedure chiudiForm; 
-/*
-procedure aggiungiInput (tipo varchar2 default 'text',id varchar2 default '', testo varchar2 default ''); 
-procedure aggiungiLabelForm (per varchar2 default '', form varchar2 default ''); 
-*/
 end gui;

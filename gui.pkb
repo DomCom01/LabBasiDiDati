@@ -3,7 +3,6 @@ create or replace PACKAGE BODY gui as
 procedure Reindirizza(indirizzo varchar2) is
 begin
 	htp.prn('<head><meta http-equiv="refresh" content="0;url=' || indirizzo || '"></head>');
-
 end Reindirizza;
 
 procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default 0, ruolo VARCHAR2 default 'Cl') is
@@ -186,10 +185,27 @@ BEGIN
 	htp.prn('</tr>');
 end ChiudiRigaTabella;
 
+procedure AggiungiPulsanteInTabella(collegamento1 VARCHAR2 default '', collegamento2 VARCHAR2 default '') IS
+BEGIN
+	htp.prn('<td><a href="'||collegamento1||'" target="_blank">
+		<button><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16l-1.58 14.22A2 2 0 0 1 16.432 22H7.568a2 2 0 0 1-1.988-1.78zm3.345-2.853A2 2 0 0 1 9.154 2h5.692a2 2 0 0 1 1.81 1.147L18 6H6zM2 6h20m-12 5v5m4-5v5"/>
+        </svg></button></a>');
+	if collegamento2 is not null then
+		htp.prn('<a href="'||collegamento2||'" target="_blank">
+		<button>
+		<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" fill-opacity="0" d="M20 7L17 4L15 6L18 9L20 7Z"><animate fill="freeze" attributeName="fill-opacity" begin="1.2s" dur="0.15s" values="0;0.3"/></path><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="20" stroke-dashoffset="20" d="M3 21H21"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="20;0"/></path><path stroke-dasharray="44" stroke-dashoffset="44" d="M7 17V13L17 3L21 7L11 17H7"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.4s" dur="0.6s" values="44;0"/></path><path stroke-dasharray="8" stroke-dashoffset="8" d="M14 6L18 10"><animate fill="freeze" attributeName="stroke-dashoffset" begin="1s" dur="0.2s" values="8;0"/></path></g></svg>
+		</button></a></td>');
+	else
+		htp.prn('</td>');
+	end if;
+END AggiungiPulsanteInTabella;
+
 procedure AggiungiElementoTabella(elemento VARCHAR2 default '') IS
 BEGIN
 	htp.prn('<td>'|| elemento || '</td>');
 end AggiungiElementoTabella;
+
 
 procedure ApriFormFiltro(azione VARCHAR default '') IS
 begin
@@ -287,28 +303,41 @@ BEGIN
 END Footer;
 
 /*Form*/
-procedure aggiungiForm (method VARCHAR2 default 'POST', classe VARCHAR2 default '', name VARCHAR2 default '') IS
+procedure aggiungiForm (classe VARCHAR2 default '', name VARCHAR2 default '', url VARCHAR2 default '') IS
 BEGIN
-	htp.prn ('<form method="'||method||'" class="'||classe||'" name="'||name||'"'); 
-	END aggiungiForm;
+	htp.prn ('<form method="GET" class="'||classe||'" name="'||name||'" action="'||url||'"">'); 
+END aggiungiForm;
 
 procedure chiudiForm IS
 BEGIN
 	gui.CHIUDIDIV; 
 	htp.prn ('</form>'); 
-	END chiudiForm;  
+END chiudiForm;  
 
-
-procedure creaForm (titolo VARCHAR2 default '') IS
+procedure creaForm (titolo VARCHAR2 default '', url VARCHAR2 default '') IS
 BEGIN
 	gui.APRIDIV(classe => 'signupSection'); 
 	gui.APRIDIV(classe => 'info'); 
 	gui.aggiungiIntestazione(testo => titolo, dimensione => 'h2'); 
 	gui.CHIUDIDIV; 
 
-	gui.AGGIUNGIFORM (method => 'GET', classe => 'signupForm', name => 'signupform'); 
-	gui.CHIUDIFORM; 
+	gui.AGGIUNGIFORM (classe => 'signupForm', name => 'signupform'); 
 	
 END creaForm; 
+
+procedure AggiungiCampoForm(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false) as
+BEGIN
+	if required then
+		htp.prn('<input class="formField" type="'||tipo||'" name="'|| nome ||'" placeholder="'||placeholder||'" value="'||value||'" required>');
+	else 
+		htp.prn('<input class="formField" type="'||tipo||'" name="'|| nome ||'" placeholder="'||placeholder||'" value="'||value||'">');
+	end if;
+
+end AggiungiCampoForm ;
+
+procedure AggiungiLabel(target VARCHAR2, testo VARCHAR2) is
+begin
+	htp.prn('<label for="'||target||'"">'||testo||' </label>');
+end AggiungiLabel;
 
 end gui;
