@@ -427,7 +427,6 @@ BEGIN
 	gui.CHIUDIDIV; 
 	END chiudiGruppoInput; 
 
-
 procedure aCapo is
 BEGIN
 	htp.prn('<br>');
