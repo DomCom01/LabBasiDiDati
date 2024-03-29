@@ -5,6 +5,11 @@ begin
 	htp.prn('<head><meta http-equiv="refresh" content="0;url=' || indirizzo || '"></head>');
 end Reindirizza;
 
+procedure aCapo is
+BEGIN
+	htp.prn('<br>');
+end aCapo;
+
 procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default 0, ruolo VARCHAR2 default 'Cl') is
 begin
 	htp.htmlOpen;
@@ -24,7 +29,8 @@ end ApriPagina;
 procedure ApriBody(idSessione int default 0, ruolo VARCHAR2) is
 begin
   htp.print('<body>');
-  gui.TopBar(null, ruolo); --Modificare if sotto per aggiungere TopBar con saldo e menu profilo se utente registrato, altrimenti niente
+  gui.TopBar('', ruolo); --Modificare if sotto per aggiungere TopBar con saldo e menu profilo se utente registrato, altrimenti niente
+						 --Saldo da aggiornare
   gui.ApriDiv('', 'container');
   gui.ApriDiv('', 'contentContainer');
   /*if (idSessione = 0) then  -- Sessione di tipo 'Ospite'
@@ -38,16 +44,26 @@ begin
 
 end ApriBody;
 
-procedure ChiudiBody is
+procedure ChiudiPagina is
 begin
 	htp.prn('</div>'); /*container*/
 	htp.prn('</div>'); /*content-container*/
 	gui.Footer;
 	htp.print('</body>');
 
-end ChiudiBody;
+end ChiudiPagina;
 
-procedure Bottone(testo varchar2 default '', nome varchar2 default '', valore varchar2 default '', ident varchar2 default '', classe varchar2 default '') is
+procedure indirizzo(indirizzo VARCHAR2 default '') is
+begin
+	htp.prn('<a href="'|| indirizzo ||'">');
+end indirizzo;
+
+procedure chiudiIndirizzo is
+begin
+	htp.prn('</a>');
+end chiudiIndirizzo;
+
+procedure BottoneTopBar(testo varchar2 default '', nome varchar2 default '', valore varchar2 default '') is
 begin
 	htp.prn('<button type="submit" ');
 	
@@ -55,13 +71,29 @@ begin
 		htp.prn('name="' || nome || '"  value="' || valore || '" ');
 	end if;
 	
-	htp.prn('id="' || ident || '" class="' || classe || '">');
-	htp.prn('<span class="text">'); --Span mi serve per mostrare il testo nel bottone della topbar e non sembra darmi problemi con gli altri
+	htp.prn(' class="button-48">');
+	htp.prn('<span class="text">'); 
 	htp.prn(testo);
 	htp.prn('</span>');
 	htp.prn('</button>');
 
-end Bottone;
+end BottoneTopBar;
+
+procedure BottonePrimario(testo varchar2 default '', nome varchar2 default '', valore varchar2 default '') is
+begin
+	htp.prn('<button type="submit" ');
+	
+	if ((nome != '' and nome is not null) and (valore != '' and valore is not null)) then
+		htp.prn('name="' || nome || '"  value="' || valore || '" ');
+	end if;
+	
+	htp.prn(' class="bottone">');
+	htp.prn('<span class="text">'); 
+	htp.prn(testo);
+	htp.prn('</span>');
+	htp.prn('</button>');
+
+end BottonePrimario;
 
 procedure ApriDiv(ident varchar2 default '', classe varchar2 default '') is
 begin
@@ -85,52 +117,59 @@ end ChiudiDiv;
 procedure TopBar(saldo varchar2 default null, ruolo VARCHAR2) is
 BEGIN
 	gui.ApriDiv(ident => 'top-bar');
-	/*if saldo is null then
-		gui.Bottone(testo => 'Saldo: 0.00 €', classe => 'bottone');
-	else
-		gui.Bottone(testo => 'Saldo: ' || saldo || '€', classe => 'bottone');
-	end if;*/
+
 	gui.APRIDIV(ident => 'bottoneSinistra');
 
 	CASE ruolo
 
     	when 'Cl' then --Cliente 
 
-			gui.Bottone(testo => 'Clienti', classe => 'button-48'); 
-			gui.Bottone(testo => 'Prenotazioni', classe => 'button-48'); 
+			gui.BottoneTopBar(testo => 'Clienti'); 
+			gui.BottoneTopBar(testo => 'Prenotazioni'); 
 
     	when 'A' THEN --Autista
 
-			gui.Bottone(testo => 'Prenotazioni', classe => 'button-48'); 
-			gui.Bottone(testo => 'Taxi', classe => 'button-48'); 
-			gui.Bottone(testo => 'Turni', classe => 'button-48');
+			gui.BottoneTopBar(testo => 'Prenotazioni'); 
+			gui.BottoneTopBar(testo => 'Taxi'); 
+			gui.BottoneTopBar(testo => 'Turni');
 
     	when 'AR' then --Autista Referente
 
-			gui.Bottone(testo => 'Prenotazioni', classe => 'button-48'); 
-			gui.Bottone(testo => 'Taxi', classe => 'button-48'); 
-			gui.Bottone(testo => 'Turni', classe => 'button-48');
+			gui.BottoneTopBar(testo => 'Prenotazioni'); 
+			gui.BottoneTopBar(testo => 'Taxi'); 
+			gui.BottoneTopBar(testo => 'Turni');
 
     	when 'O' then --Operatore
 
-			gui.Bottone(testo => 'Prenotazioni', classe => 'button-48');  
-			gui.Bottone(testo => 'Turni', classe => 'button-48');
+			gui.BottoneTopBar(testo => 'Prenotazioni');  
+			gui.BottoneTopBar(testo => 'Turni');
 
     	when 'M' then --Manager
 
-			gui.Bottone(testo => 'Clienti', classe => 'button-48'); 
-			gui.Bottone(testo => 'Prenotazioni', classe => 'button-48'); 
-			gui.Bottone(testo => 'Taxi', classe => 'button-48'); 
-			gui.Bottone(testo => 'Turni', classe => 'button-48'); 
+			gui.BottoneTopBar(testo => 'Clienti'); 
+			gui.BottoneTopBar(testo => 'Prenotazioni'); 
+			gui.BottoneTopBar(testo => 'Taxi'); 
+			gui.BottoneTopBar(testo => 'Turni'); 
 
       	when 'Co' then --Contabile
 
-			gui.Bottone(testo => 'Taxi', classe => 'button-48'); 
+			gui.BottoneTopBar(testo => 'Taxi'); 
 
    	END CASE;
 	
 	gui.CHIUDIDIV;
-	gui.Bottone(testo => 'Login', classe => 'bottone'); 
+	
+	gui.APRIDIV(classe=> 'bottoniDestra');
+	if saldo is not null then
+		gui.BottonePrimario(testo => 'Saldo: ' || saldo || '€');
+	end if;
+	if ruolo is null then
+		gui.BottonePrimario(testo => 'Login');
+	else 
+		gui.BottonePrimario(testo => 'Logout'); 
+	end if;
+	gui.CHIUDIDIV;
+
 	gui.ChiudiDiv();
 end TopBar;
 
@@ -184,28 +223,6 @@ procedure ChiudiRigaTabella IS
 BEGIN
 	htp.prn('</tr>');
 end ChiudiRigaTabella;
-
-procedure AggiungiPulsanteInTabella(nome1 VARCHAR2 default '', collegamento1 VARCHAR2 default '', nome2 VARCHAR2 default '', collegamento2 VARCHAR2 default '') IS
-BEGIN
-	htp.prn('<td><a href="'||collegamento1||'" target="_blank">
-	<button style="background-color: #000000; 
-	color: white; 
-	padding: 7px 20px; 
-	border: none; 
-	border-radius: 10px; 
-	cursor: pointer;">'|| nome1 ||'</button></a>');
-	if nome2 is not null then
-		htp.prn('<a href="'||collegamento2||'" target="_blank">
-		<button style="background-color: #000000; 
-		color: white; 
-		padding: 7px 20px; 
-		border: none; 
-		border-radius: 10px; 
-		cursor: pointer;">'|| nome2 ||'</button></a></td>');
-	else
-		htp.prn('</td>');
-	end if;
-END AggiungiPulsanteInTabella;
 
 procedure AggiungiElementoTabella(elemento VARCHAR2 default '') IS
 BEGIN
@@ -299,10 +316,10 @@ BEGIN
 	gui.APRIDIV(ident => 'footer');
 	htp.prn('<footer>');
 	gui.APRIDIV(ident => 'bottoneSinistra');
-		gui.Bottone(testo => 'Contattaci', classe => 'button-48'); 
-		gui.Bottone(testo => 'Su di noi', classe => 'button-48'); 
-		gui.Bottone(testo => 'Termini di servizio', classe => 'button-48'); 
-		gui.Bottone(testo => 'Privacy', classe => 'button-48'); 
+		gui.BottoneTopBar(testo => 'Contattaci'); 
+		gui.BottoneTopBar(testo => 'Su di noi'); 
+		gui.BottoneTopBar(testo => 'Termini di servizio'); 
+		gui.BottoneTopBar(testo => 'Privacy'); 
 	gui.CHIUDIDIV;
 	htp.prn('</footer>');
 	gui.CHIUDIDIV;

@@ -105,6 +105,11 @@ html{
   height: 8vh;
 }
 
+.bottoniDestra {
+  display: flex; /* Make the wrapper a flexbox container */
+  flex-shrink: 0; /* Prevent wrapper from shrinking */
+}
+
 /* CSS */
 
 .button-48 {
@@ -195,6 +200,15 @@ body{
     table-layout: fixed;
     border-style: hidden;
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.565);
+}
+
+.tab button{
+  background-color: #000000; 
+	color: white; 
+	padding: 7px 20px;
+	border: none; 
+	border-radius: 10px; 
+	cursor: pointer;
 }
 
 .tab tr, td{

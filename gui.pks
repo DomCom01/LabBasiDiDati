@@ -8,11 +8,15 @@ procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int defa
 
 procedure Reindirizza(indirizzo varchar2);
 
+PROCEDURE aCapo;
+
 procedure ApriBody(idSessione int default 0, ruolo VARCHAR2);
 
-procedure ChiudiBody;
+procedure ChiudiPagina;
 
-procedure Bottone(testo varchar2 default '', nome varchar2 default '', valore varchar2 default '', ident varchar2 default '', classe varchar2 default '');
+procedure BottoneTopBar(testo varchar2 default '', nome varchar2 default '', valore varchar2 default '');
+
+procedure BottonePrimario(testo varchar2 default '', nome varchar2 default '', valore varchar2 default '');
 
 procedure ApriDiv(ident varchar2 default '', classe varchar2 default '');
 
@@ -32,9 +36,6 @@ procedure ApriBodyTabella;
 procedure AggiungiRigaTabella;
 procedure ChiudiRigaTabella;
 procedure AggiungiElementoTabella(elemento VARCHAR2 default '');
-procedure AggiungiPulsanteInTabella(nome1 VARCHAR2 default '', collegamento1 VARCHAR2 default '', nome2 VARCHAR2 default '', collegamento2 VARCHAR2 default '');
-procedure ChiudiTabella;
-
 
 --procedure per Filtro Tabella
 procedure ApriFormFiltro(azione VARCHAR default '');
@@ -61,5 +62,6 @@ procedure creaForm (titolo VARCHAR2 default '', url VARCHAR2 default '');
 procedure AggiungiCampoForm(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false);
 procedure AggiungiLabel(target VARCHAR2, testo VARCHAR2);
 PROCEDURE chiudiForm;
+
 
 end gui;
