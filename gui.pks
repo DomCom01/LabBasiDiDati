@@ -36,10 +36,13 @@ procedure ApriBodyTabella;
 procedure AggiungiRigaTabella;
 procedure ChiudiRigaTabella;
 procedure AggiungiElementoTabella(elemento VARCHAR2 default '');
+procedure AggiungiPulsanteInTabella(collegamento1 VARCHAR2 default '', collegamento2 VARCHAR2 default '');
+procedure ChiudiTabella;
+
 
 --procedure per Filtro Tabella
 procedure ApriFormFiltro(azione VARCHAR default '');
-procedure AggiungiCampoFormFiltro(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '');
+procedure AggiungiCampoFormFiltro(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', id VARCHAR2 default '');
 procedure chiudiFormFiltro;
 procedure ApriSelectFormFiltro(nome varchar2);
 procedure AggiungiOpzioneSelect(value VARCHAR2, selected BOOLEAN, testo VARCHAR2 default '');
@@ -58,10 +61,18 @@ procedure Footer;
 --Form
 
 procedure aggiungiForm(classe VARCHAR2 default '', name VARCHAR2 default '', url VARCHAR2 default '');
-procedure creaForm (titolo VARCHAR2 default '', url VARCHAR2 default '');
-procedure AggiungiCampoForm(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false);
+procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '');
 procedure AggiungiLabel(target VARCHAR2, testo VARCHAR2);
+procedure aggiungiIcona (classe VARCHAR2 default ''); 
+procedure aggiungiCampoForm (tipo VARCHAR2 default 'text', classeIcona VARCHAR2 default '', nome VARCHAR2, placeholder VARCHAR2 default ''); 
+procedure aggiungiRigaForm;
+procedure chiudiRigaForm; 
+procedure aggiungiBottoneSubmit (nome VARCHAR2, value VARCHAR2 default '', onclick VARCHAR2 default ''); 
+PROCEDURE aggiungiGruppoInput; 
+procedure chiudiGruppoInput; 
 PROCEDURE chiudiForm;
+
+
 
 
 end gui;

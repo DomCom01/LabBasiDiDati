@@ -5,11 +5,6 @@ begin
 	htp.prn('<head><meta http-equiv="refresh" content="0;url=' || indirizzo || '"></head>');
 end Reindirizza;
 
-procedure aCapo is
-BEGIN
-	htp.prn('<br>');
-end aCapo;
-
 procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default 0, ruolo VARCHAR2 default 'Cl') is
 begin
 	htp.htmlOpen;
@@ -20,6 +15,8 @@ begin
   		<meta name="viewport" content="width=device-width, initial-scale=1">
   	'); 
 	htp.print('<style> ' || costanti.stile || '</style>');
+	htp.print('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+'); /*FONTAwesome*/
 	htp.print('<script type="text/javascript">' || costanti.scriptJS || '</script>'); -- Aggiunto script di base
  	htp.headClose; 
 	gui.ApriBody(idSessione, ruolo);
@@ -29,8 +26,7 @@ end ApriPagina;
 procedure ApriBody(idSessione int default 0, ruolo VARCHAR2) is
 begin
   htp.print('<body>');
-  gui.TopBar('', ruolo); --Modificare if sotto per aggiungere TopBar con saldo e menu profilo se utente registrato, altrimenti niente
-						 --Saldo da aggiornare
+  gui.TopBar(null, ruolo); --Modificare if sotto per aggiungere TopBar con saldo e menu profilo se utente registrato, altrimenti niente
   gui.ApriDiv('', 'container');
   gui.ApriDiv('', 'contentContainer');
   /*if (idSessione = 0) then  -- Sessione di tipo 'Ospite'
@@ -44,7 +40,7 @@ begin
 
 end ApriBody;
 
-procedure ChiudiPagina is
+procedure ChiudiBody is
 begin
 	htp.prn('</div>'); /*container*/
 	htp.prn('</div>'); /*content-container*/
@@ -117,9 +113,12 @@ end ChiudiDiv;
 procedure TopBar(saldo varchar2 default null, ruolo VARCHAR2) is
 BEGIN
 	gui.ApriDiv(ident => 'top-bar');
-
+	/*if saldo is null then
+		gui.Bottone(testo => 'Saldo: 0.00 €', classe => 'bottone');
+	else
+		gui.Bottone(testo => 'Saldo: ' || saldo || '€', classe => 'bottone');
+	end if;*/
 	gui.APRIDIV(ident => 'bottoneSinistra');
-
 	CASE ruolo
 
     	when 'Cl' then --Cliente 
@@ -224,6 +223,22 @@ BEGIN
 	htp.prn('</tr>');
 end ChiudiRigaTabella;
 
+procedure AggiungiPulsanteInTabella(collegamento1 VARCHAR2 default '', collegamento2 VARCHAR2 default '') IS
+BEGIN
+	htp.prn('<td><a href="'||collegamento1||'" target="_blank">
+		<button><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16l-1.58 14.22A2 2 0 0 1 16.432 22H7.568a2 2 0 0 1-1.988-1.78zm3.345-2.853A2 2 0 0 1 9.154 2h5.692a2 2 0 0 1 1.81 1.147L18 6H6zM2 6h20m-12 5v5m4-5v5"/>
+        </svg></button></a>');
+	if collegamento2 is not null then
+		htp.prn('<a href="'||collegamento2||'" target="_blank">
+		<button>
+		<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" fill-opacity="0" d="M20 7L17 4L15 6L18 9L20 7Z"><animate fill="freeze" attributeName="fill-opacity" begin="1.2s" dur="0.15s" values="0;0.3"/></path><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="20" stroke-dashoffset="20" d="M3 21H21"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="20;0"/></path><path stroke-dasharray="44" stroke-dashoffset="44" d="M7 17V13L17 3L21 7L11 17H7"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.4s" dur="0.6s" values="44;0"/></path><path stroke-dasharray="8" stroke-dashoffset="8" d="M14 6L18 10"><animate fill="freeze" attributeName="stroke-dashoffset" begin="1s" dur="0.2s" values="8;0"/></path></g></svg>
+		</button></a></td>');
+	else
+		htp.prn('</td>');
+	end if;
+END AggiungiPulsanteInTabella;
+
 procedure AggiungiElementoTabella(elemento VARCHAR2 default '') IS
 BEGIN
 	htp.prn('<td>'|| elemento || '</td>');
@@ -237,7 +252,7 @@ begin
                 	<tr>');
 end ApriFormFiltro;
 
-procedure AggiungiCampoFormFiltro(tipo VARCHAR2 default 'text', nome varchar2, value VARCHAR2 default '',  placeholder VARCHAR2 default '') IS
+procedure AggiungiCampoFormFiltro(tipo VARCHAR2 default 'text', nome varchar2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', id VARCHAR2 default '') IS
 begin
 	htp.prn('<td> <input type="'||tipo||'" name="'|| nome ||'" placeholder="'||placeholder||'" value="'||value||'"> </td>');
 end AggiungiCampoFormFiltro;
@@ -326,42 +341,90 @@ BEGIN
 END Footer;
 
 /*Form*/
+
 procedure aggiungiForm (classe VARCHAR2 default '', name VARCHAR2 default '', url VARCHAR2 default '') IS
 BEGIN
 	htp.prn ('<form method="GET" class="'||classe||'" name="'||name||'" action="'||url||'"">'); 
+	gui.APRIDIV(classe => 'form-container'); 
 END aggiungiForm;
 
 procedure chiudiForm IS
 BEGIN
 	gui.CHIUDIDIV; 
 	htp.prn ('</form>'); 
-END chiudiForm;  
+END chiudiForm; 
 
-
-procedure creaForm (titolo VARCHAR2 default '', url VARCHAR2 default '') IS
-BEGIN
-	gui.APRIDIV(classe => 'signupSection'); 
-	gui.APRIDIV(classe => 'info'); 
-	gui.aggiungiIntestazione(testo => titolo, dimensione => 'h2'); 
-	gui.CHIUDIDIV; 
-
-	gui.AGGIUNGIFORM (classe => 'signupForm', name => 'signupform'); 
-	
-END creaForm; 
-
-procedure AggiungiCampoForm(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false) as
+procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '') as
 BEGIN
 	if required then
-		htp.prn('<input class="formField" type="'||tipo||'" name="'|| nome ||'" placeholder="'||placeholder||'" value="'||value||'" required>');
+		htp.prn('<input class="'||classe||'" type="'||tipo||'"id ="'||ident||'" name="'|| nome ||'" placeholder="'||placeholder||'" value="'||value||'" required>');
 	else 
-		htp.prn('<input class="formField" type="'||tipo||'" name="'|| nome ||'" placeholder="'||placeholder||'" value="'||value||'">');
+		htp.prn('<input class="'||classe||'" type="'||tipo||'"id ="'||ident||'" name="'|| nome ||'" placeholder="'||placeholder||'" value="'||value||'">');
 	end if;
 
-end AggiungiCampoForm ;
+end AggiungiInput;
 
 procedure AggiungiLabel(target VARCHAR2, testo VARCHAR2) is
 begin
 	htp.prn('<label for="'||target||'"">'||testo||' </label>');
 end AggiungiLabel;
+
+procedure aggiungiIcona (classe VARCHAR2 default '') IS
+BEGIN
+	htp.prn ('<i class="'||classe||'"></i>'); 
+	end aggiungiIcona; 
+
+procedure aggiungiCampoForm (tipo VARCHAR2 default 'text', classeIcona VARCHAR2 default '', nome VARCHAR2, placeholder VARCHAR2 default '') IS
+begin
+
+	if tipo = 'text'
+	then
+		gui.APRIDIV (classe => 'input-group input-group-icon');    
+
+                gui.aggiungiInput (nome => nome, placeholder => placeholder, required => true, classe => '');
+                gui.apriDiv (classe => 'input-icon'); 
+                    gui.aggiungiIcona(classe => classeIcona); 
+                gui.chiudiDiv; 
+
+ 	gui.chiudiDiv; 
+	else
+		gui.APRIDIV (classe => 'input-group input-group-icon');     
+
+                gui.aggiungiInput (tipo => tipo, nome => nome, placeholder => placeholder, required => true, classe => '');
+                gui.apriDiv (classe => 'input-icon'); 
+                    gui.aggiungiIcona(classe => classeIcona); 
+                gui.chiudiDiv; 
+
+ 	gui.chiudiDiv; 
+	end if;  
+
+end aggiungiCampoForm;	
+
+procedure aggiungiRigaForm is
+BEGIN 
+	gui.APRIDIV(classe => 'form-row');
+	END aggiungiRigaForm; 
+
+procedure chiudiRigaForm is
+BEGIN 
+	gui.CHIUDIDIV; 
+	END chiudiRigaForm; 
+
+procedure aggiungiBottoneSubmit (nome VARCHAR2, value VARCHAR2 default '') is
+BEGIN
+	gui.APRIDIV(classe => 'form-submit');   
+                    gui.AGGIUNGIINPUT (nome => nome, tipo => 'submit', value => value);
+                gui.CHIUDIDIV;
+	END aggiungiBottoneSubmit; 
+
+procedure aggiungiGruppoInput is
+BEGIN
+	gui.APRIDIV (classe => 'input-group');
+	END aggiungiGruppoInput; 
+
+procedure chiudiGruppoInput is
+BEGIN
+	gui.CHIUDIDIV; 
+	END chiudiGruppoInput; 
 
 end gui;
