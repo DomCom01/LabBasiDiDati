@@ -15,6 +15,8 @@ begin
   		<meta name="viewport" content="width=device-width, initial-scale=1">
   	'); 
 	htp.print('<style> ' || costanti.stile || '</style>');
+	htp.print('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+'); /*FONTAwesome*/
 	htp.print('<script type="text/javascript">' || costanti.scriptJS || '</script>'); -- Aggiunto script di base
  	htp.headClose; 
 	gui.ApriBody(idSessione, ruolo);
@@ -214,7 +216,7 @@ begin
                 	<tr>');
 end ApriFormFiltro;
 
-procedure AggiungiCampoFormFiltro(tipo VARCHAR2 default 'text', nome varchar2, value VARCHAR2 default '',  placeholder VARCHAR2 default '') IS
+procedure AggiungiCampoFormFiltro(tipo VARCHAR2 default 'text', nome varchar2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', id VARCHAR2 default '') IS
 begin
 	htp.prn('<td> <input type="'||tipo||'" name="'|| nome ||'" placeholder="'||placeholder||'" value="'||value||'"> </td>');
 end AggiungiCampoFormFiltro;
@@ -303,41 +305,90 @@ BEGIN
 END Footer;
 
 /*Form*/
+
 procedure aggiungiForm (classe VARCHAR2 default '', name VARCHAR2 default '', url VARCHAR2 default '') IS
 BEGIN
 	htp.prn ('<form method="GET" class="'||classe||'" name="'||name||'" action="'||url||'"">'); 
+	gui.APRIDIV(classe => 'form-container'); 
 END aggiungiForm;
 
 procedure chiudiForm IS
 BEGIN
 	gui.CHIUDIDIV; 
 	htp.prn ('</form>'); 
-END chiudiForm;  
+END chiudiForm; 
 
-procedure creaForm (titolo VARCHAR2 default '', url VARCHAR2 default '') IS
-BEGIN
-	gui.APRIDIV(classe => 'signupSection'); 
-	gui.APRIDIV(classe => 'info'); 
-	gui.aggiungiIntestazione(testo => titolo, dimensione => 'h2'); 
-	gui.CHIUDIDIV; 
-
-	gui.AGGIUNGIFORM (classe => 'signupForm', name => 'signupform'); 
-	
-END creaForm; 
-
-procedure AggiungiCampoForm(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false) as
+procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '') as
 BEGIN
 	if required then
-		htp.prn('<input class="formField" type="'||tipo||'" name="'|| nome ||'" placeholder="'||placeholder||'" value="'||value||'" required>');
+		htp.prn('<input class="'||classe||'" type="'||tipo||'"id ="'||ident||'" name="'|| nome ||'" placeholder="'||placeholder||'" value="'||value||'" required>');
 	else 
-		htp.prn('<input class="formField" type="'||tipo||'" name="'|| nome ||'" placeholder="'||placeholder||'" value="'||value||'">');
+		htp.prn('<input class="'||classe||'" type="'||tipo||'"id ="'||ident||'" name="'|| nome ||'" placeholder="'||placeholder||'" value="'||value||'">');
 	end if;
 
-end AggiungiCampoForm ;
+end AggiungiInput;
 
 procedure AggiungiLabel(target VARCHAR2, testo VARCHAR2) is
 begin
 	htp.prn('<label for="'||target||'"">'||testo||' </label>');
 end AggiungiLabel;
+
+procedure aggiungiIcona (classe VARCHAR2 default '') IS
+BEGIN
+	htp.prn ('<i class="'||classe||'"></i>'); 
+	end aggiungiIcona; 
+
+procedure aggiungiCampoForm (tipo VARCHAR2 default 'text', classeIcona VARCHAR2 default '', nome VARCHAR2, placeholder VARCHAR2 default '') IS
+begin
+
+	if tipo = 'text'
+	then
+		gui.APRIDIV (classe => 'input-group input-group-icon');    
+
+                gui.aggiungiInput (nome => nome, placeholder => placeholder, required => true, classe => '');
+                gui.apriDiv (classe => 'input-icon'); 
+                    gui.aggiungiIcona(classe => classeIcona); 
+                gui.chiudiDiv; 
+
+ 	gui.chiudiDiv; 
+	else
+		gui.APRIDIV (classe => 'input-group input-group-icon');     
+
+                gui.aggiungiInput (tipo => tipo, nome => nome, placeholder => placeholder, required => true, classe => '');
+                gui.apriDiv (classe => 'input-icon'); 
+                    gui.aggiungiIcona(classe => classeIcona); 
+                gui.chiudiDiv; 
+
+ 	gui.chiudiDiv; 
+	end if;  
+
+end aggiungiCampoForm;	
+
+procedure aggiungiRigaForm is
+BEGIN 
+	gui.APRIDIV(classe => 'form-row');
+	END aggiungiRigaForm; 
+
+procedure chiudiRigaForm is
+BEGIN 
+	gui.CHIUDIDIV; 
+	END chiudiRigaForm; 
+
+procedure aggiungiBottoneSubmit (nome VARCHAR2, value VARCHAR2 default '') is
+BEGIN
+	gui.APRIDIV(classe => 'form-submit');   
+                    gui.AGGIUNGIINPUT (nome => nome, tipo => 'submit', value => value);
+                gui.CHIUDIDIV;
+	END aggiungiBottoneSubmit; 
+
+procedure aggiungiGruppoInput is
+BEGIN
+	gui.APRIDIV (classe => 'input-group');
+	END aggiungiGruppoInput; 
+
+procedure chiudiGruppoInput is
+BEGIN
+	gui.CHIUDIDIV; 
+	END chiudiGruppoInput; 
 
 end gui;
