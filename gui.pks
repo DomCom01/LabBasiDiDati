@@ -67,7 +67,7 @@ procedure aggiungiIcona (classe VARCHAR2 default '');
 procedure aggiungiCampoForm (tipo VARCHAR2 default 'text', classeIcona VARCHAR2 default '', nome VARCHAR2, placeholder VARCHAR2 default ''); 
 procedure aggiungiRigaForm;
 procedure chiudiRigaForm; 
-procedure aggiungiBottoneSubmit (nome VARCHAR2, value VARCHAR2 default '', onclick VARCHAR2 default ''); 
+procedure aggiungiBottoneSubmit (nome VARCHAR2, value VARCHAR2 default ''); 
 PROCEDURE aggiungiGruppoInput; 
 procedure chiudiGruppoInput; 
 PROCEDURE chiudiForm;

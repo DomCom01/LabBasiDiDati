@@ -40,7 +40,7 @@ begin
 
 end ApriBody;
 
-procedure ChiudiBody is
+procedure ChiudiPagina is
 begin
 	htp.prn('</div>'); /*container*/
 	htp.prn('</div>'); /*content-container*/
@@ -426,5 +426,11 @@ procedure chiudiGruppoInput is
 BEGIN
 	gui.CHIUDIDIV; 
 	END chiudiGruppoInput; 
+
+
+procedure aCapo is
+BEGIN
+	htp.prn('<br>');
+end aCapo;
 
 end gui;
