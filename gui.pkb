@@ -248,14 +248,33 @@ end AggiungiElementoTabella;
 procedure ApriFormFiltro(azione VARCHAR default '') IS
 begin
 	htp.prn('<form action="'|| azione ||'" method="get">
-            	<table class="inputTAB">
-                	<tr>');
+            	<table class="inputTAB">');
 end ApriFormFiltro;
 
 procedure AggiungiCampoFormFiltro(tipo VARCHAR2 default 'text', nome varchar2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', id VARCHAR2 default '') IS
 begin
-	htp.prn('<td> <input type="'||tipo||'" name="'|| nome ||'" placeholder="'||placeholder||'" value="'||value||'"> </td>');
+	if(tipo = 'submit') then
+	
+		htp.prn('<td>
+				<div class="formField FilterButton">
+					<label class="hidden" id="'||nome||'">_</label>
+					<input type="'||tipo||'" name="'|| nome ||'" value="'||value||'">
+				</div>
+			</td>');
+	else 
+		htp.prn('<td>
+			<div class="formField">
+				<label  id="'||nome||'">'||placeholder||'</label>
+				<input type="'||tipo||'" name="'|| nome ||'" value="'||value||'">
+			</div>
+		</td>');
+	end if;
 end AggiungiCampoFormFiltro;
+
+procedure AggiungiCampoFormHidden(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '') is
+BEGIN
+	htp.prn('<input hidden type="'||tipo||'" name="'|| nome ||'" value="'||value||'">');
+end AggiungiCampoFormHidden;
 
 procedure ApriSelectFormFiltro(nome varchar2) IS
 begin
@@ -278,7 +297,7 @@ end ChiudiSelectFormFiltro;
 
 procedure chiudiFormFiltro IS
 begin
-	htp.prn('</tr> </table> </form>');
+	htp.prn('</table> </form>');
 end chiudiFormFiltro;
 
 procedure aggiungiIntestazione(testo VARCHAR2 default 'Intestazione', dimensione VARCHAR2 default 'h1', class VARCHAR2 default '') is
