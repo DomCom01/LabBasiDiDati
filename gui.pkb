@@ -5,7 +5,7 @@ begin
 	htp.prn('<head><meta http-equiv="refresh" content="0;url=' || indirizzo || '"></head>');
 end Reindirizza;
 
-procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default 0, ruolo VARCHAR2 default 'Cl') is
+procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default -1) is
 begin
 	htp.htmlOpen;
 	htp.headOpen;
@@ -19,27 +19,38 @@ begin
 '); /*FONTAwesome*/
 	htp.print('<script type="text/javascript">' || costanti.scriptJS || '</script>'); -- Aggiunto script di base
  	htp.headClose; 
-	gui.ApriBody(idSessione, ruolo);
+	gui.ApriBody(idSessione, SessionHandler.getRuolo(idSessione));
 
 end ApriPagina;
 
-procedure ApriBody(idSessione int default 0, ruolo VARCHAR2) is
+procedure ApriBody(idSessione int, ruolo VARCHAR) is
 begin
-  htp.print('<body>');
-  gui.TopBar(null, ruolo); --Modificare if sotto per aggiungere TopBar con saldo e menu profilo se utente registrato, altrimenti niente
-  gui.ApriDiv('', 'container');
-  gui.ApriDiv('', 'contentContainer');
-  /*if (idSessione = 0) then  -- Sessione di tipo 'Ospite'
-	modGUI.InserisciLoginERegistrati;
-	modGUI.ChiudiDiv;
-  else
-	-- Fare una query alla tabella Sessioni per aggiungere l'username dell'utente in alto a destra
-	modGUI.InserisciLogout(idSessione);
-	modGUI.ChiudiDiv;
-  end if;*/
+
+	if idSessione = -1 then --Sessione ospite
+		--Apri topbar ? con quali bottoni
+		--Carica form di logIn
+		gui.aCapo;
+	end if;
+
+
+	htp.print('<body>');
+	if ruolo = 'Cliente' then
+		gui.TopBar('0', ruolo); --Modificare if sotto per aggiungere TopBar con saldo e menu profilo se utente registrato, altrimenti niente
+	else 
+		gui.TopBar(null, ruolo);
+	end if;
+	gui.ApriDiv('', 'container');
+	gui.ApriDiv('', 'contentContainer');
+	/*if (idSessione = 0) then  -- Sessione di tipo 'Ospite'
+		modGUI.InserisciLoginERegistrati;
+		modGUI.ChiudiDiv;
+	else
+		-- Fare una query alla tabella Sessioni per aggiungere l'username dell'utente in alto a destra
+		modGUI.InserisciLogout(idSessione);
+		modGUI.ChiudiDiv;
+	end if;*/
 
 end ApriBody;
-
 procedure ChiudiPagina is
 begin
 	htp.prn('</div>'); /*container*/
@@ -121,36 +132,36 @@ BEGIN
 	gui.APRIDIV(ident => 'bottoneSinistra');
 	CASE ruolo
 
-    	when 'Cl' then --Cliente 
+    	when 'Cliente' then --Cliente 
 
 			gui.BottoneTopBar(testo => 'Clienti'); 
 			gui.BottoneTopBar(testo => 'Prenotazioni'); 
 
-    	when 'A' THEN --Autista
+    	when 'Autista' THEN --Autista
 
 			gui.BottoneTopBar(testo => 'Prenotazioni'); 
 			gui.BottoneTopBar(testo => 'Taxi'); 
 			gui.BottoneTopBar(testo => 'Turni');
 
-    	when 'AR' then --Autista Referente
+    	when 'Responsabile' then --Autista Referente
 
 			gui.BottoneTopBar(testo => 'Prenotazioni'); 
 			gui.BottoneTopBar(testo => 'Taxi'); 
 			gui.BottoneTopBar(testo => 'Turni');
 
-    	when 'O' then --Operatore
+    	when 'Operatore' then --Operatore
 
 			gui.BottoneTopBar(testo => 'Prenotazioni');  
 			gui.BottoneTopBar(testo => 'Turni');
 
-    	when 'M' then --Manager
+    	when 'Manager' then --Manager
 
 			gui.BottoneTopBar(testo => 'Clienti'); 
 			gui.BottoneTopBar(testo => 'Prenotazioni'); 
 			gui.BottoneTopBar(testo => 'Taxi'); 
 			gui.BottoneTopBar(testo => 'Turni'); 
 
-      	when 'Co' then --Contabile
+      	when 'Contabile' then --Contabile
 
 			gui.BottoneTopBar(testo => 'Taxi'); 
 
@@ -223,7 +234,7 @@ BEGIN
 	htp.prn('</tr>');
 end ChiudiRigaTabella;
 
-procedure AggiungiPulsanteInTabella(collegamento1 VARCHAR2 default '', collegamento2 VARCHAR2 default '') IS
+procedure AggiungiPulsantiInTabella(collegamento1 VARCHAR2 default '', collegamento2 VARCHAR2 default '') IS
 BEGIN
 	htp.prn('<td><a href="'||collegamento1||'" target="_blank">
 		<button><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
@@ -237,7 +248,14 @@ BEGIN
 	else
 		htp.prn('</td>');
 	end if;
-END AggiungiPulsanteInTabella;
+END AggiungiPulsantiInTabella;
+
+/*
+procedure AggiungiPulsanteTabella(testo varchar2, value VARCHAR2) IS
+BEGIN
+	htp.prn('<td>
+		<button type="submit" value="'||value||'">'||testo||'</button></td>');
+END AggiungiPulsanteInTabella;*/
 
 procedure AggiungiElementoTabella(elemento VARCHAR2 default '') IS
 BEGIN
@@ -276,9 +294,11 @@ BEGIN
 	htp.prn('<input hidden type="'||tipo||'" name="'|| nome ||'" value="'||value||'">');
 end AggiungiCampoFormHidden;
 
-procedure ApriSelectFormFiltro(nome varchar2) IS
+procedure ApriSelectFormFiltro(nome varchar2, placeholder VARCHAR2) IS
 begin
-	htp.prn('<td> <select name="'|| nome ||'"> ');
+	htp.prn('<td> <div class="formField">
+				 <label id="'||nome||'">'||placeholder||'</label>
+				 <select name="'|| nome ||'"> ');
 end ApriSelectFormFiltro;
 
 procedure AggiungiOpzioneSelect(value VARCHAR2, selected BOOLEAN, testo VARCHAR2 default '') as
@@ -292,7 +312,7 @@ END AggiungiOpzioneSelect;
 
 procedure ChiudiSelectFormFiltro IS
 begin
-	htp.prn(' </select> </td> ');
+	htp.prn(' </select> </div> </td> ');
 end ChiudiSelectFormFiltro;
 
 procedure chiudiFormFiltro IS
@@ -369,7 +389,7 @@ END aggiungiForm;
 
 procedure chiudiForm IS
 BEGIN
-	gui.CHIUDIDIV; 
+	gui.CHIUDIDIV;
 	htp.prn ('</form>'); 
 END chiudiForm; 
 
@@ -434,7 +454,7 @@ BEGIN
 	gui.APRIDIV(classe => 'form-submit');   
                     gui.AGGIUNGIINPUT (nome => nome, tipo => 'submit', value => value);
                 gui.CHIUDIDIV;
-	END aggiungiBottoneSubmit; 
+END aggiungiBottoneSubmit; 
 
 procedure aggiungiGruppoInput is
 BEGIN
@@ -444,8 +464,21 @@ BEGIN
 procedure chiudiGruppoInput is
 BEGIN
 	gui.CHIUDIDIV; 
-	END chiudiGruppoInput; 
+END chiudiGruppoInput; 
 
+------------------ Aggiunto per fare delle prove per le procedure nel gruppo operazioni
+procedure aggiungiFormHiddenRigaTabella(azione varchar2 default '') is
+begin
+	htp.prn('<form action="'||azione||'" > <td>');
+end aggiungiFormHiddenRigaTabella;
+
+
+procedure chiudiFormHiddenRigaTabella is
+begin
+	htp.prn(' </td> </form>');
+end chiudiFormHiddenRigaTabella;
+
+-----------------
 
 procedure aCapo is
 BEGIN
