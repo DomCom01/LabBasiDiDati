@@ -374,8 +374,8 @@ BEGIN
 	gui.CHIUDIDIV; 
 	END chiudiRigaForm; 
 
-procedure aggiungiBottoneSubmit (nome VARCHAR2, value VARCHAR2 default '') is
-BEGIN
+procedure aggiungiBottoneSubmit (nome VARCHAR2, value VARCHAR2 default '', onclick VARCHAR2 default '') is
+BEGIN 
 	gui.APRIDIV(classe => 'form-submit');   
                     gui.AGGIUNGIINPUT (nome => nome, tipo => 'submit', value => value);
                 gui.CHIUDIDIV;
