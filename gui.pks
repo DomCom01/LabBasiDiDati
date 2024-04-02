@@ -27,22 +27,20 @@ procedure TopBar(saldo varchar2 default null, ruolo VARCHAR2);
 procedure AggiungiPopup(successo boolean, testo VARCHAR2 default 'Errore!');
 
 -- Procedure per Tabella
-procedure ApriTabella;
-PROCEDURE ApriHeaderTabella;
-procedure AggiungiHeadersTabella(elementi StringArray default emptyArray);
-procedure AggiungiHeaderTabella(elemento VARCHAR2 default '');
-procedure ChiudiHeaderTabella;
-procedure ApriBodyTabella;
+/*ApriTabella ora contiene apri header, aggiungi header, chiudi header e apri body*/
+procedure ApriTabella(elementi StringArray default emptyArray);
 procedure AggiungiRigaTabella;
 procedure ChiudiRigaTabella;
 procedure AggiungiElementoTabella(elemento VARCHAR2 default '');
-procedure AggiungiPulsanteInTabella(collegamento1 VARCHAR2 default '', collegamento2 VARCHAR2 default '');
+procedure AggiungiPulsanteCancellazione(proceduraEliminazione VARCHAR2 default '');
+procedure AggiungiPulsanteModifica(collegamento1 VARCHAR2 default '');
 procedure ChiudiTabella;
 
 
 --procedure per Filtro Tabella
 procedure ApriFormFiltro(azione VARCHAR default '');
 procedure AggiungiCampoFormFiltro(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', id VARCHAR2 default '');
+/* Per aggiungere una nuova riga al form basta chiamare AggiungiRigaTabella */
 procedure chiudiFormFiltro;
 procedure ApriSelectFormFiltro(nome varchar2);
 procedure AggiungiOpzioneSelect(value VARCHAR2, selected BOOLEAN, testo VARCHAR2 default '');
@@ -72,7 +70,7 @@ PROCEDURE aggiungiGruppoInput;
 procedure chiudiGruppoInput; 
 PROCEDURE chiudiForm;
 
-
+procedure cancella;
 
 
 end gui;

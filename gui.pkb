@@ -17,7 +17,7 @@ begin
 	htp.print('<style> ' || costanti.stile || '</style>');
 	htp.print('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 '); /*FONTAwesome*/
-	htp.print('<script type="text/javascript">' || costanti.scriptJS || '</script>'); -- Aggiunto script di base
+	htp.print('<script type="text/javascript">' || costanti.scriptjs || '</script>'); -- Aggiunto script di base
  	htp.headClose; 
 	gui.ApriBody(idSessione, ruolo);
 
@@ -175,38 +175,17 @@ end TopBar;
 
 
 -- Procedura Tabella senza filtro provvisoria
-procedure ApriTabella is
+procedure ApriTabella(elementi StringArray default emptyArray) is
 begin
 	htp.prn('<table class="tab"> ');
-end ApriTabella;
-
-procedure ApriHeaderTabella IS
-BEGIN
 	htp.prn('<thead>');
 	htp.prn('<tr>');
-end ApriHeaderTabella;	
-
-procedure AggiungiHeaderTabella(elemento VARCHAR2 default '') IS
-BEGIN
-	htp.prn('<th>'|| elemento ||'</th>');
-end AggiungiHeaderTabella;
-
-procedure AggiungiHeadersTabella(elementi StringArray default emptyArray) is
-begin
 	for i in 1..elementi.count loop
 		htp.prn('<th>'|| elementi(i) ||'</th>');
 	end loop;
-end AggiungiHeadersTabella;
-
-procedure ChiudiHeaderTabella IS
-BEGIN
 	htp.prn('</thead>');
-end ChiudiHeaderTabella;
-
-procedure ApriBodyTabella IS
-BEGIN
 	htp.prn('<tbody>');
-end ApriBodyTabella;
+end ApriTabella;
 
 procedure ChiudiTabella IS
 BEGIN
@@ -224,21 +203,28 @@ BEGIN
 	htp.prn('</tr>');
 end ChiudiRigaTabella;
 
-procedure AggiungiPulsanteInTabella(collegamento1 VARCHAR2 default '', collegamento2 VARCHAR2 default '') IS
+procedure AggiungiPulsanteCancellazione(proceduraEliminazione VARCHAR2 default '') IS
+begin
+	htp.prn('<td><button onclick="mostraConferma(this.parentNode.parentNode)">
+	<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16l-1.58 14.22A2 2 0 0 1 16.432 22H7.568a2 2 0 0 1-1.988-1.78zm3.345-2.853A2 2 0 0 1 9.154 2h5.692a2 2 0 0 1 1.81 1.147L18 6H6zM2 6h20m-12 5v5m4-5v5"/>
+    </svg>
+	</button></td>');
+end AggiungiPulsanteCancellazione;
+
+procedure cancella IS
+BEGIN
+	gui.AggiungiPopup(True, 'Ciao');
+end cancella;
+
+procedure AggiungiPulsanteModifica(collegamento1 VARCHAR2 default '') IS
 BEGIN
 	htp.prn('<td><a href="'||collegamento1||'" target="_blank">
-		<button><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16l-1.58 14.22A2 2 0 0 1 16.432 22H7.568a2 2 0 0 1-1.988-1.78zm3.345-2.853A2 2 0 0 1 9.154 2h5.692a2 2 0 0 1 1.81 1.147L18 6H6zM2 6h20m-12 5v5m4-5v5"/>
-        </svg></button></a>');
-	if collegamento2 is not null then
-		htp.prn('<a href="'||collegamento2||'" target="_blank">
 		<button>
 		<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" fill-opacity="0" d="M20 7L17 4L15 6L18 9L20 7Z"><animate fill="freeze" attributeName="fill-opacity" begin="1.2s" dur="0.15s" values="0;0.3"/></path><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="20" stroke-dashoffset="20" d="M3 21H21"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="20;0"/></path><path stroke-dasharray="44" stroke-dashoffset="44" d="M7 17V13L17 3L21 7L11 17H7"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.4s" dur="0.6s" values="44;0"/></path><path stroke-dasharray="8" stroke-dashoffset="8" d="M14 6L18 10"><animate fill="freeze" attributeName="stroke-dashoffset" begin="1s" dur="0.2s" values="8;0"/></path></g></svg>
-		</button></a></td>');
-	else
-		htp.prn('</td>');
-	end if;
-END AggiungiPulsanteInTabella;
+		</button></a>');
+	htp.prn('</td>');
+END AggiungiPulsanteModifica;
 
 procedure AggiungiElementoTabella(elemento VARCHAR2 default '') IS
 BEGIN
