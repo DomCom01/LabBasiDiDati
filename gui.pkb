@@ -29,13 +29,14 @@ begin
   gui.TopBar(null, ruolo); --Modificare if sotto per aggiungere TopBar con saldo e menu profilo se utente registrato, altrimenti niente
   gui.ApriDiv('', 'container');
   gui.ApriDiv('', 'contentContainer');
-  /*if (idSessione = 0) then  -- Sessione di tipo 'Ospite'
-	modGUI.InserisciLoginERegistrati;
-	modGUI.ChiudiDiv;
+  /*
+  if (idSessione = 0) then  -- Sessione di tipo 'Ospite'
+	LOGINLOGOUT.loginCliente;
+	gui.ChiudiDiv;
   else
 	-- Fare una query alla tabella Sessioni per aggiungere l'username dell'utente in alto a destra
 	modGUI.InserisciLogout(idSessione);
-	modGUI.ChiudiDiv;
+	gui.ChiudiDiv;
   end if;*/
 
 end ApriBody;

@@ -417,7 +417,7 @@ input[type=submit]{
     height: 100%;
     width: 30%;
     margin: 0px;
-    border-radius: 0px 5px 5px 0px;
+    border-radius: 5px 5px 5px 5px;
     background-color: #f0d685;
     font-size : large; 
     font-weight: bold;  
@@ -427,7 +427,7 @@ input[type=submit]{
     height: 100%;
     width: 30%;
     margin: 0px;
-    border-radius: 0px 5px 5px 0px;
+    border-radius: 5px 5px 5px 5px;
     background-color: #cfab3a;
     font-size: large;
   }
