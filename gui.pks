@@ -54,6 +54,7 @@ procedure aggiungiParagrafo(testo VARCHAR2 default 'testo', class VARCHAR2 defau
 
 --Dropdown con selezione multipla
 procedure aggiungiDropdown(testo VARCHAR2 default 'testo', opzioni stringArray default null);
+procedure aggiungiDropdownFormFiltro(testo VARCHAR2 default 'testo', placeholder VARCHAR2 default 'testo', nomiParametri stringArray default null, opzioni stringArray default null);
 
 --Footer
 procedure Footer;

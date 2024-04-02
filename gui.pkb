@@ -276,14 +276,14 @@ begin
 		htp.prn('<td>
 				<div class="formField FilterButton">
 					<label class="hidden" id="'||nome||'">_</label>
-					<input type="'||tipo||'" name="'|| nome ||'" value="'||value||'">
+					<input class="filterInput" type="'||tipo||'" name="'|| nome ||'" value="'||value||'">
 				</div>
 			</td>');
 	else 
 		htp.prn('<td>
 			<div class="formField">
 				<label  id="'||nome||'">'||placeholder||'</label>
-				<input type="'||tipo||'" name="'|| nome ||'" value="'||value||'">
+				<input class="filterInput" type="'||tipo||'" name="'|| nome ||'" value="'||value||'">
 			</div>
 		</td>');
 	end if;
@@ -319,6 +319,33 @@ procedure chiudiFormFiltro IS
 begin
 	htp.prn('</table> </form>');
 end chiudiFormFiltro;
+
+procedure aggiungiDropdownFormFiltro(testo VARCHAR2 default 'testo', placeholder VARCHAR2 default 'testo', nomiParametri stringArray default null ,opzioni stringArray default null) is 
+begin
+	htp.prn('<td>
+			<div class="formField">');
+	if placeholder is not null then
+		htp.prn('<label >'||placeholder||'</label>');
+	else htp.prn('<label class="hidden" >_</label>');
+	end if;
+	
+	gui.apriDiv(classe => 'multiSelect');
+		htp.prn('<div class="multiSelectBtn" onclick="apriMultiSelect()">');
+			htp.prn('<span class="text">'|| testo ||'</span>');
+			htp.prn('<span class="arrow"></span>');
+		htp.prn('</div>');
+		gui.apriDiv(ident => 'multiSelect-content', classe => 'multiSelect-content');
+		for i in 1..opzioni.count loop
+			gui.apriDiv(ident => 'option');
+				htp.prn('<input type="checkbox" name="'|| nomiParametri(i) ||'" />');
+				htp.prn('<span>'|| opzioni(i) ||'</span>');
+			gui.chiudiDiv();
+		end loop;
+		gui.chiudiDiv();
+	gui.chiudiDiv();
+				
+	htp.prn('</div> </td>');
+end aggiungiDropdownFormFiltro;
 
 procedure aggiungiIntestazione(testo VARCHAR2 default 'Intestazione', dimensione VARCHAR2 default 'h1', class VARCHAR2 default '') is
 begin
