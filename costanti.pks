@@ -1,6 +1,7 @@
-create or replace PACKAGE costanti as
+create or replace package costanti as
 
-scriptJS constant varchar(32767) := '
+/* 32767 è la dimensione massima di varchar2 */
+scriptjs constant varchar2(32767) := q'[
 
 function closeBox(id){
   document.getElementById(id).classList.add("error-box-hidden");
@@ -26,9 +27,32 @@ function apriMenu() {
   }
 }
 
-';
+function mostraConferma(riga) {
+    // Controlla se la riga di conferma è già presente
+    if (!riga.nextElementSibling || !riga.nextElementSibling.classList.contains('rigaConferma')) {
+        // Crea la riga di conferma
+        var nuovaRiga = document.createElement("tr");
+        nuovaRiga.classList.add('rigaConferma'); 
+        var nuovaCella = nuovaRiga.insertCell(0);
+        nuovaCella.colSpan = riga.cells.length; // Imposta il colspan sulla base del numero di colonne nella riga(Non funziona)
+        nuovaCella.innerHTML = "Sicuro di voler cancellare? <button onclick=\"confermaEliminazione(this.parentNode.parentNode)\">Sì</button> <button onclick=\"annullaEliminazione(this.parentNode.parentNode)\">No</button>";
+        riga.parentNode.insertBefore(nuovaRiga, riga.nextSibling);
+    }
+}
 
-stile constant varchar(32767) := '
+function confermaEliminazione(rigaConferma) {
+    //Per ora semplicemente ricarica la pagina
+    window.location.reload();
+}
+
+function annullaEliminazione(rigaConferma) {
+    // Rimuove la riga di conferma se viene cliccato no
+    rigaConferma.parentNode.removeChild(rigaConferma);
+}
+
+
+]';
+	stile constant varchar(32767) := '
 
 html{
   margin:0px;
@@ -104,6 +128,11 @@ html{
   display: flex; /* Make the wrapper a flexbox container */
   flex-shrink: 0; /* Prevent wrapper from shrinking */
   height: 8vh;
+}
+
+.bottoniDestra {
+  display: flex; /* Make the wrapper a flexbox container */
+  flex-shrink: 0; /* Prevent wrapper from shrinking */
 }
 
 /* CSS */
@@ -412,7 +441,7 @@ input[type=submit]{
     height: 100%;
     width: 30%;
     margin: 0px;
-    border-radius: 0px 5px 5px 0px;
+    border-radius: 5px 5px 5px 5px;
     background-color: #f0d685;
     font-size : large; 
     font-weight: bold;  
@@ -422,7 +451,7 @@ input[type=submit]{
     height: 100%;
     width: 30%;
     margin: 0px;
-    border-radius: 0px 5px 5px 0px;
+    border-radius: 5px 5px 5px 5px;
     background-color: #cfab3a;
     font-size: large;
   }
@@ -733,5 +762,4 @@ option .tick::before {
 }
 
 ';
-
-END costanti;
+end costanti;
