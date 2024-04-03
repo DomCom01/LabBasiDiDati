@@ -70,4 +70,8 @@ PROCEDURE chiudiForm;
 procedure indirizzo(indirizzo VARCHAR2 default '');
 procedure chiudiIndirizzo;
 
+
+procedure AggiungiBottoneTabella(testo VARCHAR2 default '', classe VARCHAR2 default 'button-tab');
+procedure BottoneAggiungi(testo VARCHAR2 default '', classe VARCHAR2 default 'button-add');
+
 end gui;
