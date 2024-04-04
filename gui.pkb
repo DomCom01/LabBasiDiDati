@@ -241,6 +241,7 @@ end ApriFormFiltro;
 
 procedure AggiungiCampoFormFiltro(tipo VARCHAR2 default 'text', nome varchar2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', id VARCHAR2 default '') IS
 begin
+
 	htp.prn('<td> <input type="'||tipo||'" name="'|| nome ||'" placeholder="'||placeholder||'" value="'||value||'"> </td>');
 end AggiungiCampoFormFiltro;
 
@@ -329,7 +330,7 @@ END Footer;
 
 /*Form*/
 
-procedure aggiungiForm (classe VARCHAR2 default '', name VARCHAR2 default '', url VARCHAR2 default '') IS
+procedure aggiungiForm (classe VARCHAR2 default '', name VARCHAR2 default '', url VARCHAR default '') IS
 BEGIN
 	htp.prn ('<form method="GET" class="'||classe||'" name="'||name||'" action="'||url||'"">'); 
 	gui.APRIDIV(classe => 'form-container'); 
@@ -337,11 +338,11 @@ END aggiungiForm;
 
 procedure chiudiForm IS
 BEGIN
-	gui.CHIUDIDIV; 
+	gui.CHIUDIDIV; --form container
 	htp.prn ('</form>'); 
 END chiudiForm; 
 
-procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '') as
+procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2 default '', value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '') as
 BEGIN
 	if required then
 		htp.prn('<input class="'||classe||'" type="'||tipo||'"id ="'||ident||'" name="'|| nome ||'" placeholder="'||placeholder||'" value="'||value||'" required>');
@@ -381,7 +382,6 @@ begin
                 gui.apriDiv (classe => 'input-icon'); 
                     gui.aggiungiIcona(classe => classeIcona); 
                 gui.chiudiDiv; 
-
  	gui.chiudiDiv; 
 	end if;  
 
@@ -397,10 +397,12 @@ BEGIN
 	gui.CHIUDIDIV; 
 	END chiudiRigaForm; 
 
-procedure aggiungiBottoneSubmit (nome VARCHAR2, value VARCHAR2 default '', onclick VARCHAR2 default '') is
+procedure aggiungiBottoneSubmit (value VARCHAR2 default '') is
 BEGIN 
 	gui.APRIDIV(classe => 'form-submit');   
-                    gui.AGGIUNGIINPUT (nome => nome, tipo => 'submit', value => value);
+					
+                    gui.AGGIUNGIINPUT (tipo => 'submit', value => value);
+
                 gui.CHIUDIDIV;
 	END aggiungiBottoneSubmit; 
 

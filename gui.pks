@@ -58,14 +58,14 @@ procedure Footer;
 
 --Form
 
-procedure aggiungiForm(classe VARCHAR2 default '', name VARCHAR2 default '', url VARCHAR2 default '');
-procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '');
+procedure aggiungiForm(classe VARCHAR2 default '', name VARCHAR2 default '', url VARCHAR default '');
+procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2 default '', value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '');
 procedure AggiungiLabel(target VARCHAR2, testo VARCHAR2);
 procedure aggiungiIcona (classe VARCHAR2 default ''); 
 procedure aggiungiCampoForm (tipo VARCHAR2 default 'text', classeIcona VARCHAR2 default '', nome VARCHAR2, placeholder VARCHAR2 default ''); 
 procedure aggiungiRigaForm;
 procedure chiudiRigaForm; 
-procedure aggiungiBottoneSubmit (nome VARCHAR2, value VARCHAR2 default ''); 
+procedure aggiungiBottoneSubmit (value VARCHAR2 default ''); 
 PROCEDURE aggiungiGruppoInput; 
 procedure chiudiGruppoInput; 
 PROCEDURE chiudiForm;

@@ -437,7 +437,18 @@ input[type="checkbox"] + label:after {
   content: "\f00c";
 }
 
-input[type=submit]{
+
+.form-submit{
+    display: flex;
+    justify-content : flex-end; 
+
+  a {
+    height: 100%;
+    width: 30%;
+    margin: 0px;
+  }
+    
+  input[type=submit]{
     height: 100%;
     width: 30%;
     margin: 0px;
@@ -455,11 +466,7 @@ input[type=submit]{
     background-color: #cfab3a;
     font-size: large;
   }
-
-  .form-submit{
-    display: flex;
-    justify-content : flex-end; 
-  } 
+} 
 
 input:checked + label:after {
   opacity: 1;
