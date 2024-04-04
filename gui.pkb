@@ -414,6 +414,19 @@ begin
 	htp.prn('<label for="'||target||'"">'||testo||' </label>');
 end AggiungiLabel;
 
+
+procedure AggiungiBottoneTabella(testo VARCHAR2 default '', classe VARCHAR2 default 'button-tab') is
+BEGIN
+	htp.prn('<td><button type="submyt" class="' || classe || '"> '|| testo ||' </button></td>' );
+end AggiungiBottoneTabella;
+
+procedure BottoneAggiungi(testo VARCHAR2 default '', classe VARCHAR2 default 'button-add') is
+BEGIN
+	htp.prn('<div class="button-add-container"><button class="' || classe || '"type="submyt"> '|| testo ||' </button></div>' );
+end BottoneAggiungi;
+
+
+
 procedure aggiungiIcona (classe VARCHAR2 default '') IS
 BEGIN
 	htp.prn ('<i class="'||classe||'"></i>'); 
@@ -490,5 +503,6 @@ procedure aCapo is
 BEGIN
 	htp.prn('<br>');
 end aCapo;
+
 
 end gui;
