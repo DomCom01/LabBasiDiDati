@@ -484,8 +484,6 @@ begin
 	htp.prn(' </td> </form>');
 end chiudiFormHiddenRigaTabella;
 
------------------
-
 procedure aCapo is
 BEGIN
 	htp.prn('<br>');
