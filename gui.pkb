@@ -274,9 +274,9 @@ begin
 	if(tipo = 'submit') then
 	
 		htp.prn('<td>
-				<div class="formField FilterButton">
+				<div class="formField">
 					<label class="hidden" id="'||nome||'">_</label>
-					<input class="filterInput" type="'||tipo||'" name="'|| nome ||'" value="'||value||'">
+					<button class="FilterButton" name="'||nome||'" value="'||value||'">'||placeholder||'</button>
 				</div>
 			</td>');
 	else 

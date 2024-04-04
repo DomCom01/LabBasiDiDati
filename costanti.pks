@@ -345,28 +345,30 @@ body{
     width: 100%;
 }
 
-  .filterInput:focus{
-        outline: none;
-        border: 1px solid rgba(203, 138, 17, 0.648);
-        box-shadow: rgba(139, 96, 15, 0.648) 0px 0px 8px;
-        
-    }
+.filterInput:focus{
+    outline: none;
+    border: 1px solid rgba(203, 138, 17, 0.648);
+    box-shadow: rgba(139, 96, 15, 0.648) 0px 0px 8px;
+      
+}
 
-    .filterInput[type=submit]{
-        border: 1px solid rgba(0, 0, 0, 0.239);
-        width: 100%;
-        margin: 0px;
-        padding: 0px;
-        box-shadow: rgba(0, 0, 0, 0.533) 0px 0px 3px;
-        background-color: #f0d685;
-        cursor: pointer;
-        font-size: 1.2em;
-    }
-    
-    .filterInput[type=submit]:hover {
-        background-color: #f0d685;
-        box-shadow: rgba(0, 0, 0, 0.533) 0px 0px 8px;
-    }
+.FilterButton{
+    border-radius: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.239);
+    width: 100%;
+    height: 40px;
+    margin: 0px;
+    padding: 0px;
+    box-shadow: rgba(0, 0, 0, 0.533) 0px 0px 3px;
+    background-color: #f0d685;
+    cursor: pointer;
+    font-size: 1.2em;
+}
+
+.FilterButton:hover {
+    background-color: #f0d685;
+    box-shadow: rgba(0, 0, 0, 0.533) 0px 0px 8px;
+}
     
 
 
