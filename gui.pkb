@@ -425,8 +425,6 @@ BEGIN
 	htp.prn('<div class="button-add-container"><button class="' || classe || '"type="submyt"> '|| testo ||' </button></div>' );
 end BottoneAggiungi;
 
-
-
 procedure aggiungiIcona (classe VARCHAR2 default '') IS
 BEGIN
 	htp.prn ('<i class="'||classe||'"></i>'); 
