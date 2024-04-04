@@ -248,7 +248,7 @@ begin
             	<table class="inputTAB">');
 end ApriFormFiltro;
 
-procedure AggiungiCampoFormFiltro(tipo VARCHAR2 default 'text', nome varchar2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', id VARCHAR2 default '') IS
+procedure AggiungiCampoFormFiltro(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '') IS
 begin
 	if(tipo = 'submit') then
 	
@@ -261,9 +261,9 @@ begin
 	else 
 		htp.prn('<td>
 			<div class="formField">
-				<label  id="'||nome||'">'||placeholder||'</label>
-				<input class="filterInput" type="'||tipo||'" name="'|| nome ||'" value="'||value||'">
-			</div>
+				<label  id="'||ident||'">'||placeholder||'</label>');
+				gui.aggiungiInput(tipo, nome, value ,'', required, 'filterInput', ident, pattern, minimo, massimo);
+			htp.prn('</div>
 		</td>');
 	end if;
 end AggiungiCampoFormFiltro;
@@ -399,13 +399,28 @@ BEGIN
 	htp.prn ('</form>'); 
 END chiudiForm; 
 
-procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '') as
+procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '') as
 BEGIN
-	if required then
-		htp.prn('<input class="'||classe||'" type="'||tipo||'"id ="'||ident||'" name="'|| nome ||'" placeholder="'||placeholder||'" value="'||value||'" required>');
-	else 
-		htp.prn('<input class="'||classe||'" type="'||tipo||'"id ="'||ident||'" name="'|| nome ||'" placeholder="'||placeholder||'" value="'||value||'">');
+	htp.prn('<input 
+		class="'||classe||'" 
+		type="'||tipo||'"
+		id ="'||ident||'" 
+		name="'|| nome ||'" 
+		placeholder="'||placeholder||'" 
+		value="'||value||'"
+		min="'||minimo||'"
+		max="'||massimo||'"');
+
+	if required then 
+		htp.prn(' required ');
 	end if;
+
+	if pattern is not null then
+		htp.prn('pattern="'||pattern||'" ');
+	end if;
+
+	htp.prn('>');
+
 
 end AggiungiInput;
 
