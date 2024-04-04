@@ -32,7 +32,6 @@ procedure ApriTabella(elementi StringArray default emptyArray);
 procedure AggiungiRigaTabella;
 procedure ChiudiRigaTabella;
 procedure AggiungiElementoTabella(elemento VARCHAR2 default '');
-procedure AggiungiPulsantiInTabella(collegamento1 VARCHAR2 default '', collegamento2 VARCHAR2 default '');
 procedure AggiungiPulsanteCancellazione(proceduraEliminazione VARCHAR2 default '');
 procedure AggiungiPulsanteModifica(collegamento1 VARCHAR2 default '');
 procedure ChiudiTabella;

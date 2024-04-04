@@ -27,6 +27,26 @@ function apriMultiSelect() {
   }
 }
 
+function apriMenu() {
+  var contenutoMenu = document.getElementById("dropdown-content");
+  var freccia = document.querySelector(".dropbtn .arrow");
+  var opzioni = contenutoMenu.querySelectorAll(".option");
+
+  if (contenutoMenu.style.display === "none" || contenutoMenu.style.display === "") {
+    contenutoMenu.style.display = "block";
+    freccia.style.transform = "rotate(0deg)";
+    opzioni.forEach(function(opzione) {
+      opzione.removeAttribute("hidden");
+    });
+  } else {
+    contenutoMenu.style.display = "none";
+    freccia.style.transform = "rotate(-90deg)";
+    opzioni.forEach(function(opzione) {
+      opzione.setAttribute("hidden", "");
+    });
+  }
+}
+
 function mostraConferma(riga) {
     // Controlla se la riga di conferma è già presente
     if (!riga.nextElementSibling || !riga.nextElementSibling.classList.contains('rigaConferma')) {
@@ -721,7 +741,7 @@ h1{
   100% { opacity: 0; display: none; height: 0%;} /* display block/none?*/
 }
 
-/* DROPDOWN */
+/* MultiSelect nel filtro */
 
 .multiSelect {
   position: relative;
@@ -763,6 +783,94 @@ h1{
     margin: 7px 7px 7px 7px;
   }
 
+}
+
+/* DROPDOWN */
+
+.dropdown {
+  position: relative;
+
+  select {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background-color: transparent;
+    padding: 10px;
+    margin: 0;
+    box-sizing: border-box;
+    text-align: left;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    list-style: none;
+    outline: none;
+  }
+}
+
+.dropbtn {
+  width: 101px;
+  padding: 10px;
+  box-sizing: border-box;
+  background-color: #000000;
+  border: none;
+  cursor: pointer;
+  color: #FFFFFF;
+  font-size: 10px;
+  text-align: left;
+  font-family: arial;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+.dropdown-content {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100px;
+  z-index: 1;
+  display: none;
+  background-color: #f1f1f1;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  border: 1px solid #ddd;
+
+  
+  option {
+    width: 100%;
+    padding: 1px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  option:hover {
+    background-color: #ddd;
+  }
+
+  option input[type="checkbox"] {
+    margin: 0 7px 0 0;
+    vertical-align: middle;
+  }
+}
+
+option .tick {
+  display: none;
+}
+
+option input[type="checkbox"]:checked + .tick {
+  display: inline-block;
+}
+
+option .tick::before {
+  content: "";
+  display: block;
+  width: 5px;
+  height: 10px;
+  border-left: 2px solid #000;
+  border-bottom: 2px solid #000;
+  transform: rotate(45deg);
 }
 
 .text {
