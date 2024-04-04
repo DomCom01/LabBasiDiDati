@@ -7,6 +7,26 @@ function closeBox(id){
   document.getElementById(id).classList.add("error-box-hidden");
 }
 
+function apriMultiSelect() {
+  var contenutoMenu = document.getElementById("multiSelect-content");
+  var freccia = document.querySelector(".multiSelectBtn .arrow");
+  var opzioni = contenutoMenu.querySelectorAll("#option");
+
+  if (contenutoMenu.style.display === "none" || contenutoMenu.style.display === "") {
+    contenutoMenu.style.display = "block";
+    freccia.style.transform = "rotate(0deg)";
+    opzioni.forEach(function(opzione) {
+      opzione.removeAttribute("hidden");
+    });
+  } else {
+    contenutoMenu.style.display = "none";
+    freccia.style.transform = "rotate(-90deg)";
+    opzioni.forEach(function(opzione) {
+      opzione.setAttribute("hidden", "");
+    });
+  }
+}
+
 function apriMenu() {
   var contenutoMenu = document.getElementById("dropdown-content");
   var freccia = document.querySelector(".dropbtn .arrow");
@@ -226,45 +246,57 @@ body{
     table-layout: fixed;
     border-style: hidden;
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.565);
-}
 
-.tab button{
-  background-color: #000000; 
-	color: white; 
-	padding: 7px 20px;
-	border: none; 
-	border-radius: 10px; 
-	cursor: pointer;
-}
-
-.tab tr, td{
+    tr, td{
     border: 1px solid rgba(0, 0, 0, 0.565);
     height: 35px;
     font-size: small;
     text-align: center;
-}
+    }
 
-.tab td{
+    td{
     border-right: 0px solid white;
     border-left: 0px solid white;
-}
+    }
 
-.tab tr:hover{
-    background-color: rgba(27, 26, 26, 0.065);
-}
+    tr:hover{
+      background-color: rgba(27, 26, 26, 0.065);
+    }
 
-.tab th{
-    background-color: rgba(0, 0, 0, 0.241);
-    height: 45px;
-    font-size: large;
-}
+    th{
+        background-color: rgba(0, 0, 0, 0.241);
+        height: 45px;
+        font-size: large;
+    }
 
-.tab th:first-child{
-    border-top-left-radius: 5px;
-}
+    th:first-child{
+        border-top-left-radius: 5px;
+    }
 
-.tab th:last-child{
-    border-top-right-radius: 5px;
+    th:last-child{
+        border-top-right-radius: 5px;
+    }
+
+    td:last-child{
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        border: 0px;
+    }
+
+    img{
+        width: 15px;
+        height: 15px;
+    }
+
+    button{
+      background-color: #000000; 
+      color: white; 
+      padding: 7px 20px;
+      border: none; 
+      border-radius: 10px; 
+      cursor: pointer;
+    }
 }
 
 .tab td:last-child{
@@ -278,63 +310,114 @@ body{
     width: 15px;
     height: 15px;
 }
-
 .inputTAB{
   
+  display: table;
   border-collapse: collapse;
   border-radius: 5px;
   width: 100%;
+  height:auto;
   table-layout: fixed;
   border-style: hidden;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.565);
   background-color: rgba(27, 26, 26, 0.065);
 
-  select, select:focus{
-    outline: none !important;
-    margin: 0px;
-    border: 0px;
-    padding: 0px;
-    width: 100%;
-    background-color: transparent;
-    text-align: center;
+  td{
+      margin: 0px;
+      padding: 3px;
+      height: max-content;
   }
 
-  .inputTAB td{
-    border: 1px solid rgba(0, 0, 0, 0.565);
-    width: 100%;
-  }
-  
-  input, input:focus{
-    outline: none !important;
-    border: 0px;
-    width: auto;
-    text-align: center;
-    background-color: transparent;
-    width:100%;
-    padding:0px;
-  }*/
-
-  input[type=submit]{
-    height: 100%;
-    width: 100%;
-    margin: 0px;
-    border-radius: 0px 5px 5px 0px;
-    background-color: #f0d685;
-    font-size: large;
+  td:last-child{
+      padding-right: 6px !important;
   }
 
-  input[type=submit]:hover {
-    height: 100%;
-    width: 100%;
-    margin: 0px;
-    border-radius: 0px 5px 5px 0px;
-    background-color: #cfab3a;
-    font-size: large;
+  td:first-child{
+      padding-left: 6px !important;
   }
+
+  tr:last-child{
+    margin-bottom: 8px;
+  }
+
 }
 
-.inputTAB td:last-child{
+.formField{
+
+    display: block;
+    width: auto;
+    height: auto;
+
+    label{
+        display: block;
+        font-size: 0.8em;
+        padding-left: 6%;
+        margin: 5px;
+        margin-left: 2px;
+    }
+
+    select{
+        display: block;
+        outline: none !important;
+        border-radius: 5px;
+        background-color: white !important;
+        border: 1px solid rgba(0, 0, 0, 0.298);
+        padding-left:0px;
+        padding-left: 3%;
+        margin: 0px;
+        box-shadow: rgba(0, 0, 0, 0.565) 0px 0px 2px;
+        height: 40px;
+        font-size: 1em;
+        width: 100%;
+    }
+
+}
+
+.filterInput{
+    display: block;
+    /*outline: none !important;*/
+    border-radius: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.298);
     padding: 0px;
+    padding-left: 3%;
+    margin: 0px;
+    box-shadow: rgba(0, 0, 0, 0.565) 0px 0px 2px;
+    height: 40px;
+    font-size: 1em;
+    width: auto;
+    transition: all 0.5s ease;
+    width: 100%;
+}
+
+.filterInput:focus{
+    outline: none;
+    border: 1px solid rgba(203, 138, 17, 0.648);
+    box-shadow: rgba(139, 96, 15, 0.648) 0px 0px 8px;
+      
+}
+
+.FilterButton{
+    border-radius: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.239);
+    width: 100%;
+    height: 40px;
+    margin: 0px;
+    padding: 0px;
+    box-shadow: rgba(0, 0, 0, 0.533) 0px 0px 3px;
+    background-color: #f0d685;
+    cursor: pointer;
+    font-size: 1.2em;
+}
+
+.FilterButton:hover {
+    background-color: #f0d685;
+    box-shadow: rgba(0, 0, 0, 0.533) 0px 0px 8px;
+}
+    
+
+
+.hidden{
+    visibility: hidden !important;
 }
 
 form{
@@ -350,92 +433,106 @@ h1{
 /*Roba per form
     URL : https://codepen.io/arefeh_htmi/pen/mdPYZKJ */
 
-input,
-input[type="radio"] + label,
-input[type="checkbox"] + label:before,
-select option,
-select {
-  width: 100%;
-  padding: 1em;
-  line-height: 1.4;
-  background-color: #f9f9f9;
-  border: 1px solid #e5e5e5;
-  border-radius: 3px;
-  -webkit-transition: 0.35s ease-in-out;
-  -moz-transition: 0.35s ease-in-out;
-  -o-transition: 0.35s ease-in-out;
-  transition: 0.35s ease-in-out;
-  transition: all 0.35s ease-in-out;
+.form-submit{
+    display: flex;
+    justify-content : flex-end; 
 }
 
-input[type="radio"] {
-  display: none;
-}
+.form-container {
+  position : relative; 
+  max-width: 38em;
+  padding: 1em 3em 2em 3em;
+  margin: 0em auto;
+  background-color: #fff;
+  border-radius: 4.2px;
+  box-shadow: 0px 3px 10px -2px rgba(0, 0, 0, 0.2);
 
-input[type="radio"] + label,
-select {
-  display: inline-block;
-  width: 50%;
-  text-align: center;
-  float: left;
-  border-radius: 0;
-  color : #000;
-}
+  input,
+  input[type="radio"] + label,
+  input[type="checkbox"] + label:before,
+  select option,
+  select {
+    width: 100%;
+    padding: 1em;
+    line-height: 1.4;
+    background-color: #f9f9f9;
+    border: 1px solid #e5e5e5;
+    border-radius: 3px;
+    -webkit-transition: 0.35s ease-in-out;
+    -moz-transition: 0.35s ease-in-out;
+    -o-transition: 0.35s ease-in-out;
+    transition: 0.35s ease-in-out;
+    transition: all 0.35s ease-in-out;
+  }
 
-input[type="radio"] + label:first-of-type {
-  border-top-left-radius: 3px;
-  border-bottom-left-radius: 3px;
-}
+  input[type="radio"] {
+    display: none;
+  }
 
-input[type="radio"] + label:last-of-type {
-  border-top-right-radius: 3px;
-  border-bottom-right-radius: 3px;
-}
+  input[type="radio"] + label,
+  select {
+    display: inline-block;
+    width: 50%;
+    text-align: center;
+    float: left;
+    border-radius: 0;
+    color : #000;
+  }
 
-input[type="radio"] + label i {
-  padding-right: 0.4em;
-}
+  input[type="radio"] + label:first-of-type {
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+  }
 
-input[type="radio"]:checked + label,
-input:checked + label:before,
-select:focus,
-select:active {
-  background-color: #f0d685;
-  color: #fff;
-  border-color: #bd8200;
-}
+  input[type="radio"] + label:last-of-type {
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+  }
 
-input[type="checkbox"] {
-  display: none;
-}
+  input[type="radio"] + label i {
+    padding-right: 0.4em;
+  }
 
-input[type="checkbox"] + label {
-  position: relative;
-  display: block;
-  padding-left: 1.6em;
-}
+  input[type="radio"]:checked + label,
+  input:checked + label:before,
+  select:focus,
+  select:active {
+    background-color: #f0d685;
+    color: #fff;
+    border-color: #bd8200;
+  }
 
-input[type="checkbox"] + label:before {
-  position: absolute;
-  top: 0.2em;
-  left: 0;
-  display: block;
-  width: 1em;
-  height: 1em;
-  padding: 0;
-  content: "";
-}
+  input[type="checkbox"] {
+    display: none;
+  }
 
-input[type="checkbox"] + label:after {
-  position: absolute;
-  top: 0.45em;
-  left: 0.2em;
-  font-size: 0.8em;
-  color: #fff;
-  opacity: 0;
-  font-family: FontAwesome;
-  content: "\f00c";
-}
+  input[type="checkbox"] + label {
+    position: relative;
+    display: block;
+    padding-left: 1.6em;
+  }
+
+  input[type="checkbox"] + label:before {
+    position: absolute;
+    top: 0.2em;
+    left: 0;
+    display: block;
+    width: 1em;
+    height: 1em;
+    padding: 0;
+    content: "";
+  }
+
+  input[type="checkbox"] + label:after {
+    position: absolute;
+    top: 0.45em;
+    left: 0.2em;
+    font-size: 0.8em;
+    color: #fff;
+    opacity: 0;
+    font-family: FontAwesome;
+    content: "\f00c";
+  }
 
 
 .form-submit{
@@ -468,35 +565,26 @@ input[type="checkbox"] + label:after {
   }
 } 
 
-input:checked + label:after {
-  opacity: 1;
-}
+  input:checked + label:after {
+    opacity: 1;
+  }
 
-input:focus {
-  outline: 0;
-  border-color: #f0d685;
-}
+  input:focus {
+    outline: 0;
+    border-color: #f0d685;
+  }
 
-input:focus + .input-icon i {
-  color: #f0d685;
-}   
+  input:focus + .input-icon i {
+    color: #f0d685;
+  }   
 
-input:focus + .input-icon:after {
-  border-right-color: #f0d685;
-}
+  input:focus + .input-icon:after {
+    border-right-color: #f0d685;
+  }
 
-h2, h4{
-  color: #f0d685;
-}
-
-.form-container {
-  position : relative; 
-  max-width: 38em;
-  padding: 1em 3em 2em 3em;
-  margin: 0em auto;
-  background-color: #fff;
-  border-radius: 4.2px;
-  box-shadow: 0px 3px 10px -2px rgba(0, 0, 0, 0.2);
+  h2, h4{
+    color: #f0d685;
+  }
 }
 
 .form-row {
@@ -665,10 +753,70 @@ h2, h4{
   100% { opacity: 0; display: none; height: 0%;} /* display block/none?*/
 }
 
+/* MultiSelect nel filtro */
+
+.multiSelect {
+  position: relative;
+  height: 38px;
+  width: auto;
+  border-radius: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.298);
+  box-shadow: rgba(0, 0, 0, 0.565) 0px 0px 2px;
+}
+
+.multiSelectBtn {
+  border-radius: 4px;
+  height:100%;
+  width:100%;
+  padding: 10px;
+  background-color: #000000;
+  cursor: pointer;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  font-size: 1em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+.multiSelect-content {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+  display: none;
+  background-color: #f1f1f1;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  border: 1px solid #ddd;
+
+  input[type="checkbox"] {
+    margin: 7px 7px 7px 7px;
+  }
+
+}
+
 /* DROPDOWN */
 
 .dropdown {
   position: relative;
+
+  select {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background-color: transparent;
+    padding: 10px;
+    margin: 0;
+    box-sizing: border-box;
+    text-align: left;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    list-style: none;
+    outline: none;
+  }
 }
 
 .dropbtn {
@@ -698,56 +846,25 @@ h2, h4{
   background-color: #f1f1f1;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   border: 1px solid #ddd;
-}
 
-.text {
-  flex-grow: 1;
-  text-align: center;
-}
+  
+  option {
+    width: 100%;
+    padding: 1px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
 
-.arrow {
-  display: inline-block;
-  width: 0;
-  height: 0;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-top: 6px solid #fff;
-  transform: rotate(-90deg);
-  transition: transform 0.3s;
-}
+  option:hover {
+    background-color: #ddd;
+  }
 
-select {
-  width: 100%;
-  height: 100%;
-  border: none;
-  background-color: transparent;
-  padding: 10px;
-  margin: 0;
-  box-sizing: border-box;
-  text-align: left;
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  appearance: none;
-  list-style: none;
-  outline: none;
-}
-
-option {
-  width: 100%;
-  padding: 1px;
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-}
-
-option:hover {
-  background-color: #ddd;
-}
-
-option input[type="checkbox"] {
-  margin: 0 7px 0 0;
-  vertical-align: middle;
+  option input[type="checkbox"] {
+    margin: 0 7px 0 0;
+    vertical-align: middle;
+  }
 }
 
 option .tick {
@@ -768,5 +885,67 @@ option .tick::before {
   transform: rotate(45deg);
 }
 
+.text {
+  flex-grow: 1;
+  text-align: center;
+}
+
+.arrow {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid #fff;
+  transform: rotate(-90deg);
+  transition: transform 0.3s;
+}
+
+
+.button-add-container {
+  background-color: blue;
+  position: relative;
+  
+}
+.button-add {
+  position: absolute;
+  background-color: black;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  top: 50%;
+  right: 0;
+  transform: translateY(-100%);
+}
+.button-tab {
+  appearance: none;
+  background-color: #0c0b07;
+  border-width: 0;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: inline-block;
+  /*font-family: Clarkson,Helvetica,sans-serif;*/
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1em;
+  margin: 1;
+  margin-right: 1px;
+  opacity: 1;
+  outline: 0;
+  padding: 1.5em 2.2em;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  text-rendering: geometricprecision;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: baseline;
+  white-space: nowrap;
+}
 ';
 end costanti;
