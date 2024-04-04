@@ -79,4 +79,8 @@ PROCEDURE chiudiForm;
 procedure cancella;
 
 
+
+procedure AggiungiBottoneTabella(testo VARCHAR2 default '', classe VARCHAR2 default 'button-tab');
+procedure BottoneAggiungi(testo VARCHAR2 default '', classe VARCHAR2 default 'button-add');
+
 end gui;
