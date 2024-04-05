@@ -291,11 +291,13 @@ body{
 
     button{
       background-color: #000000; 
-      color: white; 
-      padding: 7px 20px;
-      border: none; 
+      color: white;
+      padding: 5px;
+      border: none;
+      margin: 0px;
       border-radius: 10px; 
       cursor: pointer;
+      min-width: 30px;
     }
 }
 
@@ -893,8 +895,8 @@ option .tick::before {
 .button-add-container {
   background-color: blue;
   position: relative;
-  
 }
+
 .button-add {
   position: absolute;
   background-color: black;
@@ -920,11 +922,9 @@ option .tick::before {
   font-weight: 500;
   letter-spacing: 0;
   line-height: 1em;
-  margin: 1;
-  margin-right: 1px;
   opacity: 1;
   outline: 0;
-  padding: 1.5em 2.2em;
+  padding: 5px 8px 5px 8px !important;
   position: relative;
   text-align: center;
   text-decoration: none;

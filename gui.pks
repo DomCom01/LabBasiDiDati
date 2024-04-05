@@ -65,8 +65,8 @@ procedure AggiungiLabel(target VARCHAR2, testo VARCHAR2);
 procedure aggiungiIcona (classe VARCHAR2 default ''); 
 procedure aggiungiCampoForm (tipo VARCHAR2 default 'text', classeIcona VARCHAR2 default '', nome VARCHAR2, placeholder VARCHAR2 default '');
 ------------------- Aggiunto per fare delle prove per le procedure nel gruppo operazioni
-procedure aggiungiFormHiddenRigaTabella(azione varchar2 default '');
-procedure chiudiFormHiddenRigaTabella;
+procedure apriFormTastiAzioneTabella(azione varchar2 default '');
+procedure chiudiFormTastiAzioneTabella;
 -------------------
 procedure AggiungiCampoFormHidden(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '');
 procedure aggiungiRigaForm;

@@ -215,11 +215,11 @@ end ChiudiRigaTabella;
 
 procedure AggiungiPulsanteCancellazione(proceduraEliminazione VARCHAR2 default '') IS
 begin
-	htp.prn('<td><button onclick="mostraConferma(this.parentNode.parentNode)">
+	htp.prn('<button onclick="mostraConferma(this.parentNode.parentNode)">
 	<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
     <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16l-1.58 14.22A2 2 0 0 1 16.432 22H7.568a2 2 0 0 1-1.988-1.78zm3.345-2.853A2 2 0 0 1 9.154 2h5.692a2 2 0 0 1 1.81 1.147L18 6H6zM2 6h20m-12 5v5m4-5v5"/>
     </svg>
-	</button></td>');
+	</button>');
 end AggiungiPulsanteCancellazione;
 
 procedure cancella IS
@@ -229,11 +229,10 @@ end cancella;
 
 procedure AggiungiPulsanteModifica(collegamento1 VARCHAR2 default '') IS
 BEGIN
-	htp.prn('<td><a href="'||collegamento1||'" target="_blank">
+	htp.prn('<a href="'||collegamento1||'" target="_blank">
 		<button>
 		<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" fill-opacity="0" d="M20 7L17 4L15 6L18 9L20 7Z"><animate fill="freeze" attributeName="fill-opacity" begin="1.2s" dur="0.15s" values="0;0.3"/></path><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="20" stroke-dashoffset="20" d="M3 21H21"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="20;0"/></path><path stroke-dasharray="44" stroke-dashoffset="44" d="M7 17V13L17 3L21 7L11 17H7"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.4s" dur="0.6s" values="44;0"/></path><path stroke-dasharray="8" stroke-dashoffset="8" d="M14 6L18 10"><animate fill="freeze" attributeName="stroke-dashoffset" begin="1s" dur="0.2s" values="8;0"/></path></g></svg>
 		</button></a>');
-	htp.prn('</td>');
 END AggiungiPulsanteModifica;
 
 procedure AggiungiElementoTabella(elemento VARCHAR2 default '') IS
@@ -432,12 +431,12 @@ end AggiungiLabel;
 
 procedure AggiungiBottoneTabella(testo VARCHAR2 default '', classe VARCHAR2 default 'button-tab') is
 BEGIN
-	htp.prn('<td><button type="submyt" class="' || classe || '"> '|| testo ||' </button></td>' );
+	htp.prn('<button type="submit" class="' || classe || '"> '|| testo ||' </button>');
 end AggiungiBottoneTabella;
 
 procedure BottoneAggiungi(testo VARCHAR2 default '', classe VARCHAR2 default 'button-add') is
 BEGIN
-	htp.prn('<div class="button-add-container"><button class="' || classe || '"type="submyt"> '|| testo ||' </button></div>' );
+	htp.prn('<div class="button-add-container"><button class="' || classe || '"type="submit"> '|| testo ||' </button></div>' );
 end BottoneAggiungi;
 
 
@@ -500,17 +499,17 @@ BEGIN
 	gui.CHIUDIDIV; 
 END chiudiGruppoInput; 
 
------------------- Aggiunto per fare delle prove per le procedure nel gruppo operazioni
-procedure aggiungiFormHiddenRigaTabella(azione varchar2 default '') is
+------------------ Ultima colonna della tabella, nel caso si vogliano fare operazioni sulla riga della tabella
+procedure apriFormTastiAzioneTabella(azione varchar2 default '') is
 begin
 	htp.prn('<form action="'||azione||'" > <td>');
-end aggiungiFormHiddenRigaTabella;
+end apriFormTastiAzioneTabella;
 
 
-procedure chiudiFormHiddenRigaTabella is
+procedure chiudiFormTastiAzioneTabella is
 begin
 	htp.prn(' </td> </form>');
-end chiudiFormHiddenRigaTabella;
+end chiudiFormTastiAzioneTabella;
 
 -----------------
 
