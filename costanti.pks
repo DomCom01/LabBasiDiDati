@@ -1,3 +1,4 @@
+SET DEFINE OFF;
 create or replace package costanti as
 
 /* 32767 è la dimensione massima di varchar2 */
@@ -27,32 +28,45 @@ function apriMenu() {
   }
 }
 
-function mostraConferma(riga) {
-    // Controlla se la riga di conferma è già presente
-    if (!riga.nextElementSibling || !riga.nextElementSibling.classList.contains('rigaConferma')) {
-        // Crea la riga di conferma
-        var nuovaRiga = document.createElement("tr");
-        nuovaRiga.classList.add('rigaConferma'); 
-        var nuovaCella = nuovaRiga.insertCell(0);
-        nuovaCella.colSpan = riga.cells.length; // Imposta il colspan sulla base del numero di colonne nella riga(Non funziona)
-        nuovaCella.innerHTML = "Sicuro di voler cancellare? <button onclick=\"confermaEliminazione(this.parentNode.parentNode)\">Sì</button> <button onclick=\"annullaEliminazione(this.parentNode.parentNode)\">No</button>";
-        riga.parentNode.insertBefore(nuovaRiga, riga.nextSibling);
+function confermaEliminazione(url) {
+    var conferma = confirm("Sei sicuro di voler eliminare?");
+    if (conferma) {
+        
+        inviaRichiesta(url);
     }
 }
 
-function confermaEliminazione(rigaConferma) {
-    //Per ora semplicemente ricarica la pagina
-    window.location.reload();
+function inviaRichiesta(url) {
+  try {
+    // Simula l'invio di una richiesta al server con AJAX
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url, true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          // Gestisci la risposta del server
+          if (xhr.responseText === 'true') {
+            alert("Eliminazione avvenuta con successo");
+            window.location.reload(); // Ricarica la pagina 
+          } else {
+            alert("Eliminazione non eseguita. Si è verificato un errore.");
+          }
+        } else {
+          alert("Errore durante la richiesta di eliminazione. (Codice di stato: " + xhr.status + ")");
+        }
+      }
+    };
+    // Invia la richiesta con il valore di azione
+    xhr.send(null);
+  } catch (err) {
+    console.error("Errore in inviaRichiesta:", err);
+    alert("Si è verificato un errore inaspettato. Contattare l'amministratore di sistema."+err);
+  }
 }
-
-function annullaEliminazione(rigaConferma) {
-    // Rimuove la riga di conferma se viene cliccato no
-    rigaConferma.parentNode.removeChild(rigaConferma);
-}
-
-
 ]';
-	stile constant varchar(32767) := '
+
+stile constant varchar(32767) := '
 
 html{
   margin:0px;
@@ -763,3 +777,30 @@ option .tick::before {
 
 ';
 end costanti;
+
+
+/*
+
+function mostraConferma(riga) {
+    // Controlla se la riga di conferma è già presente
+    if (!riga.nextElementSibling || !riga.nextElementSibling.classList.contains('rigaConferma')) {
+        // Crea la riga di conferma
+        var nuovaRiga = document.createElement("tr");
+        nuovaRiga.classList.add('rigaConferma'); 
+        var nuovaCella = nuovaRiga.insertCell(0);
+        nuovaCella.colSpan = riga.cells.length; // Imposta il colspan sulla base del numero di colonne nella riga(Non funziona)
+        nuovaCella.innerHTML = "Sicuro di voler cancellare? <button onclick=\"confermaEliminazione(this.parentNode.parentNode)\">Sì</button> <button onclick=\"annullaEliminazione(this.parentNode.parentNode)\">No</button>";
+        riga.parentNode.insertBefore(nuovaRiga, riga.nextSibling);
+    }
+}
+
+function confermaEliminazione(rigaConferma) {
+    //Per ora semplicemente ricarica la pagina
+    window.location.reload();
+}
+
+function annullaEliminazione(rigaConferma) {
+    // Rimuove la riga di conferma se viene cliccato no
+    rigaConferma.parentNode.removeChild(rigaConferma);
+}
+*/

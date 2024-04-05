@@ -1,3 +1,4 @@
+SET DEFINE OFF;
 create or replace PACKAGE BODY gui as
 
 procedure Reindirizza(indirizzo varchar2) is
@@ -202,15 +203,19 @@ BEGIN
 	htp.prn('</tr>');
 end ChiudiRigaTabella;
 
-procedure AggiungiPulsanteCancellazione(proceduraEliminazione VARCHAR2 default '') IS
-begin
-	htp.prn('<td><button onclick="mostraConferma(this.parentNode.parentNode)">
-	<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+procedure AggiungiPulsanteCancellazione(
+    proceduraEliminazione VARCHAR2 DEFAULT ''
+) IS
+BEGIN
+    htp.prn('<td><button onclick="confermaEliminazione('||proceduraEliminazione||')">
+    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
     <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16l-1.58 14.22A2 2 0 0 1 16.432 22H7.568a2 2 0 0 1-1.988-1.78zm3.345-2.853A2 2 0 0 1 9.154 2h5.692a2 2 0 0 1 1.81 1.147L18 6H6zM2 6h20m-12 5v5m4-5v5"/>
     </svg>
-	</button></td>');
-end AggiungiPulsanteCancellazione;
+    </button></td>');
+END AggiungiPulsanteCancellazione;
 
+
+/*Da togliere*/
 procedure cancella IS
 BEGIN
 	gui.AggiungiPopup(True, 'Ciao');
@@ -340,14 +345,24 @@ BEGIN
 	htp.prn ('</form>'); 
 END chiudiForm; 
 
-procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '') as
+procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '', placeholder VARCHAR2 default '', required BOOLEAN default false,
+	classe VARCHAR2 default '', ident VARCHAR2 default '', pattern VARCHAR2 default '', testo VARCHAR2 default '') as
 BEGIN
-	if required then
-		htp.prn('<input class="'||classe||'" type="'||tipo||'"id ="'||ident||'" name="'|| nome ||'" placeholder="'||placeholder||'" value="'||value||'" required>');
-	else 
-		htp.prn('<input class="'||classe||'" type="'||tipo||'"id ="'||ident||'" name="'|| nome ||'" placeholder="'||placeholder||'" value="'||value||'">');
-	end if;
-
+    if required then
+        if pattern is not null then
+            htp.prn('<input class="'||classe||'" type="'||tipo||'" id="'||ident||'" name="'||nome||'" 
+				placeholder="'||placeholder||'" value="'||value||'" required pattern="'||pattern||' title='||testo||'">');
+        else
+            htp.prn('<input class="'||classe||'" type="'||tipo||'" id="'||ident||'" name="'||nome||'" placeholder="'||placeholder||'" value="'||value||'" required>');
+        end if;
+    else 
+        if pattern is not null then
+            htp.prn('<input class="'||classe||'" type="'||tipo||'" id="'||ident||'" name="'||nome||'" 
+				placeholder="'||placeholder||'" value="'||value||'" pattern="'||pattern||' title='||testo||'">');
+        else
+            htp.prn('<input class="'||classe||'" type="'||tipo||'" id="'||ident||'" name="'||nome||'" placeholder="'||placeholder||'" value="'||value||'">');
+        end if;
+    end if;
 end AggiungiInput;
 
 procedure AggiungiLabel(target VARCHAR2, testo VARCHAR2) is
