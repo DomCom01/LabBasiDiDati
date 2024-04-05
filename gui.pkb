@@ -6,7 +6,7 @@ begin
 	htp.prn('<head><meta http-equiv="refresh" content="0;url=' || indirizzo || '"></head>');
 end Reindirizza;
 
-procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default 0, ruolo VARCHAR2 default 'Cl') is
+procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default -1) is
 begin
 	htp.htmlOpen;
 	htp.headOpen;
@@ -20,27 +20,38 @@ begin
 '); /*FONTAwesome*/
 	htp.print('<script type="text/javascript">' || costanti.scriptjs || '</script>'); -- Aggiunto script di base
  	htp.headClose; 
-	gui.ApriBody(idSessione, ruolo);
+	gui.ApriBody(idSessione, SessionHandler.getRuolo(idSessione));
 
 end ApriPagina;
 
-procedure ApriBody(idSessione int default 0, ruolo VARCHAR2) is
+procedure ApriBody(idSessione int, ruolo VARCHAR) is
 begin
-  htp.print('<body>');
-  gui.TopBar(null, ruolo); --Modificare if sotto per aggiungere TopBar con saldo e menu profilo se utente registrato, altrimenti niente
-  gui.ApriDiv('', 'container');
-  gui.ApriDiv('', 'contentContainer');
-  /*if (idSessione = 0) then  -- Sessione di tipo 'Ospite'
-	modGUI.InserisciLoginERegistrati;
-	modGUI.ChiudiDiv;
-  else
-	-- Fare una query alla tabella Sessioni per aggiungere l'username dell'utente in alto a destra
-	modGUI.InserisciLogout(idSessione);
-	modGUI.ChiudiDiv;
-  end if;*/
+
+	if idSessione = -1 then --Sessione ospite
+		--Apri topbar ? con quali bottoni
+		--Carica form di logIn
+		gui.aCapo;
+	end if;
+
+
+	htp.print('<body>');
+	if ruolo = 'Cliente' then
+		gui.TopBar('0', ruolo); --Modificare if sotto per aggiungere TopBar con saldo e menu profilo se utente registrato, altrimenti niente
+	else 
+		gui.TopBar(null, ruolo);
+	end if;
+	gui.ApriDiv('', 'container');
+	gui.ApriDiv('', 'contentContainer');
+	/*if (idSessione = 0) then  -- Sessione di tipo 'Ospite'
+		modGUI.InserisciLoginERegistrati;
+		modGUI.ChiudiDiv;
+	else
+		-- Fare una query alla tabella Sessioni per aggiungere l'username dell'utente in alto a destra
+		modGUI.InserisciLogout(idSessione);
+		modGUI.ChiudiDiv;
+	end if;*/
 
 end ApriBody;
-
 procedure ChiudiPagina is
 begin
 	htp.prn('</div>'); /*container*/
@@ -122,36 +133,36 @@ BEGIN
 	gui.APRIDIV(ident => 'bottoneSinistra');
 	CASE ruolo
 
-    	when 'Cl' then --Cliente 
+    	when 'Cliente' then --Cliente 
 
 			gui.BottoneTopBar(testo => 'Clienti'); 
 			gui.BottoneTopBar(testo => 'Prenotazioni'); 
 
-    	when 'A' THEN --Autista
+    	when 'Autista' THEN --Autista
 
 			gui.BottoneTopBar(testo => 'Prenotazioni'); 
 			gui.BottoneTopBar(testo => 'Taxi'); 
 			gui.BottoneTopBar(testo => 'Turni');
 
-    	when 'AR' then --Autista Referente
+    	when 'Responsabile' then --Autista Referente
 
 			gui.BottoneTopBar(testo => 'Prenotazioni'); 
 			gui.BottoneTopBar(testo => 'Taxi'); 
 			gui.BottoneTopBar(testo => 'Turni');
 
-    	when 'O' then --Operatore
+    	when 'Operatore' then --Operatore
 
 			gui.BottoneTopBar(testo => 'Prenotazioni');  
 			gui.BottoneTopBar(testo => 'Turni');
 
-    	when 'M' then --Manager
+    	when 'Manager' then --Manager
 
 			gui.BottoneTopBar(testo => 'Clienti'); 
 			gui.BottoneTopBar(testo => 'Prenotazioni'); 
 			gui.BottoneTopBar(testo => 'Taxi'); 
 			gui.BottoneTopBar(testo => 'Turni'); 
 
-      	when 'Co' then --Contabile
+      	when 'Contabile' then --Contabile
 
 			gui.BottoneTopBar(testo => 'Taxi'); 
 
@@ -239,18 +250,39 @@ end AggiungiElementoTabella;
 procedure ApriFormFiltro(azione VARCHAR default '') IS
 begin
 	htp.prn('<form action="'|| azione ||'" method="get">
-            	<table class="inputTAB">
-                	<tr>');
+            	<table class="inputTAB">');
 end ApriFormFiltro;
 
-procedure AggiungiCampoFormFiltro(tipo VARCHAR2 default 'text', nome varchar2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', id VARCHAR2 default '') IS
+procedure AggiungiCampoFormFiltro(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '') IS
 begin
-	htp.prn('<td> <input type="'||tipo||'" name="'|| nome ||'" placeholder="'||placeholder||'" value="'||value||'"> </td>');
+	if(tipo = 'submit') then
+	
+		htp.prn('<td>
+				<div class="formField">
+					<label class="hidden" id="'||nome||'">_</label>
+					<button class="FilterButton" name="'||nome||'" value="'||value||'">'||placeholder||'</button>
+				</div>
+			</td>');
+	else 
+		htp.prn('<td>
+			<div class="formField">
+				<label  id="'||ident||'">'||placeholder||'</label>');
+				gui.aggiungiInput(tipo, nome, value ,'', required, 'filterInput', ident, pattern, minimo, massimo);
+			htp.prn('</div>
+		</td>');
+	end if;
 end AggiungiCampoFormFiltro;
 
-procedure ApriSelectFormFiltro(nome varchar2) IS
+procedure AggiungiCampoFormHidden(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '') is
+BEGIN
+	htp.prn('<input hidden type="'||tipo||'" name="'|| nome ||'" value="'||value||'">');
+end AggiungiCampoFormHidden;
+
+procedure ApriSelectFormFiltro(nome varchar2, placeholder VARCHAR2) IS
 begin
-	htp.prn('<td> <select name="'|| nome ||'"> ');
+	htp.prn('<td> <div class="formField">
+				 <label id="'||nome||'">'||placeholder||'</label>
+				 <select name="'|| nome ||'"> ');
 end ApriSelectFormFiltro;
 
 procedure AggiungiOpzioneSelect(value VARCHAR2, selected BOOLEAN, testo VARCHAR2 default '') as
@@ -264,13 +296,40 @@ END AggiungiOpzioneSelect;
 
 procedure ChiudiSelectFormFiltro IS
 begin
-	htp.prn(' </select> </td> ');
+	htp.prn(' </select> </div> </td> ');
 end ChiudiSelectFormFiltro;
 
 procedure chiudiFormFiltro IS
 begin
-	htp.prn('</tr> </table> </form>');
+	htp.prn('</table> </form>');
 end chiudiFormFiltro;
+
+procedure aggiungiDropdownFormFiltro(testo VARCHAR2 default 'testo', placeholder VARCHAR2 default 'testo', nomiParametri stringArray default null ,opzioni stringArray default null) is 
+begin
+	htp.prn('<td>
+			<div class="formField">');
+	if placeholder is not null then
+		htp.prn('<label >'||placeholder||'</label>');
+	else htp.prn('<label class="hidden" >_</label>');
+	end if;
+	
+	gui.apriDiv(classe => 'multiSelect');
+		htp.prn('<div class="multiSelectBtn" onclick="apriMultiSelect()">');
+			htp.prn('<span class="text">'|| testo ||'</span>');
+			htp.prn('<span class="arrow"></span>');
+		htp.prn('</div>');
+		gui.apriDiv(ident => 'multiSelect-content', classe => 'multiSelect-content');
+		for i in 1..opzioni.count loop
+			gui.apriDiv(ident => 'option');
+				htp.prn('<input type="checkbox" name="'|| nomiParametri(i) ||'" />');
+				htp.prn('<span>'|| opzioni(i) ||'</span>');
+			gui.chiudiDiv();
+		end loop;
+		gui.chiudiDiv();
+	gui.chiudiDiv();
+				
+	htp.prn('</div> </td>');
+end aggiungiDropdownFormFiltro;
 
 procedure aggiungiIntestazione(testo VARCHAR2 default 'Intestazione', dimensione VARCHAR2 default 'h1', class VARCHAR2 default '') is
 begin
@@ -341,34 +400,52 @@ END aggiungiForm;
 
 procedure chiudiForm IS
 BEGIN
-	gui.CHIUDIDIV; 
+	gui.CHIUDIDIV;
 	htp.prn ('</form>'); 
 END chiudiForm; 
 
-procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '', placeholder VARCHAR2 default '', required BOOLEAN default false,
-	classe VARCHAR2 default '', ident VARCHAR2 default '', pattern VARCHAR2 default '', testo VARCHAR2 default '') as
+procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '') as
 BEGIN
-    if required then
-        if pattern is not null then
-            htp.prn('<input class="'||classe||'" type="'||tipo||'" id="'||ident||'" name="'||nome||'" 
-				placeholder="'||placeholder||'" value="'||value||'" required pattern="'||pattern||' title='||testo||'">');
-        else
-            htp.prn('<input class="'||classe||'" type="'||tipo||'" id="'||ident||'" name="'||nome||'" placeholder="'||placeholder||'" value="'||value||'" required>');
-        end if;
-    else 
-        if pattern is not null then
-            htp.prn('<input class="'||classe||'" type="'||tipo||'" id="'||ident||'" name="'||nome||'" 
-				placeholder="'||placeholder||'" value="'||value||'" pattern="'||pattern||' title='||testo||'">');
-        else
-            htp.prn('<input class="'||classe||'" type="'||tipo||'" id="'||ident||'" name="'||nome||'" placeholder="'||placeholder||'" value="'||value||'">');
-        end if;
-    end if;
+	htp.prn('<input 
+		class="'||classe||'" 
+		type="'||tipo||'"
+		id ="'||ident||'" 
+		name="'|| nome ||'" 
+		placeholder="'||placeholder||'" 
+		value="'||value||'"
+		min="'||minimo||'"
+		max="'||massimo||'"');
+
+	if required then 
+		htp.prn(' required ');
+	end if;
+
+	if pattern is not null then
+		htp.prn('pattern="'||pattern||'" ');
+	end if;
+
+	htp.prn('>');
+
+
 end AggiungiInput;
 
 procedure AggiungiLabel(target VARCHAR2, testo VARCHAR2) is
 begin
 	htp.prn('<label for="'||target||'"">'||testo||' </label>');
 end AggiungiLabel;
+
+
+procedure AggiungiBottoneTabella(testo VARCHAR2 default '', classe VARCHAR2 default 'button-tab') is
+BEGIN
+	htp.prn('<td><button type="submyt" class="' || classe || '"> '|| testo ||' </button></td>' );
+end AggiungiBottoneTabella;
+
+procedure BottoneAggiungi(testo VARCHAR2 default '', classe VARCHAR2 default 'button-add') is
+BEGIN
+	htp.prn('<div class="button-add-container"><button class="' || classe || '"type="submyt"> '|| testo ||' </button></div>' );
+end BottoneAggiungi;
+
+
 
 procedure aggiungiIcona (classe VARCHAR2 default '') IS
 BEGIN
@@ -416,7 +493,7 @@ BEGIN
 	gui.APRIDIV(classe => 'form-submit');   
                     gui.AGGIUNGIINPUT (nome => nome, tipo => 'submit', value => value);
                 gui.CHIUDIDIV;
-	END aggiungiBottoneSubmit; 
+END aggiungiBottoneSubmit; 
 
 procedure aggiungiGruppoInput is
 BEGIN
@@ -426,12 +503,26 @@ BEGIN
 procedure chiudiGruppoInput is
 BEGIN
 	gui.CHIUDIDIV; 
-	END chiudiGruppoInput; 
+END chiudiGruppoInput; 
 
+------------------ Aggiunto per fare delle prove per le procedure nel gruppo operazioni
+procedure aggiungiFormHiddenRigaTabella(azione varchar2 default '') is
+begin
+	htp.prn('<form action="'||azione||'" > <td>');
+end aggiungiFormHiddenRigaTabella;
+
+
+procedure chiudiFormHiddenRigaTabella is
+begin
+	htp.prn(' </td> </form>');
+end chiudiFormHiddenRigaTabella;
+
+-----------------
 
 procedure aCapo is
 BEGIN
 	htp.prn('<br>');
 end aCapo;
+
 
 end gui;
