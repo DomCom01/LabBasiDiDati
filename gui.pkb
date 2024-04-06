@@ -359,6 +359,28 @@ BEGIN
 	gui.chiudiDiv();
 END aggiungiDropdown;
 
+procedure aggiungiSelezioneSingola(elementi StringArray, titolo varchar2 default '', ident varchar2) IS
+BEGIN
+	htp.prn('<label for="'||ident||'">'||titolo||'</label><br>');
+	htp.prn('<select id="'||ident||'" name="'||ident||'">');
+	for elem in elementi.FIRST..elementi.LAST 
+	LOOP
+		htp.prn('<option value="'||elementi(elem)||'">'||elementi(elem)||'</option>');
+	END LOOP;
+	htp.prn('</select>');
+END aggiungiSelezioneSingola;
+
+procedure aggiungiSelezioneMultipla(elementi StringArray, titolo varchar2 default '', ident varchar2) IS
+BEGIN
+	htp.prn('<label for="'||ident||'">'||titolo||'</label><br>');
+	htp.prn('<select id="'||ident||'" name="'||ident||'" multiple>');
+	for elem in elementi.FIRST..elementi.LAST 
+	LOOP
+		htp.prn('<option value="'||elementi(elem)||'">'||elementi(elem)||'</option>');
+	END LOOP;
+	htp.prn('</select>');
+END aggiungiSelezioneMultipla;
+
 -- Procedura per popup di errore/successo
 procedure AggiungiPopup(successo boolean, testo VARCHAR2 default 'Errore!') IS
 begin
@@ -491,7 +513,9 @@ BEGIN
 procedure aggiungiBottoneSubmit (nome VARCHAR2, value VARCHAR2 default '') is
 BEGIN
 	gui.APRIDIV(classe => 'form-submit');   
-                    gui.AGGIUNGIINPUT (nome => nome, tipo => 'submit', value => value);
+					/*Nome è vuoto perchè altrimenti aggiunge 
+					  pure il pulsante nell'url*/
+                    gui.AGGIUNGIINPUT (nome => '', tipo => 'submit', value => value);
                 gui.CHIUDIDIV;
 END aggiungiBottoneSubmit; 
 
