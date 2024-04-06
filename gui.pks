@@ -77,7 +77,7 @@ PROCEDURE aggiungiGruppoInput;
 procedure chiudiGruppoInput; 
 PROCEDURE chiudiForm;
 
-procedure cancella;
+procedure cancella(linktest varchar2) ;
 
 
 

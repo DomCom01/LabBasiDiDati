@@ -20,7 +20,7 @@ begin
 '); /*FONTAwesome*/
 	htp.print('<script type="text/javascript">' || costanti.scriptjs || '</script>'); -- Aggiunto script di base
  	htp.headClose; 
-	gui.ApriBody(idSessione, SessionHandler.getRuolo(idSessione));
+	gui.ApriBody(idSessione, 'Cliente');
 
 end ApriPagina;
 
@@ -218,7 +218,7 @@ procedure AggiungiPulsanteCancellazione(
     proceduraEliminazione VARCHAR2 DEFAULT ''
 ) IS
 BEGIN
-    htp.prn('<td><button onclick="confermaEliminazione('||proceduraEliminazione||')">
+    htp.prn('<td><button onclick="mostraConferma(this.parentNode.parentNode, '||proceduraEliminazione||')">
     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
     <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16l-1.58 14.22A2 2 0 0 1 16.432 22H7.568a2 2 0 0 1-1.988-1.78zm3.345-2.853A2 2 0 0 1 9.154 2h5.692a2 2 0 0 1 1.81 1.147L18 6H6zM2 6h20m-12 5v5m4-5v5"/>
     </svg>
@@ -227,9 +227,9 @@ END AggiungiPulsanteCancellazione;
 
 
 /*Da togliere*/
-procedure cancella IS
+procedure cancella(linktest varchar2) IS
 BEGIN
-	gui.AggiungiPopup(True, 'Ciao');
+	gui.aggiungiParagrafo(linktest);
 end cancella;
 
 procedure AggiungiPulsanteModifica(collegamento1 VARCHAR2 default '') IS
