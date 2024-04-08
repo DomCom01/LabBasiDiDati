@@ -20,7 +20,7 @@ begin
 '); /*FONTAwesome*/
 	htp.print('<script type="text/javascript">' || costanti.scriptjs || '</script>'); -- Aggiunto script di base
  	htp.headClose; 
-	gui.ApriBody(idSessione, SessionHandler.getRuolo(idSessione));
+	gui.ApriBody(idSessione, ruolo => 'Cliente');
 
 end ApriPagina;
 
