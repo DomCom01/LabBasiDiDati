@@ -9,7 +9,7 @@ procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int defa
 
 procedure Reindirizza(indirizzo varchar2);
 
-PROCEDURE aCapo;
+procedure aCapo(volte number default 1);
 
 procedure ApriBody(idSessione int, ruolo VARCHAR);
 
@@ -25,7 +25,7 @@ procedure ChiudiDiv;
 
 procedure TopBar(saldo varchar2 default null, ruolo VARCHAR2);
 
-procedure AggiungiPopup(successo boolean, testo VARCHAR2 default 'Errore!');
+procedure AggiungiPopup(successo boolean, testo VARCHAR2 default 'Errore!', indirizzo varchar2 default '');
 
 -- Procedure per Tabella
 /*ApriTabella ora contiene apri header, aggiungi header, chiudi header e apri body*/
@@ -61,7 +61,8 @@ procedure Footer;
 --Form
 
 procedure aggiungiForm(classe VARCHAR2 default '', name VARCHAR2 default '', url VARCHAR2 default '');
-procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '');
+procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', 
+                pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '', readonly boolean default False);
 procedure AggiungiLabel(target VARCHAR2, testo VARCHAR2);
 procedure aggiungiIcona (classe VARCHAR2 default ''); 
 procedure aggiungiCampoForm (tipo VARCHAR2 default 'text', classeIcona VARCHAR2 default '', nome VARCHAR2, placeholder VARCHAR2 default '');

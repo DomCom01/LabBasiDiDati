@@ -73,6 +73,28 @@ function annullaEliminazione(rigaConferma) {
     // Rimuove la riga di conferma se viene cliccato no
     rigaConferma.parentNode.removeChild(rigaConferma);
 }
+
+function mostraPopup() {
+    var popup = document.getElementById("popup-message");
+    popup.style.display = "block";
+}
+
+// Funzione per nascondere il popup
+function nascondiPopup() {
+    var popup = document.getElementById("popup-message");
+    popup.style.display = "none";
+}
+
+// Esempio di come puoi attivare il popup
+document.addEventListener("DOMContentLoaded", function() {
+    // Mostra il popup dopo 3 secondi (puoi sostituire questo evento con quello che desideri)
+    setTimeout(mostraPopup, 3000);
+    
+    // Aggiungi un gestore di eventi al pulsante Chiudi
+    var closeButton = document.getElementById("closeButton");
+    closeButton.addEventListener("click", nascondiPopup);
+});
+
 ]';
 
 stile constant varchar(32767) := '
@@ -420,7 +442,7 @@ body{
 
 
 .hidden{
-    visibility: hidden !important;
+    visibility: hidden;
 }
 
 form{
@@ -694,32 +716,13 @@ h1{
   margin-bottom : 0px; 
 }
 
-.message-box{
-  height: auto;
-  padding: 20px;
-  display: flex;
-  border-radius: 5px;
-  justify-content: space-between;
-  justify-items: center;
-
-  p{
-    padding: 0px;
-    margin: 0px;
-    align-self: center;
-    justify-self: center;
-    font-size: 1.2em;
-  }
-
-  .closeIcon{
-    cursor: pointer;
-  }
-
-  img{
-    height: 27px;
-    width: 27px;
-    cursor: pointer;
-  }
-
+.message-box {
+    height: auto;
+    padding: 20px;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 5px;
+    justify-content: center;
 }
 
 .error{
@@ -938,5 +941,32 @@ option .tick::before {
   vertical-align: baseline;
   white-space: nowrap;
 }
+
+.bottone-popup {
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 14px;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  border-radius: 6px;
+  color: #3D3D3D;
+  background: #fff;
+  border: none;
+  box-shadow: 0px 0.5px 1px rgba(0, 0, 0, 0.1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  cursor: pointer; 
+}
+
+.bottone-popup:hover {
+    cursor: pointer; 
+}
+
+.bottone-popup:focus {
+  box-shadow: 0px 0.5px 1px rgba(0, 0, 0, 0.1), 0px 0px 0px 3.5px rgba(58, 108, 217, 0.5);
+  outline: 0;
+}
+
+
 ';
 end costanti;

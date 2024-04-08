@@ -382,19 +382,19 @@ BEGIN
 END aggiungiSelezioneMultipla;
 
 -- Procedura per popup di errore/successo
-procedure AggiungiPopup(successo boolean, testo VARCHAR2 default 'Errore!') IS
+procedure AggiungiPopup(successo boolean, testo VARCHAR2 default 'Errore!', indirizzo varchar2 default '') IS
 begin
 
 	if successo then 
-		htp.prn('<div id=1 class="message-box success">');
+		htp.prn('<div id="popup-message" class="message-box success" hidden>');
 			htp.prn('<p>'|| testo ||'</p>');
-			htp.prn('<p class="closeIcon" onclick="closeBox(1)">🅧</p>');
+        	htp.prn('<a href=""><button class="bottone-popup">Chiudi</button></a>');
 		htp.prn('</div>');
 	else 
-		htp.prn('<div id=1 class="message-box error">');
-				htp.prn('<p>'|| testo ||'</p>');
-				htp.prn('<p class="closeIcon" onclick="closeBox(1)">🅧</p>');
-			htp.prn('</div>');
+		htp.prn('<div id="popup-message" class="message-box error" hidden>');
+			htp.prn('<p>'|| testo ||'</p>');
+			htp.prn('<a href=""><button class="bottone-popup">Chiudi</button></a>');
+		htp.prn('</div>');
 	end if;
 end AggiungiPopup;
 
@@ -426,7 +426,7 @@ BEGIN
 	htp.prn ('</form>'); 
 END chiudiForm; 
 
-procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '') as
+procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '', readonly boolean default False) as
 BEGIN
 	htp.prn('<input 
 		class="'||classe||'" 
@@ -446,6 +446,9 @@ BEGIN
 		htp.prn('pattern="'||pattern||'" ');
 	end if;
 
+	if readonly then
+		htp.prn('readonly');
+	end if;
 	htp.prn('>');
 
 
@@ -543,10 +546,22 @@ end chiudiFormHiddenRigaTabella;
 
 -----------------
 
-procedure aCapo is
+procedure aCapo(volte number default 1) is
 BEGIN
-	htp.prn('<br>');
+	for volta in 1..volte 
+	LOOP
+		htp.prn('<br>');
+	END LOOP;
 end aCapo;
 
 
 end gui;
+/*
+	acapo multipli: Fatto
+	readonly input: Fatto
+	popup che reindirizza: Fatto quasi, devo capire quando renderlo visibile
+	riguardare css form(intestazione, bottoni sistemati)
+	riguardare StringArray(Non si estende)
+	modificare il form per far passare un valore diverso da quello visualizzato
+	bottone con link
+*/
