@@ -4,7 +4,7 @@ TYPE StringArray IS VARRAY(15) OF VARCHAR2(30); -- Tipo array di stringhe
 
 emptyArray StringArray;
 
-procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default -1);
+procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default -1, scriptJS VARCHAR2 default '');
 
 procedure Reindirizza(indirizzo varchar2);
 
@@ -12,7 +12,7 @@ PROCEDURE aCapo;
 
 procedure ApriBody(idSessione int, ruolo VARCHAR);
 
-procedure ChiudiPagina;
+procedure ChiudiPagina(scriptJS VARCHAR2 default '');
 
 procedure BottoneTopBar(testo varchar2 default '', nome varchar2 default '', valore varchar2 default '');
 
@@ -59,9 +59,9 @@ procedure Footer;
 
 --Form
 
-procedure aggiungiForm(classe VARCHAR2 default '', name VARCHAR2 default '', url VARCHAR2 default '');
-procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '');
-procedure AggiungiLabel(target VARCHAR2, testo VARCHAR2);
+procedure aggiungiForm (classe VARCHAR2 default '', name VARCHAR2 default '', url VARCHAR2 default '');
+procedure AggiungiInput (tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '');
+procedure AggiungiLabel (target VARCHAR2, testo VARCHAR2);
 procedure aggiungiIcona (classe VARCHAR2 default ''); 
 procedure aggiungiCampoForm (tipo VARCHAR2 default 'text', classeIcona VARCHAR2 default '', nome VARCHAR2, placeholder VARCHAR2 default '');
 ------------------- Aggiunto per fare delle prove per le procedure nel gruppo operazioni

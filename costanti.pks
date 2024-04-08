@@ -1,4 +1,39 @@
+SET DEFINE OFF;
+
 create or replace package costanti as
+
+tableSortScript CONSTANT VARCHAR2(32767) := '
+var lastSortedTH;
+var ordTH = true;
+    
+const getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent;
+
+const comparer = (idx, asc) => (a, b) => ((v1, v2) => 
+  v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
+  )(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx));
+
+document.querySelectorAll("th").forEach(th => th.addEventListener("click", (() => {
+  const table = th.closest("table");
+  const l = th.innerText.length;
+  
+  if(lastSortedTH == th) {
+    ordTH ?
+      th.innerText = th.innerText.substring(0, l-1) + "▴"
+      : th.innerText = th.innerText.substring(0, l-1) + "▾";
+  }else {
+
+    if (lastSortedTH)  lastSortedTH.innerText = lastSortedTH.innerText.substring( 0, lastSortedTH.innerText.length-1);
+    ordTH ? th.innerText += " ▴"
+        : th.innerText += " ▾";
+    lastSortedTH = th;
+  }
+
+  ordTH = !ordTH;
+
+  Array.from(table.querySelectorAll("tr:nth-child(n+2)"))
+    .sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
+    .forEach(tr => table.appendChild(tr) );
+})));';
 
 /* 32767 è la dimensione massima di varchar2 */
 scriptjs constant varchar2(32767) := q'[
@@ -265,8 +300,10 @@ body{
 
     th{
         background-color: rgba(0, 0, 0, 0.241);
-        height: 45px;
+        height: 100%;
+        width: 100%;
         font-size: large;
+        cursor: pointer;
     }
 
     th:first-child{
@@ -301,17 +338,6 @@ body{
     }
 }
 
-.tab td:last-child{
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    border: 0px;
-}
-
-.tab img{
-    width: 15px;
-    height: 15px;
-}
 .inputTAB{
   
   display: table;
@@ -787,6 +813,12 @@ h1{
 
 }
 
+/* TOP BAR DROPDOWN*/
+.topbar-dropdown{
+  
+}
+
+
 /* DROPDOWN */
 
 .dropdown {
@@ -935,5 +967,6 @@ option .tick::before {
   vertical-align: baseline;
   white-space: nowrap;
 }
+
 ';
 end costanti;

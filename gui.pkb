@@ -1,3 +1,5 @@
+SET DEFINE OFF;
+
 create or replace PACKAGE BODY gui as
 
 procedure Reindirizza(indirizzo varchar2) is
@@ -5,7 +7,7 @@ begin
 	htp.prn('<head><meta http-equiv="refresh" content="0;url=' || indirizzo || '"></head>');
 end Reindirizza;
 
-procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default -1) is
+procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default -1,  scriptJS VARCHAR2 default '') is
 begin
 	htp.htmlOpen;
 	htp.headOpen;
@@ -17,7 +19,7 @@ begin
 	htp.print('<style> ' || costanti.stile || '</style>');
 	htp.print('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 '); /*FONTAwesome*/
-	htp.print('<script type="text/javascript">' || costanti.scriptjs || '</script>'); -- Aggiunto script di base
+	htp.print('<script type="text/javascript">' || costanti.scriptjs || CHR(10) || scriptJS || '</script>'); -- Aggiunto script di base
  	htp.headClose; 
 	gui.ApriBody(idSessione, SessionHandler.getRuolo(idSessione));
 
@@ -31,7 +33,6 @@ begin
 		--Carica form di logIn
 		gui.aCapo;
 	end if;
-
 
 	htp.print('<body>');
 	if ruolo = 'Cliente' then
@@ -51,11 +52,12 @@ begin
 	end if;*/
 
 end ApriBody;
-procedure ChiudiPagina is
+procedure ChiudiPagina(scriptJS VARCHAR2 default '') is
 begin
 	htp.prn('</div>'); /*container*/
 	htp.prn('</div>'); /*content-container*/
 	gui.Footer;
+	htp.prn('<script>'||costanti.tableSortScript|| CHR(10) || scriptJS ||'</script>');
 	htp.print('</body>');
 
 end ChiudiPagina;
@@ -134,14 +136,25 @@ BEGIN
 
     	when 'Cliente' then --Cliente 
 
-			gui.BottoneTopBar(testo => 'Clienti'); 
+			gui.BottoneTopBar(testo => 'Clienti');
+			
 			gui.BottoneTopBar(testo => 'Prenotazioni'); 
 
     	when 'Autista' THEN --Autista
 
 			gui.BottoneTopBar(testo => 'Prenotazioni'); 
-			gui.BottoneTopBar(testo => 'Taxi'); 
-			gui.BottoneTopBar(testo => 'Turni');
+			gui.BottoneTopBar(testo => 'Taxi');
+			gui.apriDiv(classe => 'topbar-dropdown');
+				gui.BottoneTopBar(testo => 'Turni');
+				gui.apriDiv(ident => 'dropdown-content', classe => 'dropdown-content');
+					for i in 1..3 loop
+						gui.apriDiv(ident => 'option');
+							htp.prn('<input type="checkbox" id="'|| 1 ||'" />');
+							htp.prn('<label for="'|| 1||'">'|| 1 ||'</label>');
+						gui.chiudiDiv();
+					end loop;
+				gui.chiudiDiv();
+			gui.chiudiDiv();
 
     	when 'Responsabile' then --Autista Referente
 
@@ -188,18 +201,20 @@ end TopBar;
 procedure ApriTabella(elementi StringArray default emptyArray) is
 begin
 	htp.prn('<table class="tab"> ');
-	htp.prn('<thead>');
+	--htp.prn('<thead>');
 	htp.prn('<tr>');
 	for i in 1..elementi.count loop
-		htp.prn('<th>'|| elementi(i) ||'</th>');
+		htp.prn('<th>
+					'|| elementi(i) || '
+				</th>');
 	end loop;
-	htp.prn('</thead>');
-	htp.prn('<tbody>');
+	--htp.prn('</thead>');
+	--htp.prn('<tbody>');
 end ApriTabella;
 
 procedure ChiudiTabella IS
 BEGIN
-	htp.prn('</tbody>');
+	--htp.prn('</tbody>');
 	htp.prn('</table>');
 end ChiudiTabella;
 
