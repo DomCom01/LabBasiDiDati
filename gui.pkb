@@ -504,13 +504,13 @@ END chiudiGruppoInput;
 ------------------ Aggiunto per fare delle prove per le procedure nel gruppo operazioni
 procedure aggiungiFormHiddenRigaTabella(azione varchar2 default '') is
 begin
-	htp.prn('<form action="'||azione||'" > <td>');
+	htp.prn('<form action="'||azione||'" >');
 end aggiungiFormHiddenRigaTabella;
 
 
 procedure chiudiFormHiddenRigaTabella is
 begin
-	htp.prn(' </td> </form>');
+	htp.prn('</form>');
 end chiudiFormHiddenRigaTabella;
 
 procedure aCapo is
