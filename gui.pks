@@ -133,6 +133,7 @@ create or replace package gui as
 		name   varchar2 default '',
 		url    varchar2 default ''
 	);
+
 	procedure aggiungiinput (
 		tipo        varchar2 default 'text',
 		nome        varchar2,
@@ -145,39 +146,48 @@ create or replace package gui as
 		minimo      varchar2 default '',
 		massimo     varchar2 default ''
 	);
+
 	procedure aggiungilabel (
 		target varchar2,
 		testo  varchar2
 	);
+
 	procedure aggiungiicona (
 		classe varchar2 default ''
 	);
+
 	procedure aggiungicampoform (
 		tipo        varchar2 default 'text',
 		classeicona varchar2 default '',
 		nome        varchar2,
 		placeholder varchar2 default ''
 	);
+
 ------------------- Aggiunto per fare delle prove per le procedure nel gruppo operazioni
 	procedure aggiungiformhiddenrigatabella (
 		azione varchar2 default ''
 	);
 	procedure chiudiformhiddenrigatabella;
 -------------------
+
 	procedure aggiungicampoformhidden (
 		tipo  varchar2 default 'text',
 		nome  varchar2,
 		value varchar2 default ''
 	);
+
 	procedure aggiungirigaform;
+
 	procedure chiudirigaform;
-	procedure aggiungibottonesubmit (
-		nome  varchar2,
+
+	procedure aggiungibottonesubmit(
 		value varchar2 default ''
 	);
 
 	procedure aggiungigruppoinput;
+
 	procedure chiudigruppoinput;
+
 	procedure chiudiform;
 
 	procedure cancella;

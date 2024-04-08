@@ -392,10 +392,10 @@ END Footer;
 
 /*Form*/
 
-procedure aggiungiForm (classe VARCHAR2 default '', name VARCHAR2 default '', url VARCHAR default '') IS
+procedure aggiungiForm(classe VARCHAR2 default '', name VARCHAR2 default '', url VARCHAR2 default '') IS
 BEGIN
-	htp.prn ('<form method="GET" class="'||classe||'" name="'||name||'" action="'||url||'"">'); 
-	gui.APRIDIV(classe => 'form-container'); 
+    htp.prn('<form method="GET" class="' || classe || '" name="' || name || '" action="' || url || '">');
+    gui.ApriDiv(classe => 'form-container');
 END aggiungiForm;
 
 procedure chiudiForm IS
@@ -456,7 +456,6 @@ begin
 	if tipo = 'text'
 	then
 		gui.APRIDIV (classe => 'input-group input-group-icon');    
-
                 gui.aggiungiInput (nome => nome, placeholder => placeholder, required => true, classe => '');
                 gui.apriDiv (classe => 'input-icon'); 
                     gui.aggiungiIcona(classe => classeIcona); 
@@ -487,10 +486,8 @@ BEGIN
 
 procedure aggiungiBottoneSubmit (value VARCHAR2 default '') is
 BEGIN 
-	gui.APRIDIV(classe => 'form-submit');   
-					
-                    gui.AGGIUNGIINPUT (tipo => 'submit', value => value);
-
+	gui.APRIDIV(classe => 'form-submit');   	
+                    gui.AGGIUNGIINPUT (nome => 'Submit', tipo => 'submit', value => value);
                 gui.CHIUDIDIV;
 END aggiungiBottoneSubmit; 
 
