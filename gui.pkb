@@ -188,7 +188,7 @@ end TopBar;
 -- Procedura Tabella senza filtro provvisoria
 procedure ApriTabella(elementi StringArray default emptyArray) is
 begin
-	htp.prn('<table class="tab"> ');
+	htp.prn('<table class="tab">');
 	htp.prn('<thead>');
 	htp.prn('<tr>');
 	for i in 1..elementi.count loop
@@ -214,33 +214,39 @@ BEGIN
 	htp.prn('</tr>');
 end ChiudiRigaTabella;
 
-procedure AggiungiPulsanteCancellazione(
+PROCEDURE AggiungiPulsanteCancellazione (
     proceduraEliminazione VARCHAR2 DEFAULT ''
 ) IS
 BEGIN
     htp.prn('<td>');
-	gui.AGGIUNGIINPUT (tipo => 'hidden', nome => 'Elimina', value => 'true'); 
-	htp.prn ('<button onclick="confermaEliminazione('||proceduraEliminazione||')">
-    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16l-1.58 14.22A2 2 0 0 1 16.432 22H7.568a2 2 0 0 1-1.988-1.78zm3.345-2.853A2 2 0 0 1 9.154 2h5.692a2 2 0 0 1 1.81 1.147L18 6H6zM2 6h20m-12 5v5m4-5v5"/>
-    </svg>
-    </button></td>');
+    htp.prn('<input type="hidden" id="inputElimina" value="true"/>');
+    htp.prn('<button id="buttonElimina" onclick="confermaEliminazione('||proceduraEliminazione||')">');
+    htp.prn('<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">');
+    htp.prn('<path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16l-1.58 14.22A2 2 0 0 1 16.432 22H7.568a2 2 0 0 1-1.988-1.78zm3.345-2.853A2 2 0 0 1 9.154 2h5.692a2 2 0 0 1 1.81 1.147L18 6H6zM2 6h20m-12 5v5m4-5v5"/>');
+    htp.prn('</svg>');
+    htp.prn('</button>');
+    htp.prn('</td>');
+    htp.prn('<script>');
+    htp.prn('document.querySelector("#buttonElimina").addEventListener("click", function() {');
+    htp.prn('document.getElementById("inputElimina").setAttribute("name", "Elimina");');
+    htp.prn('});');
+    htp.prn('</script>');
 END AggiungiPulsanteCancellazione;
-
-
-/*Da togliere*/
-procedure cancella IS
-BEGIN
-	gui.AggiungiPopup(True, 'Ciao');
-end cancella;
 
 procedure AggiungiPulsanteModifica(collegamento1 VARCHAR2 default '') IS
 BEGIN
-	htp.prn('<td><a href="'||collegamento1||'" target	="_blank">
-		<button>
+	htp.prn('<td>');
+	htp.prn('<input type="hidden" id="inputModifica" value="true">');
+	htp.prn(/*<a href="'||collegamento1||'" target="_blank">*/
+		'<button id="buttonModifica">
 		<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" fill-opacity="0" d="M20 7L17 4L15 6L18 9L20 7Z"><animate fill="freeze" attributeName="fill-opacity" begin="1.2s" dur="0.15s" values="0;0.3"/></path><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="20" stroke-dashoffset="20" d="M3 21H21"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="20;0"/></path><path stroke-dasharray="44" stroke-dashoffset="44" d="M7 17V13L17 3L21 7L11 17H7"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.4s" dur="0.6s" values="44;0"/></path><path stroke-dasharray="8" stroke-dashoffset="8" d="M14 6L18 10"><animate fill="freeze" attributeName="stroke-dashoffset" begin="1s" dur="0.2s" values="8;0"/></path></g></svg>
 		</button></a>');	
 	htp.prn('</td>');
+	htp.prn('<script>');
+    htp.prn('document.querySelector("#buttonModifica").addEventListener("click", function() {');
+    htp.prn('document.getElementById("inputModifica").setAttribute("name", "Modifica");');
+    htp.prn('});');
+    htp.prn('</script>');
 END AggiungiPulsanteModifica;
 
 procedure AggiungiElementoTabella(elemento VARCHAR2 default '') IS

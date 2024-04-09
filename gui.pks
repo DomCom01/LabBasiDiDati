@@ -193,8 +193,6 @@ create or replace package gui as
 
 	procedure chiudiform;
 
-	procedure cancella;
-
 	procedure aggiungibottonetabella (
 		testo  varchar2 default '',
 		classe varchar2 default 'button-tab'
