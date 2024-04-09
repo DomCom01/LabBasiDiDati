@@ -1,5 +1,4 @@
 SET DEFINE OFF;
-
 create or replace PACKAGE BODY gui as
 
 procedure Reindirizza(indirizzo varchar2) is
@@ -25,6 +24,7 @@ begin
 
 end ApriPagina;
 
+procedure ApriBody(idSessione int, ruolo VARCHAR) is
 procedure ApriBody(idSessione int, ruolo VARCHAR) is
 begin
 
@@ -71,7 +71,35 @@ procedure chiudiIndirizzo is
 begin
 	htp.prn('</a>');
 end chiudiIndirizzo;
+end ChiudiPagina;
 
+procedure indirizzo(indirizzo VARCHAR2 default '') is
+begin
+	htp.prn('<a href="'|| indirizzo ||'">');
+end indirizzo;
+
+procedure chiudiIndirizzo is
+begin
+	htp.prn('</a>');
+end chiudiIndirizzo;
+
+procedure BottoneTopBar(testo varchar2 default '', nome varchar2 default '', valore varchar2 default '') is
+begin
+	htp.prn('<button type="submit" ');
+	
+	if ((nome != '' and nome is not null) and (valore != '' and valore is not null)) then
+		htp.prn('name="' || nome || '"  value="' || valore || '" ');
+	end if;
+	
+	htp.prn(' class="button-48">');
+	htp.prn('<span class="text">'); 
+	htp.prn(testo);
+	htp.prn('</span>');
+	htp.prn('</button>');
+
+end BottoneTopBar;
+
+procedure BottonePrimario(testo varchar2 default '', nome varchar2 default '', valore varchar2 default '') is
 procedure BottoneTopBar(testo varchar2 default '', nome varchar2 default '', valore varchar2 default '') is
 begin
 	htp.prn('<button type="submit" ');
@@ -370,6 +398,45 @@ begin
 	htp.prn('<p class='||class||' >'||testo||'</p>');
 end aggiungiParagrafo;
 
+procedure aggiungiSelezioneSingola(elementi StringArray, titolo varchar2 default '', ident varchar2) IS
+BEGIN
+	htp.prn('<label for="'||ident||'">'||titolo||'</label><br>');
+	htp.prn('<select id="'||ident||'" name="'||ident||'">');
+	for elem in elementi.FIRST..elementi.LAST 
+	LOOP
+		htp.prn('<option value="'||elementi(elem)||'">'||elementi(elem)||'</option>');
+	END LOOP;
+	htp.prn('</select>');
+END aggiungiSelezioneSingola;
+
+procedure aggiungiSelezioneMultipla(elementi StringArray, titolo varchar2 default '', ident varchar2) IS
+BEGIN
+	htp.prn('<label for="'||ident||'">'||titolo||'</label><br>');
+	htp.prn('<select id="'||ident||'" name="'||ident||'" multiple>');
+	for elem in elementi.FIRST..elementi.LAST 
+	LOOP
+		htp.prn('<option value="'||elementi(elem)||'">'||elementi(elem)||'</option>');
+	END LOOP;
+	htp.prn('</select>');
+END aggiungiSelezioneMultipla;
+
+-- Procedura per popup di errore/successo
+procedure AggiungiPopup(successo boolean, testo VARCHAR2 default 'Errore!', indirizzo varchar2 default '') IS
+begin
+
+	if successo then 
+		htp.prn('<div id="popup-message" class="message-box success" hidden>');
+			htp.prn('<p>'|| testo ||'</p>');
+        	htp.prn('<a href=""><button class="bottone-popup">Chiudi</button></a>');
+		htp.prn('</div>');
+	else 
+		htp.prn('<div id="popup-message" class="message-box error" hidden>');
+			htp.prn('<p>'|| testo ||'</p>');
+			htp.prn('<a href=""><button class="bottone-popup">Chiudi</button></a>');
+		htp.prn('</div>');
+	end if;
+end AggiungiPopup;
+
 procedure aggiungiDropdown(testo VARCHAR2 default 'testo', opzioni stringArray default null) is
 BEGIN
 	gui.apriDiv(classe => 'dropdown');
@@ -388,22 +455,7 @@ BEGIN
 	gui.chiudiDiv();
 END aggiungiDropdown;
 
--- Procedura per popup di errore/successo
-procedure AggiungiPopup(successo boolean, testo VARCHAR2 default 'Errore!') IS
-begin
 
-	if successo then 
-		htp.prn('<div id=1 class="message-box success">');
-			htp.prn('<p>'|| testo ||'</p>');
-			htp.prn('<p class="closeIcon" onclick="closeBox(1)">🅧</p>');
-		htp.prn('</div>');
-	else 
-		htp.prn('<div id=1 class="message-box error">');
-				htp.prn('<p>'|| testo ||'</p>');
-				htp.prn('<p class="closeIcon" onclick="closeBox(1)">🅧</p>');
-			htp.prn('</div>');
-	end if;
-end AggiungiPopup;
 
 procedure Footer is
 BEGIN
@@ -433,7 +485,7 @@ BEGIN
 	htp.prn ('</form>'); 
 END chiudiForm; 
 
-procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '') as
+procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '', readonly boolean default False) as
 BEGIN
 	htp.prn('<input 
 		class="'||classe||'" 
@@ -453,6 +505,9 @@ BEGIN
 		htp.prn('pattern="'||pattern||'" ');
 	end if;
 
+	if readonly then
+		htp.prn('readonly');
+	end if;
 	htp.prn('>');
 
 
@@ -473,7 +528,6 @@ procedure BottoneAggiungi(testo VARCHAR2 default '') is
 BEGIN
 	htp.prn('<div class="button-add-container"><a href="ciao" ><button class="button-add" type="submit"> '|| testo ||' </button></a></div>' );
 end BottoneAggiungi;
-
 
 
 procedure aggiungiIcona (classe VARCHAR2 default '') IS
@@ -520,7 +574,9 @@ BEGIN
 procedure aggiungiBottoneSubmit (nome VARCHAR2, value VARCHAR2 default '') is
 BEGIN
 	gui.APRIDIV(classe => 'form-submit');   
-                    gui.AGGIUNGIINPUT (nome => nome, tipo => 'submit', value => value);
+					/*Nome è vuoto perchè altrimenti aggiunge 
+					  pure il pulsante nell'url*/
+                    gui.AGGIUNGIINPUT (nome => '', tipo => 'submit', value => value);
                 gui.CHIUDIDIV;
 END aggiungiBottoneSubmit; 
 
@@ -534,24 +590,36 @@ BEGIN
 	gui.CHIUDIDIV; 
 END chiudiGruppoInput; 
 
------------------- Ultima colonna della tabella, nel caso si vogliano fare operazioni sulla riga della tabella
-procedure apriFormTastiAzioneTabella(azione varchar2 default '') is
+------------------ Aggiunto per fare delle prove per le procedure nel gruppo operazioni
+procedure aggiungiFormHiddenRigaTabella(azione varchar2 default '') is
 begin
 	htp.prn('<form action="'||azione||'" > <td>');
-end apriFormTastiAzioneTabella;
+end aggiungiFormHiddenRigaTabella;
 
 
-procedure chiudiFormTastiAzioneTabella is
+procedure chiudiFormHiddenRigaTabella is
 begin
 	htp.prn(' </td> </form>');
-end chiudiFormTastiAzioneTabella;
+end chiudiFormHiddenRigaTabella;
 
 -----------------
 
-procedure aCapo is
+procedure aCapo(volte number default 1) is
 BEGIN
-	htp.prn('<br>');
+	for volta in 1..volte 
+	LOOP
+		htp.prn('<br>');
+	END LOOP;
 end aCapo;
 
 
 end gui;
+/*
+	acapo multipli: Fatto
+	readonly input: Fatto
+	popup che reindirizza: Fatto quasi, devo capire quando renderlo visibile
+	riguardare css form(intestazione, bottoni sistemati)
+	riguardare StringArray(Non si estende)
+	modificare il form per far passare un valore diverso da quello visualizzato
+	bottone con link
+*/

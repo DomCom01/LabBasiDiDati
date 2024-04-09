@@ -139,7 +139,7 @@ dropdownScript constant VARCHAR2(32767) := '
     }
 }';
 
-	stile constant varchar(32767) := '
+stile constant varchar(32767) := '
 
 html{
   margin:0px;
@@ -212,6 +212,12 @@ html{
 }
 
 .bottoniSinistra {
+  display: flex; /* Make the wrapper a flexbox container */
+  flex-shrink: 0; /* Prevent wrapper from shrinking */
+  height: 8vh;
+}
+
+.bottoniDestra {
   display: flex; /* Make the wrapper a flexbox container */
   flex-shrink: 0; /* Prevent wrapper from shrinking */
   height: 8vh;
