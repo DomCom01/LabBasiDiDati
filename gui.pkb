@@ -234,7 +234,7 @@ end cancella;
 
 procedure AggiungiPulsanteModifica(collegamento1 VARCHAR2 default '') IS
 BEGIN
-	htp.prn('<td><a href="'||collegamento1||'" target="_blank">
+	htp.prn('<td><a href="'||collegamento1||'">
 		<button>
 		<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" fill-opacity="0" d="M20 7L17 4L15 6L18 9L20 7Z"><animate fill="freeze" attributeName="fill-opacity" begin="1.2s" dur="0.15s" values="0;0.3"/></path><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="20" stroke-dashoffset="20" d="M3 21H21"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="20;0"/></path><path stroke-dasharray="44" stroke-dashoffset="44" d="M7 17V13L17 3L21 7L11 17H7"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.4s" dur="0.6s" values="44;0"/></path><path stroke-dasharray="8" stroke-dashoffset="8" d="M14 6L18 10"><animate fill="freeze" attributeName="stroke-dashoffset" begin="1s" dur="0.2s" values="8;0"/></path></g></svg>
 		</button></a>');
@@ -273,9 +273,9 @@ begin
 	end if;
 end AggiungiCampoFormFiltro;
 
-procedure AggiungiCampoFormHidden(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '') is
+procedure AggiungiCampoFormHidden(nome VARCHAR2, value VARCHAR2 default '') is
 BEGIN
-	htp.prn('<input hidden type="'||tipo||'" name="'|| nome ||'" value="'||value||'">');
+	htp.prn('<input type="hidden" name="'|| nome ||'" value="'||value||'">');
 end AggiungiCampoFormHidden;
 
 procedure ApriSelectFormFiltro(nome varchar2, placeholder VARCHAR2) IS
@@ -386,14 +386,14 @@ procedure AggiungiPopup(successo boolean, testo VARCHAR2 default 'Errore!', indi
 begin
 
 	if successo then 
-		htp.prn('<div id="popup-message" class="message-box success" hidden>');
+		htp.prn('<div id="popup-message" class="message-box success">');
 			htp.prn('<p>'|| testo ||'</p>');
-        	htp.prn('<a href=""><button class="bottone-popup">Chiudi</button></a>');
+        	htp.prn('<button class="bottone-popup" onclick="nascondipopup()">Chiudi</button>');
 		htp.prn('</div>');
 	else 
-		htp.prn('<div id="popup-message" class="message-box error" hidden>');
+		htp.prn('<div id="popup-message" class="message-box error">');
 			htp.prn('<p>'|| testo ||'</p>');
-			htp.prn('<a href=""><button class="bottone-popup">Chiudi</button></a>');
+			htp.prn('<button class="bottone-popup" onclick="nascondipopup()">Chiudi</button>');
 		htp.prn('</div>');
 	end if;
 end AggiungiPopup;
@@ -465,17 +465,15 @@ BEGIN
 	htp.prn('<td><button type="submyt" class="' || classe || '"> '|| testo ||' </button></td>' );
 end AggiungiBottoneTabella;
 
-procedure BottoneAggiungi(testo VARCHAR2 default '', classe VARCHAR2 default 'button-add') is
+procedure BottoneAggiungi(testo VARCHAR2 default '', classe VARCHAR2 default 'button-add', indirizzo varchar2) is
 BEGIN
-	htp.prn('<div class="button-add-container"><button class="' || classe || '"type="submyt"> '|| testo ||' </button></div>' );
+	htp.prn('<div class="button-add-container"><a href="'||indirizzo||'"><button class="button-add"> '|| testo ||' </button></a></div>' );
 end BottoneAggiungi;
-
-
 
 procedure aggiungiIcona (classe VARCHAR2 default '') IS
 BEGIN
 	htp.prn ('<i class="'||classe||'"></i>'); 
-	end aggiungiIcona; 
+end aggiungiIcona; 
 
 procedure aggiungiCampoForm (tipo VARCHAR2 default 'text', classeIcona VARCHAR2 default '', nome VARCHAR2, placeholder VARCHAR2 default '') IS
 begin
@@ -516,10 +514,10 @@ BEGIN
 procedure aggiungiBottoneSubmit (nome VARCHAR2, value VARCHAR2 default '') is
 BEGIN
 	gui.APRIDIV(classe => 'form-submit');   
-					/*Nome è vuoto perchè altrimenti aggiunge 
-					  pure il pulsante nell'url*/
-                    gui.AGGIUNGIINPUT (nome => '', tipo => 'submit', value => value);
-                gui.CHIUDIDIV;
+		/*Nome è vuoto perchè altrimenti aggiunge 
+			pure il pulsante nell'url*/
+		gui.AGGIUNGIINPUT (nome => '', tipo => 'submit', value => value);
+	gui.CHIUDIDIV;
 END aggiungiBottoneSubmit; 
 
 procedure aggiungiGruppoInput is
@@ -556,12 +554,13 @@ end aCapo;
 
 
 end gui;
+
 /*
 	acapo multipli: Fatto
 	readonly input: Fatto
-	popup che reindirizza: Fatto quasi, devo capire quando renderlo visibile
+	popup: non si chiude
 	riguardare css form(intestazione, bottoni sistemati)
 	riguardare StringArray(Non si estende)
 	modificare il form per far passare un valore diverso da quello visualizzato
-	bottone con link
+	bottone con link: fatto
 */

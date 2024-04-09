@@ -85,16 +85,6 @@ function nascondiPopup() {
     popup.style.display = "none";
 }
 
-// Esempio di come puoi attivare il popup
-document.addEventListener("DOMContentLoaded", function() {
-    // Mostra il popup dopo 3 secondi (puoi sostituire questo evento con quello che desideri)
-    setTimeout(mostraPopup, 3000);
-    
-    // Aggiungi un gestore di eventi al pulsante Chiudi
-    var closeButton = document.getElementById("closeButton");
-    closeButton.addEventListener("click", nascondiPopup);
-});
-
 ]';
 
 stile constant varchar(32767) := '
@@ -735,17 +725,6 @@ h1{
   background-color: rgba(0, 255, 0, 0.037);
 }
 
-
-.error-box-hidden {
-  -webkit-animation: fadeOut 1s;
-  animation: fadeOut 1s;
-  animation-fill-mode: forwards;
-}
-
-@keyframes fadeOut {
-  0% { opacity: 1; height: 100%;}
-  100% { opacity: 0; display: none; height: 0%;} /* display block/none?*/
-}
 
 /* MultiSelect nel filtro */
 

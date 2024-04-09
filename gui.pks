@@ -1,7 +1,7 @@
 SET DEFINE OFF;
 create or replace PACKAGE gui as
 
-TYPE StringArray IS VARRAY(15) OF VARCHAR2(30); -- Tipo array di stringhe 
+TYPE StringArray IS VARRAY(100) OF VARCHAR2(30); -- Tipo array di stringhe 
 
 emptyArray StringArray;
 
@@ -72,7 +72,7 @@ procedure aggiungiSelezioneMultipla(elementi StringArray, titolo varchar2 defaul
 procedure aggiungiFormHiddenRigaTabella(azione varchar2 default '');
 procedure chiudiFormHiddenRigaTabella;
 -------------------
-procedure AggiungiCampoFormHidden(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '');
+procedure AggiungiCampoFormHidden(nome VARCHAR2, value VARCHAR2 default '');
 procedure aggiungiRigaForm;
 procedure chiudiRigaForm;
 procedure aggiungiBottoneSubmit (nome VARCHAR2, value VARCHAR2 default ''); 
@@ -85,6 +85,6 @@ procedure cancella(linktest varchar2) ;
 
 
 procedure AggiungiBottoneTabella(testo VARCHAR2 default '', classe VARCHAR2 default 'button-tab');
-procedure BottoneAggiungi(testo VARCHAR2 default '', classe VARCHAR2 default 'button-add');
+procedure BottoneAggiungi(testo VARCHAR2 default '', classe VARCHAR2 default 'button-add', indirizzo varchar2);
 
 end gui;
