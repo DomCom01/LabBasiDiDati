@@ -142,16 +142,30 @@ BEGIN
 
     	when 'Autista' THEN --Autista
 
-			gui.BottoneTopBar(testo => 'Prenotazioni'); 
-			gui.BottoneTopBar(testo => 'Taxi');
+			gui.apriDiv(classe => 'topbar-dropdown');
+				gui.BottoneTopBar(testo => 'Prenotazioni');
+				gui.apriDiv(ident => 'topbardropdown-content', classe => 'topbardropdown-content');
+					for i in 1..3 loop
+						htp.prn('<span>Link1</span>');
+					end loop;
+				gui.chiudiDiv();
+			gui.chiudiDiv();
+
+			gui.apriDiv(classe => 'topbar-dropdown');
+				gui.BottoneTopBar(testo => 'Taxi');
+				gui.apriDiv(ident => 'topbardropdown-content', classe => 'topbardropdown-content');
+					for i in 1..3 loop
+						htp.prn('<span>Link1</span>');
+					end loop;
+				gui.chiudiDiv();
+			gui.chiudiDiv();
+
+
 			gui.apriDiv(classe => 'topbar-dropdown');
 				gui.BottoneTopBar(testo => 'Turni');
-				gui.apriDiv(ident => 'dropdown-content', classe => 'dropdown-content');
+				gui.apriDiv(ident => 'topbardropdown-content', classe => 'topbardropdown-content');
 					for i in 1..3 loop
-						gui.apriDiv(ident => 'option');
-							htp.prn('<input type="checkbox" id="'|| 1 ||'" />');
-							htp.prn('<label for="'|| 1||'">'|| 1 ||'</label>');
-						gui.chiudiDiv();
+						htp.prn('<span>Link1</span>');
 					end loop;
 				gui.chiudiDiv();
 			gui.chiudiDiv();
@@ -323,7 +337,7 @@ begin
 	end if;
 	
 	gui.apriDiv(classe => 'multiSelect');
-		htp.prn('<div class="multiSelectBtn" onclick="apriMultiSelect()">');
+		htp.prn('<div class="multiSelectBtn" onclick="apriMultiSelect(this)">');
 			htp.prn('<span class="text">'|| testo ||'</span>');
 			htp.prn('<span class="arrow"></span>');
 		htp.prn('</div>');
@@ -353,7 +367,7 @@ end aggiungiParagrafo;
 procedure aggiungiDropdown(testo VARCHAR2 default 'testo', opzioni stringArray default null) is
 BEGIN
 	gui.apriDiv(classe => 'dropdown');
-		htp.prn('<button class="dropbtn" onclick="apriMenu()">');
+		htp.prn('<button class="dropbtn" onclick="apriMenu(this)">');
 			htp.prn('<span class="text">'|| testo ||'</span>');
 			htp.prn('<span class="arrow"></span>');
 		htp.prn('</button>');

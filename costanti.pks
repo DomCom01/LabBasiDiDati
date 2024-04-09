@@ -42,8 +42,8 @@ function closeBox(id){
   document.getElementById(id).classList.add("error-box-hidden");
 }
 
-function apriMultiSelect() {
-  var contenutoMenu = document.getElementById("multiSelect-content");
+function apriMultiSelect(contenutoMenu) {
+  //var contenutoMenu = document.getElementById("multiSelect-content");
   var freccia = document.querySelector(".multiSelectBtn .arrow");
   var opzioni = contenutoMenu.querySelectorAll("#option");
 
@@ -62,7 +62,7 @@ function apriMultiSelect() {
   }
 }
 
-function apriMenu() {
+function apriMenu(dropdown) {
   var contenutoMenu = document.getElementById("dropdown-content");
   var freccia = document.querySelector(".dropbtn .arrow");
   var opzioni = contenutoMenu.querySelectorAll(".option");
@@ -815,7 +815,37 @@ h1{
 
 /* TOP BAR DROPDOWN*/
 .topbar-dropdown{
-  
+  display: inline-block;
+}
+
+.topbardropdown-content {
+   overflow: hidden;
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  height:auto;
+  margin-top:1px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  border: 1px solid #ddd;
+  z-index: 1;
+  cursor: pointer;
+
+  span{
+    width: auto;
+    float: none;
+    padding: 12px 16px;
+    display: block;
+    text-align: left;
+  }
+
+  span:hover{
+    background-color: #f0d5856b;
+  }
+}
+
+.topbar-dropdown:hover .topbardropdown-content{
+  display:block;
 }
 
 
