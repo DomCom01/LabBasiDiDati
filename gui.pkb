@@ -19,7 +19,7 @@ begin
 	htp.print('<style> ' || costanti.stile || '</style>');
 	htp.print('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 '); /*FONTAwesome*/
-	htp.print('<script type="text/javascript">' || costanti.scriptjs || CHR(10) || scriptJS || '</script>'); -- Aggiunto script di base
+	htp.print('<script type="text/javascript">' || costanti.scriptjs || CHR(10) || scriptJS || CHR(10)|| costanti.dropdownScript || '</script>'); -- Aggiunto script di base
  	htp.headClose; 
 	gui.ApriBody(idSessione, SessionHandler.getRuolo(idSessione));
 
@@ -104,7 +104,7 @@ begin
 
 end BottonePrimario;
 
-procedure ApriDiv(ident varchar2 default '', classe varchar2 default '') is
+procedure ApriDiv(ident varchar2 default '', classe varchar2 default '', onclick varchar2 default '') is
 begin
 	htp.print('<div');
   	if ident is not null then
@@ -113,6 +113,9 @@ begin
   	if classe is not null then
     	htp.print(' class="' || classe || '"');
  	 end if;
+	if onclick is not null then
+		htp.print(' onclick="'||onclick||'"');
+	end if;
  	htp.print('>');
 
 end ApriDiv;
@@ -327,8 +330,9 @@ begin
 	htp.prn('</table> </form>');
 end chiudiFormFiltro;
 
-procedure aggiungiDropdownFormFiltro(testo VARCHAR2 default 'testo', placeholder VARCHAR2 default 'testo', nomiParametri stringArray default null ,opzioni stringArray default null) is 
+procedure aggiungiDropdownFormFiltro(testo VARCHAR2 default 'testo', placeholder VARCHAR2 default 'testo', ids stringArray default emptyArray ,names stringArray default emptyArray, hiddenParameter varchar2 default '') is 
 begin
+
 	htp.prn('<td>
 			<div class="formField">');
 	if placeholder is not null then
@@ -337,17 +341,19 @@ begin
 	end if;
 	
 	gui.apriDiv(classe => 'multiSelect');
-		htp.prn('<div class="multiSelectBtn" onclick="apriMultiSelect(this)">');
+		gui.apriDiv(classe => 'multiSelectBtn', onclick => 'apriMultiSelect(this.parentNode)');
 			htp.prn('<span class="text">'|| testo ||'</span>');
 			htp.prn('<span class="arrow"></span>');
 		htp.prn('</div>');
 		gui.apriDiv(ident => 'multiSelect-content', classe => 'multiSelect-content');
-		for i in 1..opzioni.count loop
+		
+		for i in 1..ids.count loop
 			gui.apriDiv(ident => 'option');
-				htp.prn('<input type="checkbox" name="'|| nomiParametri(i) ||'" />');
-				htp.prn('<span>'|| opzioni(i) ||'</span>');
+				htp.prn('<input type="checkbox" name="'|| names(i) ||'id="' ||ids(i)|| '" value="' ||ids(i)||'" onchange="updateHiddenInput('||chr(39)||hiddenParameter||chr(39)||', this)"/>');
+				htp.prn('<span>'|| names(i) ||'</span>');
 			gui.chiudiDiv();
 		end loop;
+		
 		gui.chiudiDiv();
 	gui.chiudiDiv();
 				
@@ -367,10 +373,10 @@ end aggiungiParagrafo;
 procedure aggiungiDropdown(testo VARCHAR2 default 'testo', opzioni stringArray default null) is
 BEGIN
 	gui.apriDiv(classe => 'dropdown');
-		htp.prn('<button class="dropbtn" onclick="apriMenu(this)">');
+		gui.apriDiv(classe => 'dropbtn', onclick => 'apriMenu(this.parentNode)');
 			htp.prn('<span class="text">'|| testo ||'</span>');
 			htp.prn('<span class="arrow"></span>');
-		htp.prn('</button>');
+		htp.prn('</div>');
 		gui.apriDiv(ident => 'dropdown-content', classe => 'dropdown-content');
 		for i in 1..opzioni.count loop
 			gui.apriDiv(ident => 'option');
@@ -458,14 +464,14 @@ begin
 end AggiungiLabel;
 
 
-procedure AggiungiBottoneTabella(testo VARCHAR2 default '', classe VARCHAR2 default 'button-tab') is
+procedure AggiungiBottoneTabella(testo VARCHAR2 default '') is
 BEGIN
-	htp.prn('<button type="submit" class="' || classe || '"> '|| testo ||' </button>');
+	htp.prn('<button type="submit" class="button-tab"> '|| testo ||' </button>');
 end AggiungiBottoneTabella;
 
-procedure BottoneAggiungi(testo VARCHAR2 default '', classe VARCHAR2 default 'button-add') is
+procedure BottoneAggiungi(testo VARCHAR2 default '') is
 BEGIN
-	htp.prn('<div class="button-add-container"><button class="' || classe || '"type="submit"> '|| testo ||' </button></div>' );
+	htp.prn('<div class="button-add-container"><a href="ciao" ><button class="button-add" type="submit"> '|| testo ||' </button></a></div>' );
 end BottoneAggiungi;
 
 

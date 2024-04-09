@@ -18,7 +18,7 @@ procedure BottoneTopBar(testo varchar2 default '', nome varchar2 default '', val
 
 procedure BottonePrimario(testo varchar2 default '', nome varchar2 default '', valore varchar2 default '');
 
-procedure ApriDiv(ident varchar2 default '', classe varchar2 default '');
+procedure ApriDiv(ident varchar2 default '', classe varchar2 default '', onclick varchar2 default '');
 
 procedure ChiudiDiv;
 
@@ -52,7 +52,7 @@ procedure aggiungiParagrafo(testo VARCHAR2 default 'testo', class VARCHAR2 defau
 
 --Dropdown con selezione multipla
 procedure aggiungiDropdown(testo VARCHAR2 default 'testo', opzioni stringArray default null);
-procedure aggiungiDropdownFormFiltro(testo VARCHAR2 default 'testo', placeholder VARCHAR2 default 'testo', nomiParametri stringArray default null, opzioni stringArray default null);
+procedure aggiungiDropdownFormFiltro(testo VARCHAR2 default 'testo', placeholder VARCHAR2 default 'testo', ids stringArray default emptyArray ,names stringArray default emptyArray, hiddenParameter varchar2 default '');
 
 --Footer
 procedure Footer;
@@ -80,7 +80,7 @@ procedure cancella;
 
 
 
-procedure AggiungiBottoneTabella(testo VARCHAR2 default '', classe VARCHAR2 default 'button-tab');
-procedure BottoneAggiungi(testo VARCHAR2 default '', classe VARCHAR2 default 'button-add');
+procedure AggiungiBottoneTabella(testo VARCHAR2 default '');
+procedure BottoneAggiungi(testo VARCHAR2 default '');
 
 end gui;

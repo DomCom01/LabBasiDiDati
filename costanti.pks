@@ -42,12 +42,12 @@ function closeBox(id){
   document.getElementById(id).classList.add("error-box-hidden");
 }
 
-function apriMultiSelect(contenutoMenu) {
-  //var contenutoMenu = document.getElementById("multiSelect-content");
-  var freccia = document.querySelector(".multiSelectBtn .arrow");
+function apriMultiSelect(multiselect) {
+  var contenutoMenu = multiselect.querySelector(".multiSelect-content");
+  var freccia = multiselect.querySelector(".multiSelectBtn .arrow");
   var opzioni = contenutoMenu.querySelectorAll("#option");
 
-  if (contenutoMenu.style.display === "none" || contenutoMenu.style.display === "") {
+  if (contenutoMenu.style.display === "none") {
     contenutoMenu.style.display = "block";
     freccia.style.transform = "rotate(0deg)";
     opzioni.forEach(function(opzione) {
@@ -63,8 +63,8 @@ function apriMultiSelect(contenutoMenu) {
 }
 
 function apriMenu(dropdown) {
-  var contenutoMenu = document.getElementById("dropdown-content");
-  var freccia = document.querySelector(".dropbtn .arrow");
+  var contenutoMenu = dropdown.querySelector(".dropdown-content");
+  var freccia = dropdown.querySelector(".dropbtn .arrow");
   var opzioni = contenutoMenu.querySelectorAll(".option");
 
   if (contenutoMenu.style.display === "none" || contenutoMenu.style.display === "") {
@@ -107,6 +107,38 @@ function annullaEliminazione(rigaConferma) {
 
 
 ]';
+
+dropdownScript constant VARCHAR2(32767) := '
+ 
+ const updateHiddenInput = (inputName, checkbox, symbol = ";") => {
+    if (!checkbox) throw new Error("Checkbox non trovata");
+    if (!symbol) symbol = ";";
+
+    const input = document.getElementsByName(inputName)[0];
+
+    if (!input) throw new Error("Elemento " + inputName + " non trovato");
+
+    const values = input.getAttribute("value");
+    const value = checkbox.getAttribute("value");
+
+    const newValues = values ? values.split(symbol) : [];
+    if (checkbox.checked) {
+        // aggiungi value a values
+        newValues.push(value);
+        newValues.sort();
+        input.setAttribute("value", newValues.join(symbol));
+    } else {
+        // elimina value da values
+        const index = newValues.indexOf(value);
+
+        if (index == -1)
+            return;
+
+        newValues.splice(index, 1);
+        input.setAttribute("value", newValues.join(symbol));
+    }
+}';
+
 	stile constant varchar(32767) := '
 
 html{
@@ -819,7 +851,7 @@ h1{
 }
 
 .topbardropdown-content {
-   overflow: hidden;
+  overflow: hidden;
   display: none;
   position: absolute;
   background-color: #f9f9f9;
@@ -891,6 +923,7 @@ h1{
 .dropdown-content {
   position: absolute;
   top: 100%;
+  overflow: scroll;
   left: 0;
   width: 100px;
   z-index: 1;
