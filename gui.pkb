@@ -25,7 +25,6 @@ begin
 end ApriPagina;
 
 procedure ApriBody(idSessione int, ruolo VARCHAR) is
-procedure ApriBody(idSessione int, ruolo VARCHAR) is
 begin
 
 	if idSessione = -1 then --Sessione ospite
@@ -52,6 +51,8 @@ begin
 	end if;*/
 
 end ApriBody;
+
+
 procedure ChiudiPagina(scriptJS VARCHAR2 default '') is
 begin
 	htp.prn('</div>'); /*container*/
@@ -71,35 +72,7 @@ procedure chiudiIndirizzo is
 begin
 	htp.prn('</a>');
 end chiudiIndirizzo;
-end ChiudiPagina;
 
-procedure indirizzo(indirizzo VARCHAR2 default '') is
-begin
-	htp.prn('<a href="'|| indirizzo ||'">');
-end indirizzo;
-
-procedure chiudiIndirizzo is
-begin
-	htp.prn('</a>');
-end chiudiIndirizzo;
-
-procedure BottoneTopBar(testo varchar2 default '', nome varchar2 default '', valore varchar2 default '') is
-begin
-	htp.prn('<button type="submit" ');
-	
-	if ((nome != '' and nome is not null) and (valore != '' and valore is not null)) then
-		htp.prn('name="' || nome || '"  value="' || valore || '" ');
-	end if;
-	
-	htp.prn(' class="button-48">');
-	htp.prn('<span class="text">'); 
-	htp.prn(testo);
-	htp.prn('</span>');
-	htp.prn('</button>');
-
-end BottoneTopBar;
-
-procedure BottonePrimario(testo varchar2 default '', nome varchar2 default '', valore varchar2 default '') is
 procedure BottoneTopBar(testo varchar2 default '', nome varchar2 default '', valore varchar2 default '') is
 begin
 	htp.prn('<button type="submit" ');
@@ -282,14 +255,14 @@ begin
 	</button>');
 end AggiungiPulsanteCancellazione;
 
-procedure cancella IS
+procedure cancella(linktest varchar2) IS
 BEGIN
-	gui.AggiungiPopup(True, 'Ciao');
+	gui.aggiungiParagrafo(linktest);
 end cancella;
 
 procedure AggiungiPulsanteModifica(collegamento1 VARCHAR2 default '') IS
 BEGIN
-	htp.prn('<a href="'||collegamento1||'" target="_blank">
+	htp.prn('<a href="'||collegamento1||'">
 		<button>
 		<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" fill-opacity="0" d="M20 7L17 4L15 6L18 9L20 7Z"><animate fill="freeze" attributeName="fill-opacity" begin="1.2s" dur="0.15s" values="0;0.3"/></path><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="20" stroke-dashoffset="20" d="M3 21H21"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="20;0"/></path><path stroke-dasharray="44" stroke-dashoffset="44" d="M7 17V13L17 3L21 7L11 17H7"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.4s" dur="0.6s" values="44;0"/></path><path stroke-dasharray="8" stroke-dashoffset="8" d="M14 6L18 10"><animate fill="freeze" attributeName="stroke-dashoffset" begin="1s" dur="0.2s" values="8;0"/></path></g></svg>
 		</button></a>');
@@ -564,12 +537,12 @@ end aggiungiCampoForm;
 procedure aggiungiRigaForm is
 BEGIN 
 	gui.APRIDIV(classe => 'form-row');
-	END aggiungiRigaForm; 
+END aggiungiRigaForm; 
 
 procedure chiudiRigaForm is
 BEGIN 
 	gui.CHIUDIDIV; 
-	END chiudiRigaForm; 
+END chiudiRigaForm; 
 
 procedure aggiungiBottoneSubmit (nome VARCHAR2, value VARCHAR2 default '') is
 BEGIN
@@ -583,7 +556,7 @@ END aggiungiBottoneSubmit;
 procedure aggiungiGruppoInput is
 BEGIN
 	gui.APRIDIV (classe => 'input-group');
-	END aggiungiGruppoInput; 
+END aggiungiGruppoInput; 
 
 procedure chiudiGruppoInput is
 BEGIN

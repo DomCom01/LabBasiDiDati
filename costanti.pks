@@ -95,9 +95,25 @@ function mostraConferma(riga) {
     }
 }
 
-function confermaEliminazione(rigaConferma) {
-    //Per ora semplicemente ricarica la pagina
-    window.location.reload();
+function mostraConferma(riga, url) {
+    // Controlla se la riga di conferma è già presente altrimenti la crea
+    if (!riga.nextElementSibling || !riga.nextElementSibling.classList.contains('rigaConferma')) {
+        var nuovaRiga = document.createElement("tr");
+        nuovaRiga.classList.add('rigaConferma'); 
+        var nuovaCella = nuovaRiga.insertCell(0);
+        nuovaCella.colSpan = riga.cells.length; //Non funziona
+        
+        nuovaCella.innerHTML = "Sicuro di voler cancellare? " + 
+                                "<button onclick=\"apriURL('" + url + "')\">Sì</button> " + 
+                                "<button onclick=\"annullaEliminazione(this.parentNode.parentNode)\">No</button>";
+        
+        // Inserisci la nuova riga dopo la riga corrente
+        riga.parentNode.insertBefore(nuovaRiga, riga.nextSibling);
+    }
+}
+
+function apriURL(url) {
+    window.location.href = url; // Apre l'URL nella stessa finestra
 }
 
 function annullaEliminazione(rigaConferma) {
@@ -105,6 +121,16 @@ function annullaEliminazione(rigaConferma) {
     rigaConferma.parentNode.removeChild(rigaConferma);
 }
 
+function mostraPopup() {
+    var popup = document.getElementById("popup-message");
+    popup.style.display = "block";
+}
+
+// Funzione per nascondere il popup
+function nascondiPopup() {
+    var popup = document.getElementById("popup-message");
+    popup.style.display = "none";
+}
 
 ]';
 
@@ -140,7 +166,6 @@ dropdownScript constant VARCHAR2(32767) := '
 }';
 
 stile constant varchar(32767) := '
-
 html{
   margin:0px;
 }
@@ -212,12 +237,6 @@ html{
 }
 
 .bottoniSinistra {
-  display: flex; /* Make the wrapper a flexbox container */
-  flex-shrink: 0; /* Prevent wrapper from shrinking */
-  height: 8vh;
-}
-
-.bottoniDestra {
   display: flex; /* Make the wrapper a flexbox container */
   flex-shrink: 0; /* Prevent wrapper from shrinking */
   height: 8vh;
@@ -503,7 +522,6 @@ h1{
     display: flex;
     justify-content : flex-end; 
 }
-
 .form-container {
   position : relative; 
   max-width: 38em;
@@ -1035,6 +1053,31 @@ option .tick::before {
   touch-action: manipulation;
   vertical-align: baseline;
   white-space: nowrap;
+}
+
+.bottone-popup {
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 14px;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  border-radius: 6px;
+  color: #3D3D3D;
+  background: #fff;
+  border: none;
+  box-shadow: 0px 0.5px 1px rgba(0, 0, 0, 0.1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  cursor: pointer; 
+}
+
+.bottone-popup:hover {
+    cursor: pointer; 
+}
+
+.bottone-popup:focus {
+  box-shadow: 0px 0.5px 1px rgba(0, 0, 0, 0.1), 0px 0px 0px 3.5px rgba(58, 108, 217, 0.5);
+  outline: 0;
 }
 
 ';

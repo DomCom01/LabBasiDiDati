@@ -84,7 +84,7 @@ procedure cancella(linktest varchar2) ;
 
 
 
-procedure AggiungiBottoneTabella(testo VARCHAR2 default '', classe VARCHAR2 default 'button-tab');
-procedure BottoneAggiungi(testo VARCHAR2 default '', classe VARCHAR2 default 'button-add');
+procedure AggiungiBottoneTabella(testo VARCHAR2 default '');
+procedure BottoneAggiungi(testo VARCHAR2 default '');
 
 end gui;
