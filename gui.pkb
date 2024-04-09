@@ -218,7 +218,9 @@ procedure AggiungiPulsanteCancellazione(
     proceduraEliminazione VARCHAR2 DEFAULT ''
 ) IS
 BEGIN
-    htp.prn('<td><button onclick="confermaEliminazione('||proceduraEliminazione||')">
+    htp.prn('<td>');
+	gui.AGGIUNGIINPUT (tipo => 'hidden', nome => 'Elimina', value => 'true'); 
+	htp.prn ('<button onclick="confermaEliminazione('||proceduraEliminazione||')">
     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
     <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16l-1.58 14.22A2 2 0 0 1 16.432 22H7.568a2 2 0 0 1-1.988-1.78zm3.345-2.853A2 2 0 0 1 9.154 2h5.692a2 2 0 0 1 1.81 1.147L18 6H6zM2 6h20m-12 5v5m4-5v5"/>
     </svg>
@@ -234,16 +236,17 @@ end cancella;
 
 procedure AggiungiPulsanteModifica(collegamento1 VARCHAR2 default '') IS
 BEGIN
-	htp.prn('<td><a href="'||collegamento1||'" target="_blank">
+	htp.prn('<td><a href="'||collegamento1||'" target	="_blank">
 		<button>
 		<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" fill-opacity="0" d="M20 7L17 4L15 6L18 9L20 7Z"><animate fill="freeze" attributeName="fill-opacity" begin="1.2s" dur="0.15s" values="0;0.3"/></path><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="20" stroke-dashoffset="20" d="M3 21H21"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="20;0"/></path><path stroke-dasharray="44" stroke-dashoffset="44" d="M7 17V13L17 3L21 7L11 17H7"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.4s" dur="0.6s" values="44;0"/></path><path stroke-dasharray="8" stroke-dashoffset="8" d="M14 6L18 10"><animate fill="freeze" attributeName="stroke-dashoffset" begin="1s" dur="0.2s" values="8;0"/></path></g></svg>
-		</button></a>');
+		</button></a>');	
 	htp.prn('</td>');
 END AggiungiPulsanteModifica;
 
 procedure AggiungiElementoTabella(elemento VARCHAR2 default '') IS
 BEGIN
-	htp.prn('<td>'|| elemento || '</td>');
+	htp.prn('<td>'||elemento||'</td>');  
+
 end AggiungiElementoTabella;
 
 
@@ -253,7 +256,7 @@ begin
             	<table class="inputTAB">');
 end ApriFormFiltro;
 
-procedure AggiungiCampoFormFiltro(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '') IS
+procedure AggiungiCampoFormFiltro(tipo VARCHAR2 default 'text', nome VARCHAR2 default NULL, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '') IS
 begin
 	if(tipo = 'submit') then
 	
@@ -267,7 +270,7 @@ begin
 		htp.prn('<td>
 			<div class="formField">
 				<label  id="'||ident||'">'||placeholder||'</label>');
-				gui.aggiungiInput(tipo, nome, value ,'', required, 'filterInput', ident, pattern, minimo, massimo);
+				gui.aggiungiInput(tipo, nome, value ,'', required, false, 'filterInput', ident, pattern, minimo, massimo);
 			htp.prn('</div>
 		</td>');
 	end if;
@@ -404,7 +407,7 @@ BEGIN
 	htp.prn ('</form>'); 
 END chiudiForm; 
 
-procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '') as
+procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, readonly BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '') as
 BEGIN
 	htp.prn('<input 
 		class="'||classe||'" 
@@ -419,6 +422,10 @@ BEGIN
 	if required then 
 		htp.prn(' required ');
 	end if;
+
+	if readonly then 
+		htp.prn(' readonly ');
+	end if; 
 
 	if pattern is not null then
 		htp.prn('pattern="'||pattern||'" ');
@@ -484,10 +491,10 @@ BEGIN
 	gui.CHIUDIDIV; 
 	END chiudiRigaForm; 
 
-procedure aggiungiBottoneSubmit (value VARCHAR2 default '') is
+procedure aggiungiBottoneSubmit (nome varchar2 default null, value VARCHAR2 default '') is
 BEGIN 
 	gui.APRIDIV(classe => 'form-submit');   	
-                    gui.AGGIUNGIINPUT (nome => 'Submit', tipo => 'submit', value => value);
+                    gui.AGGIUNGIINPUT (nome => nome, tipo => 'submit', value => value);
                 gui.CHIUDIDIV;
 END aggiungiBottoneSubmit; 
 

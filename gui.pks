@@ -62,6 +62,7 @@ create or replace package gui as
 	procedure aggiungielementotabella (
 		elemento varchar2 default ''
 	);
+
 	procedure aggiungipulsantecancellazione (
 		proceduraeliminazione varchar2 default ''
 	);
@@ -77,7 +78,7 @@ create or replace package gui as
 	);
 	procedure aggiungicampoformfiltro (
 		tipo        varchar2 default 'text',
-		nome        varchar2,
+		nome        varchar2 default NULL,
 		value       varchar2 default '',
 		placeholder varchar2 default '',
 		required    boolean default false,
@@ -140,6 +141,7 @@ create or replace package gui as
 		value       varchar2 default '',
 		placeholder varchar2 default '',
 		required    boolean default false,
+		readonly    boolean default false,
 		classe      varchar2 default '',
 		ident       varchar2 default '',
 		pattern     varchar2 default '',
@@ -181,6 +183,7 @@ create or replace package gui as
 	procedure chiudirigaform;
 
 	procedure aggiungibottonesubmit(
+		nome varchar2 default null, 
 		value varchar2 default ''
 	);
 
