@@ -80,9 +80,7 @@ PROCEDURE aggiungiGruppoInput;
 procedure chiudiGruppoInput; 
 PROCEDURE chiudiForm;
 
-procedure cancella(linktest varchar2) ;
-
-
+procedure cancella(linktest varchar2);
 
 procedure AggiungiBottoneTabella(testo VARCHAR2 default '');
 procedure BottoneAggiungi(testo VARCHAR2 default '');

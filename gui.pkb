@@ -433,14 +433,14 @@ END aggiungiDropdown;
 procedure Footer is
 BEGIN
 	gui.APRIDIV(ident => 'footer');
-	htp.prn('<footer>');
+	--htp.prn('<div>');
 	gui.APRIDIV(ident => 'bottoneSinistra');
 		gui.BottoneTopBar(testo => 'Contattaci'); 
 		gui.BottoneTopBar(testo => 'Su di noi'); 
 		gui.BottoneTopBar(testo => 'Termini di servizio'); 
 		gui.BottoneTopBar(testo => 'Privacy'); 
 	gui.CHIUDIDIV;
-	htp.prn('</footer>');
+	--htp.prn('</div>');
 	gui.CHIUDIDIV;
 END Footer;
 

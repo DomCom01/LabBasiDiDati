@@ -189,7 +189,6 @@ html{
   width: fit-content;
   word-break: break-word;
   border: none;
-  margin-right: 20px;
 }
 
 .bottone2 {
@@ -228,9 +227,10 @@ html{
   justify-content: space-between; /* Distributes buttons evenly */
   align-items: center; /* Aligns buttons vertically */
   background-color: #0c0b07;
-  padding: 1px;
+  height: 6vh;
   width:100%;
   position: fixed;
+  padding: 1px 0px 1px 0px;
   top:0px;
   left:0px;
   z-index:999; /*mi assicuro che la top bar sia sempre il primo elemento della pagina*/   
@@ -239,12 +239,12 @@ html{
 .bottoniSinistra {
   display: flex; /* Make the wrapper a flexbox container */
   flex-shrink: 0; /* Prevent wrapper from shrinking */
-  height: 8vh;
 }
 
 .bottoniDestra {
   display: flex; /* Make the wrapper a flexbox container */
   flex-shrink: 0; /* Prevent wrapper from shrinking */
+  padding-right: 10px;
 }
 
 /* CSS */
@@ -256,17 +256,16 @@ html{
   box-sizing: border-box;
   color: #FFFFFF;
   cursor: pointer;
-  display: inline-block;
+  /*display: inline-block;*/
   /*font-family: Clarkson,Helvetica,sans-serif;*/
   font-size: 14px;
   font-weight: 500;
   letter-spacing: 0;
-  line-height: 1em;
-  margin: 1;
-  margin-right: 1px;
+  line-height: 1vh;
+  margin: 0px;
   opacity: 1;
   outline: 0;
-  padding: 1.5em 2.2em;
+  padding: 2.5vh 2.2em;
   position: relative;
   text-align: center;
   text-decoration: none;
@@ -311,10 +310,12 @@ html{
 
 /* Roba tabella */
 body{ 
-  width: 100vw;
+  max-width: 100vw;
   margin: 0px;
+  padding: 0px;
   font-family: Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
   background-color: #e3e3e3;
+  box-sizing: border-box;
 }
 
 .container{
@@ -326,7 +327,7 @@ body{
 
 .contentContainer{
   width: 80%; /* Allargato per far entrare bene anche tabelle grandi */
-  min-height: 82.7vh;
+  min-height: calc(84vh - 2px);
   padding-top: 10vh;
   margin:0px;
 }
@@ -767,12 +768,11 @@ h1{
   justify-content: center;
   align-items: center;
   background-color: #0c0b07;
-  padding-top: 1px;
-  padding-bottom: 1px;
+  padding: 1px 0px 1px 0px;
   margin:0px;
   width:100%;
+  height: 6vh;
   left:0px;
-  margin-bottom : 0px; 
 }
 
 .message-box{
