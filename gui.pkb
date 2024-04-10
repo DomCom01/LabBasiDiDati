@@ -426,7 +426,9 @@ BEGIN
 	htp.prn ('</form>'); 
 END chiudiForm; 
 
-procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '', readonly boolean default False) as
+procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '', placeholder VARCHAR2 default '', 
+	required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', 
+	massimo VARCHAR2 default '', readonly boolean default False) as
 BEGIN
 	htp.prn('<input 
 		class="'||classe||'" 
@@ -462,7 +464,7 @@ end AggiungiLabel;
 
 procedure AggiungiBottoneTabella(testo VARCHAR2 default '', classe VARCHAR2 default 'button-tab') is
 BEGIN
-	htp.prn('<td><button type="submyt" class="' || classe || '"> '|| testo ||' </button></td>' );
+	htp.prn('<td><button type="submit" class="' || classe || '"> '|| testo ||' </button></td>' );
 end AggiungiBottoneTabella;
 
 procedure BottoneAggiungi(testo VARCHAR2 default '', classe VARCHAR2 default 'button-add', indirizzo varchar2) is
@@ -559,8 +561,14 @@ end gui;
 	acapo multipli: Fatto
 	readonly input: Fatto
 	popup: non si chiude
-	riguardare css form(intestazione, bottoni sistemati)
-	riguardare StringArray(Non si estende)
-	modificare il form per far passare un valore diverso da quello visualizzato
-	bottone con link: fatto
+	riguardare css form: sistemato testo che diventava invisibile
+	riguardare StringArray(Non si estende): Cambiato 
+	modificare il form per far passare un valore diverso da quello visualizzato: js? Non funziona bene
+	bottone con link: fatto(modificato BottoneAggiungi)
+*/
+
+/*
+Inserimento dati: tariffa con la virgola, non ci sono abbastanza taxi e sono tutti con stato fermo
+Logico: create table Patenti codice se lo metto a number funziona con la sequenza
+Sistemisti(?): Nella sequenza patenti il codice è lungo 7
 */

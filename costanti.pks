@@ -478,6 +478,7 @@ h1{
     -o-transition: 0.35s ease-in-out;
     transition: 0.35s ease-in-out;
     transition: all 0.35s ease-in-out;
+    color: #000000;
   }
 
   input[type="radio"] {
