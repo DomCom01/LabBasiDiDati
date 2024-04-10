@@ -435,9 +435,9 @@ begin
 end AggiungiLabel;
 
 
-procedure AggiungiBottoneTabella(testo VARCHAR2 default '', classe VARCHAR2 default 'button-tab') is
+procedure AggiungiBottoneTabella(testo VARCHAR2 default '', classe VARCHAR2 default 'button-tab', url VARCHAR2) is
 BEGIN
-	htp.prn('<td><button type="submyt" class="' || classe || '"> '|| testo ||' </button></td>' );
+htp.prn('<td><div class="button-add-container"><a href="' || url || '" class="' || classe || '">' || testo || '</a></div></td>');
 end AggiungiBottoneTabella;
 
 PROCEDURE BottoneAggiungi(testo VARCHAR2 DEFAULT '', classe VARCHAR2 DEFAULT 'button-add', url VARCHAR2) IS
