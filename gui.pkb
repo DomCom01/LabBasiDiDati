@@ -38,6 +38,7 @@ begin
   end if;*/
 
 end ApriBody;
+
 procedure ChiudiPagina is
 begin
 	htp.prn('</div>'); /*container*/
@@ -109,7 +110,6 @@ begin
 end ChiudiDiv;
 
 procedure TopBar(saldo varchar2 default null, ruolo VARCHAR2) is
-procedure TopBar(saldo varchar2 default null, ruolo VARCHAR2) is
 BEGIN
 	gui.ApriDiv(ident => 'top-bar');
 	/*if saldo is null then
@@ -118,49 +118,83 @@ BEGIN
 		gui.Bottone(testo => 'Saldo: ' || saldo || '€', classe => 'bottone');
 	end if;*/
 	gui.APRIDIV(ident => 'bottoneSinistra');
-
 	CASE ruolo
 
-    	when 'Cl' then --Cliente 
+    	when 'Cliente' then --Cliente 
 
-			gui.Bottone(testo => 'Clienti', classe => 'button-48'); 
-			gui.Bottone(testo => 'Prenotazioni', classe => 'button-48'); 
+			gui.BottoneTopBar(testo => 'Clienti');
+			
+			gui.BottoneTopBar(testo => 'Prenotazioni'); 
 
-    	when 'A' THEN --Autista
+    	when 'Autista' THEN --Autista
 
-			gui.Bottone(testo => 'Prenotazioni', classe => 'button-48'); 
-			gui.Bottone(testo => 'Taxi', classe => 'button-48'); 
-			gui.Bottone(testo => 'Turni', classe => 'button-48');
+			gui.apriDiv(classe => 'topbar-dropdown');
+				gui.BottoneTopBar(testo => 'Prenotazioni');
+				gui.apriDiv(ident => 'topbardropdown-content', classe => 'topbardropdown-content');
+					for i in 1..3 loop
+						htp.prn('<span>Link1</span>');
+					end loop;
+				gui.chiudiDiv();
+			gui.chiudiDiv();
 
-    	when 'AR' then --Autista Referente
+			gui.apriDiv(classe => 'topbar-dropdown');
+				gui.BottoneTopBar(testo => 'Taxi');
+				gui.apriDiv(ident => 'topbardropdown-content', classe => 'topbardropdown-content');
+					for i in 1..3 loop
+						htp.prn('<span>Link1</span>');
+					end loop;
+				gui.chiudiDiv();
+			gui.chiudiDiv();
 
-			gui.Bottone(testo => 'Prenotazioni', classe => 'button-48'); 
-			gui.Bottone(testo => 'Taxi', classe => 'button-48'); 
-			gui.Bottone(testo => 'Turni', classe => 'button-48');
 
-    	when 'O' then --Operatore
+			gui.apriDiv(classe => 'topbar-dropdown');
+				gui.BottoneTopBar(testo => 'Turni');
+				gui.apriDiv(ident => 'topbardropdown-content', classe => 'topbardropdown-content');
+					for i in 1..3 loop
+						htp.prn('<span>Link1</span>');
+					end loop;
+				gui.chiudiDiv();
+			gui.chiudiDiv();
 
-			gui.Bottone(testo => 'Prenotazioni', classe => 'button-48');  
-			gui.Bottone(testo => 'Turni', classe => 'button-48');
+    	when 'Responsabile' then --Autista Referente
 
-    	when 'M' then --Manager
+			gui.BottoneTopBar(testo => 'Prenotazioni'); 
+			gui.BottoneTopBar(testo => 'Taxi'); 
+			gui.BottoneTopBar(testo => 'Turni');
 
-			gui.Bottone(testo => 'Clienti', classe => 'button-48'); 
-			gui.Bottone(testo => 'Prenotazioni', classe => 'button-48'); 
-			gui.Bottone(testo => 'Taxi', classe => 'button-48'); 
-			gui.Bottone(testo => 'Turni', classe => 'button-48'); 
+    	when 'Operatore' then --Operatore
 
-      	when 'Co' then --Contabile
+			gui.BottoneTopBar(testo => 'Prenotazioni');  
+			gui.BottoneTopBar(testo => 'Turni');
 
-			gui.Bottone(testo => 'Taxi', classe => 'button-48'); 
+    	when 'Manager' then --Manager
+
+			gui.BottoneTopBar(testo => 'Clienti'); 
+			gui.BottoneTopBar(testo => 'Prenotazioni'); 
+			gui.BottoneTopBar(testo => 'Taxi'); 
+			gui.BottoneTopBar(testo => 'Turni'); 
+
+      	when 'Contabile' then --Contabile
+
+			gui.BottoneTopBar(testo => 'Taxi'); 
 
    	END CASE;
 	
 	gui.CHIUDIDIV;
-	gui.Bottone(testo => 'Login', classe => 'bottone'); 
+	
+	gui.APRIDIV(classe=> 'bottoniDestra');
+	if saldo is not null then
+		gui.BottonePrimario(testo => 'Saldo: ' || saldo || '€');
+	end if;
+	if ruolo is null then
+		gui.BottonePrimario(testo => 'Login');
+	else 
+		gui.BottonePrimario(testo => 'Logout'); 
+	end if;
+	gui.CHIUDIDIV;
+
 	gui.ChiudiDiv();
 end TopBar;
-
 
 -- Procedura Tabella senza filtro provvisoria
 procedure ApriTabella(elementi StringArray default emptyArray) is
@@ -168,7 +202,7 @@ begin
 	htp.prn('<table class="tab"> ');
 	htp.prn('<thead>');
 	htp.prn('<tr>');
-end ApriHeaderTabella;	
+end ApriTabella;	
 
 procedure AggiungiHeaderTabella(elemento VARCHAR2 default '') IS
 BEGIN
@@ -182,7 +216,7 @@ begin
 	end loop;
 	htp.prn('</thead>');
 	htp.prn('<tbody>');
-end ApriTabella;
+end AggiungiHeadersTabella;
 
 procedure ChiudiTabella IS
 BEGIN
@@ -404,7 +438,6 @@ end AggiungiPopup;
 procedure Footer is
 BEGIN
 	gui.APRIDIV(ident => 'footer');
-	gui.APRIDIV(ident => 'footer');
 	htp.prn('<footer>');
 	gui.APRIDIV(ident => 'bottoneSinistra');
 		gui.BottoneTopBar(testo => 'Contattaci'); 
@@ -510,12 +543,12 @@ end aggiungiCampoForm;
 procedure aggiungiRigaForm is
 BEGIN 
 	gui.APRIDIV(classe => 'form-row');
-	END aggiungiRigaForm; 
+END aggiungiRigaForm; 
 
 procedure chiudiRigaForm is
 BEGIN 
 	gui.CHIUDIDIV; 
-	END chiudiRigaForm; 
+END chiudiRigaForm; 
 
 procedure aggiungiBottoneSubmit (nome VARCHAR2, value VARCHAR2 default '') is
 BEGIN
@@ -529,7 +562,7 @@ END aggiungiBottoneSubmit;
 procedure aggiungiGruppoInput is
 BEGIN
 	gui.APRIDIV (classe => 'input-group');
-	END aggiungiGruppoInput; 
+END aggiungiGruppoInput; 
 
 procedure chiudiGruppoInput is
 BEGIN

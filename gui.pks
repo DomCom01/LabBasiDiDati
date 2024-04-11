@@ -17,7 +17,6 @@ procedure BottoneTopBar(testo varchar2 default '', nome varchar2 default '', val
 
 procedure BottonePrimario(testo varchar2 default '', nome varchar2 default '', valore varchar2 default '');
 
-procedure Bottone(testo varchar2 default '', nome varchar2 default '', valore varchar2 default '', ident varchar2 default '', classe varchar2 default '');
 
 procedure ApriDiv(ident varchar2 default '', classe varchar2 default '');
 
