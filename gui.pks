@@ -35,6 +35,10 @@ procedure ChiudiRigaTabella;
 procedure AggiungiElementoTabella(elemento VARCHAR2 default '');
 procedure AggiungiPulsanteCancellazione(proceduraEliminazione VARCHAR2 default '');
 procedure AggiungiPulsanteModifica(collegamento1 VARCHAR2 default '');
+procedure AggiungiPulsanteGenerale(
+    proceduraEliminazione VARCHAR2 DEFAULT '',
+	testo VARCHAR2
+);
 procedure ChiudiTabella;
 
 
@@ -67,7 +71,7 @@ procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCH
 procedure AggiungiLabel(target VARCHAR2, testo VARCHAR2);
 procedure aggiungiIcona (classe VARCHAR2 default ''); 
 procedure aggiungiCampoForm (tipo VARCHAR2 default 'text', classeIcona VARCHAR2 default '', nome VARCHAR2, placeholder VARCHAR2 default '');
-procedure aggiungiSelezioneSingola(elementi StringArray, titolo varchar2 default '', ident varchar2);
+procedure aggiungiSelezioneSingola(elementi StringArray, valoreEffettivo StringArray default null, titolo varchar2 default '', ident varchar2);
 procedure aggiungiSelezioneMultipla(elementi StringArray, titolo varchar2 default '', ident varchar2);
 ------------------- Aggiunto per fare delle prove per le procedure nel gruppo operazioni
 procedure aggiungiFormHiddenRigaTabella(azione varchar2 default '');

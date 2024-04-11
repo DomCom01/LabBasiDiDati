@@ -225,6 +225,16 @@ BEGIN
     </button></td>');
 END AggiungiPulsanteCancellazione;
 
+procedure AggiungiPulsanteGenerale(
+    proceduraEliminazione VARCHAR2 DEFAULT '',
+	testo VARCHAR2
+) IS
+BEGIN
+    htp.prn('<td><button onclick="mostraConfermaGenerale(this.parentNode.parentNode, '||proceduraEliminazione||')">
+    '||testo||'
+    </button></td>');
+END AggiungiPulsanteGenerale;
+
 
 /*Da togliere*/
 procedure cancella(linktest varchar2) IS
@@ -359,14 +369,21 @@ BEGIN
 	gui.chiudiDiv();
 END aggiungiDropdown;
 
-procedure aggiungiSelezioneSingola(elementi StringArray, titolo varchar2 default '', ident varchar2) IS
+procedure aggiungiSelezioneSingola(elementi StringArray, valoreEffettivo StringArray default null, titolo varchar2 default '', ident varchar2) IS
 BEGIN
 	htp.prn('<label for="'||ident||'">'||titolo||'</label><br>');
 	htp.prn('<select id="'||ident||'" name="'||ident||'">');
-	for elem in elementi.FIRST..elementi.LAST 
-	LOOP
-		htp.prn('<option value="'||elementi(elem)||'">'||elementi(elem)||'</option>');
-	END LOOP;
+	if valoreEffettivo is null THEN
+		for elem in elementi.FIRST..elementi.LAST
+		LOOP
+			htp.prn('<option value="'||elementi(elem)||'">'||elementi(elem)||'</option>');
+		END LOOP;
+	else
+		for elem in elementi.FIRST..elementi.LAST
+		LOOP
+			htp.prn('<option value="'||valoreEffettivo(elem)||'">'||elementi(elem)||'</option>');
+		END LOOP;
+	end if;
 	htp.prn('</select>');
 END aggiungiSelezioneSingola;
 
@@ -563,12 +580,8 @@ end gui;
 	popup: non si chiude
 	riguardare css form: sistemato testo che diventava invisibile
 	riguardare StringArray(Non si estende): Cambiato 
-	modificare il form per far passare un valore diverso da quello visualizzato: js? Non funziona bene
+	modificare il form per far passare un valore diverso da quello visualizzato: fatto in selezioneSingola
 	bottone con link: fatto(modificato BottoneAggiungi)
-*/
-
-/*
-Inserimento dati: tariffa con la virgola, non ci sono abbastanza taxi e sono tutti con stato fermo
-Logico: create table Patenti codice se lo metto a number funziona con la sequenza
-Sistemisti(?): Nella sequenza patenti il codice è lungo 7
+	Modificare selezioneMultipla
+	orario diverso in base alla lingua del sistema
 */
