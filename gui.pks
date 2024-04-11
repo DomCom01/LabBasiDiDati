@@ -5,19 +5,19 @@ type StringArray is table of varchar2(30) not null;
 
 emptyArray StringArray;
 
-procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default -1);
+procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default 0, ruolo VARCHAR2 default 'Cl');
 
 procedure Reindirizza(indirizzo varchar2);
-
 procedure aCapo(volte number default 1);
-
-procedure ApriBody(idSessione int, ruolo VARCHAR);
+procedure ApriBody(idSessione int default 0, ruolo VARCHAR2);
 
 procedure ChiudiPagina;
 
 procedure BottoneTopBar(testo varchar2 default '', nome varchar2 default '', valore varchar2 default '');
 
 procedure BottonePrimario(testo varchar2 default '', nome varchar2 default '', valore varchar2 default '');
+
+procedure Bottone(testo varchar2 default '', nome varchar2 default '', valore varchar2 default '', ident varchar2 default '', classe varchar2 default '');
 
 procedure ApriDiv(ident varchar2 default '', classe varchar2 default '');
 

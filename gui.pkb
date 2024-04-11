@@ -6,7 +6,7 @@ begin
 	htp.prn('<head><meta http-equiv="refresh" content="0;url=' || indirizzo || '"></head>');
 end Reindirizza;
 
-procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default -1) is
+procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default 0, ruolo VARCHAR2 default 'Cl') is
 begin
 	htp.htmlOpen;
 	htp.headOpen;
@@ -16,40 +16,26 @@ begin
   		<meta name="viewport" content="width=device-width, initial-scale=1">
   	'); 
 	htp.print('<style> ' || costanti.stile || '</style>');
-	htp.print('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-'); /*FONTAwesome*/
-	htp.print('<script type="text/javascript">' || costanti.scriptjs || '</script>'); -- Aggiunto script di base
+	htp.print('<script type="text/javascript">' || costanti.scriptJS || '</script>'); -- Aggiunto script di base
  	htp.headClose; 
-	gui.ApriBody(idSessione, 'Cliente');
+	gui.ApriBody(idSessione, ruolo);
 
 end ApriPagina;
 
-procedure ApriBody(idSessione int, ruolo VARCHAR) is
+procedure ApriBody(idSessione int default 0, ruolo VARCHAR2) is
 begin
-
-	if idSessione = -1 then --Sessione ospite
-		--Apri topbar ? con quali bottoni
-		--Carica form di logIn
-		gui.aCapo;
-	end if;
-
-
-	htp.print('<body>');
-	if ruolo = 'Cliente' then
-		gui.TopBar('0', ruolo); --Modificare if sotto per aggiungere TopBar con saldo e menu profilo se utente registrato, altrimenti niente
-	else 
-		gui.TopBar(null, ruolo);
-	end if;
-	gui.ApriDiv('', 'container');
-	gui.ApriDiv('', 'contentContainer');
-	/*if (idSessione = 0) then  -- Sessione di tipo 'Ospite'
-		modGUI.InserisciLoginERegistrati;
-		modGUI.ChiudiDiv;
-	else
-		-- Fare una query alla tabella Sessioni per aggiungere l'username dell'utente in alto a destra
-		modGUI.InserisciLogout(idSessione);
-		modGUI.ChiudiDiv;
-	end if;*/
+  htp.print('<body>');
+  gui.TopBar(null, ruolo); --Modificare if sotto per aggiungere TopBar con saldo e menu profilo se utente registrato, altrimenti niente
+  gui.ApriDiv('', 'container');
+  gui.ApriDiv('', 'contentContainer');
+  /*if (idSessione = 0) then  -- Sessione di tipo 'Ospite'
+	modGUI.InserisciLoginERegistrati;
+	modGUI.ChiudiDiv;
+  else
+	-- Fare una query alla tabella Sessioni per aggiungere l'username dell'utente in alto a destra
+	modGUI.InserisciLogout(idSessione);
+	modGUI.ChiudiDiv;
+  end if;*/
 
 end ApriBody;
 procedure ChiudiPagina is
@@ -123,6 +109,7 @@ begin
 end ChiudiDiv;
 
 procedure TopBar(saldo varchar2 default null, ruolo VARCHAR2) is
+procedure TopBar(saldo varchar2 default null, ruolo VARCHAR2) is
 BEGIN
 	gui.ApriDiv(ident => 'top-bar');
 	/*if saldo is null then
@@ -131,56 +118,46 @@ BEGIN
 		gui.Bottone(testo => 'Saldo: ' || saldo || '€', classe => 'bottone');
 	end if;*/
 	gui.APRIDIV(ident => 'bottoneSinistra');
+
 	CASE ruolo
 
-    	when 'Cliente' then --Cliente 
+    	when 'Cl' then --Cliente 
 
-			gui.BottoneTopBar(testo => 'Clienti'); 
-			gui.BottoneTopBar(testo => 'Prenotazioni'); 
+			gui.Bottone(testo => 'Clienti', classe => 'button-48'); 
+			gui.Bottone(testo => 'Prenotazioni', classe => 'button-48'); 
 
-    	when 'Autista' THEN --Autista
+    	when 'A' THEN --Autista
 
-			gui.BottoneTopBar(testo => 'Prenotazioni'); 
-			gui.BottoneTopBar(testo => 'Taxi'); 
-			gui.BottoneTopBar(testo => 'Turni');
+			gui.Bottone(testo => 'Prenotazioni', classe => 'button-48'); 
+			gui.Bottone(testo => 'Taxi', classe => 'button-48'); 
+			gui.Bottone(testo => 'Turni', classe => 'button-48');
 
-    	when 'Responsabile' then --Autista Referente
+    	when 'AR' then --Autista Referente
 
-			gui.BottoneTopBar(testo => 'Prenotazioni'); 
-			gui.BottoneTopBar(testo => 'Taxi'); 
-			gui.BottoneTopBar(testo => 'Turni');
+			gui.Bottone(testo => 'Prenotazioni', classe => 'button-48'); 
+			gui.Bottone(testo => 'Taxi', classe => 'button-48'); 
+			gui.Bottone(testo => 'Turni', classe => 'button-48');
 
-    	when 'Operatore' then --Operatore
+    	when 'O' then --Operatore
 
-			gui.BottoneTopBar(testo => 'Prenotazioni');  
-			gui.BottoneTopBar(testo => 'Turni');
+			gui.Bottone(testo => 'Prenotazioni', classe => 'button-48');  
+			gui.Bottone(testo => 'Turni', classe => 'button-48');
 
-    	when 'Manager' then --Manager
+    	when 'M' then --Manager
 
-			gui.BottoneTopBar(testo => 'Clienti'); 
-			gui.BottoneTopBar(testo => 'Prenotazioni'); 
-			gui.BottoneTopBar(testo => 'Taxi'); 
-			gui.BottoneTopBar(testo => 'Turni'); 
+			gui.Bottone(testo => 'Clienti', classe => 'button-48'); 
+			gui.Bottone(testo => 'Prenotazioni', classe => 'button-48'); 
+			gui.Bottone(testo => 'Taxi', classe => 'button-48'); 
+			gui.Bottone(testo => 'Turni', classe => 'button-48'); 
 
-      	when 'Contabile' then --Contabile
+      	when 'Co' then --Contabile
 
-			gui.BottoneTopBar(testo => 'Taxi'); 
+			gui.Bottone(testo => 'Taxi', classe => 'button-48'); 
 
    	END CASE;
 	
 	gui.CHIUDIDIV;
-	
-	gui.APRIDIV(classe=> 'bottoniDestra');
-	if saldo is not null then
-		gui.BottonePrimario(testo => 'Saldo: ' || saldo || '€');
-	end if;
-	if ruolo is null then
-		gui.BottonePrimario(testo => 'Login');
-	else 
-		gui.BottonePrimario(testo => 'Logout'); 
-	end if;
-	gui.CHIUDIDIV;
-
+	gui.Bottone(testo => 'Login', classe => 'bottone'); 
 	gui.ChiudiDiv();
 end TopBar;
 
@@ -191,6 +168,15 @@ begin
 	htp.prn('<table class="tab"> ');
 	htp.prn('<thead>');
 	htp.prn('<tr>');
+end ApriHeaderTabella;	
+
+procedure AggiungiHeaderTabella(elemento VARCHAR2 default '') IS
+BEGIN
+	htp.prn('<th>'|| elemento ||'</th>');
+end AggiungiHeaderTabella;
+
+procedure AggiungiHeadersTabella(elementi StringArray default emptyArray) is
+begin
 	for i in 1..elementi.count loop
 		htp.prn('<th>'|| elementi(i) ||'</th>');
 	end loop;
@@ -417,6 +403,7 @@ end AggiungiPopup;
 
 procedure Footer is
 BEGIN
+	gui.APRIDIV(ident => 'footer');
 	gui.APRIDIV(ident => 'footer');
 	htp.prn('<footer>');
 	gui.APRIDIV(ident => 'bottoneSinistra');
