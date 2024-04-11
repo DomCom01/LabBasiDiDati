@@ -320,7 +320,7 @@ begin
 			<div class="formField">');
 	if placeholder is not null then
 		htp.prn('<label >'||placeholder||'</label>');
-	else htp.prn('<label class="hidden" >_</label>');
+	else htp.prn('<label class="hidden" >_</label>');	
 	end if;
 	
 	gui.apriDiv(classe => 'multiSelect');
@@ -464,13 +464,13 @@ BEGIN
 	htp.prn ('<i class="'||classe||'"></i>'); 
 	end aggiungiIcona; 
 
-procedure aggiungiCampoForm (tipo VARCHAR2 default 'text', classeIcona VARCHAR2 default '', nome VARCHAR2, placeholder VARCHAR2 default '') IS
+procedure aggiungiCampoForm (tipo VARCHAR2 default 'text', classeIcona VARCHAR2 default '', nome VARCHAR2, required BOOLEAN default true, ident VARCHAR2 default '', placeholder VARCHAR2 default '') IS
 begin
 
 	if tipo = 'text'
 	then
 		gui.APRIDIV (classe => 'input-group input-group-icon');    
-                gui.aggiungiInput (nome => nome, placeholder => placeholder, required => true, classe => '');
+                gui.aggiungiInput (nome => nome, placeholder => placeholder, required => required, ident => ident,  classe => '');
                 gui.apriDiv (classe => 'input-icon'); 
                     gui.aggiungiIcona(classe => classeIcona); 
                 gui.chiudiDiv; 
@@ -479,7 +479,7 @@ begin
 	else
 		gui.APRIDIV (classe => 'input-group input-group-icon');     
 
-                gui.aggiungiInput (tipo => tipo, nome => nome, placeholder => placeholder, required => true, classe => '');
+                gui.aggiungiInput (tipo => tipo, nome => nome, placeholder => placeholder, required => required, classe => '');
                 gui.apriDiv (classe => 'input-icon'); 
                     gui.aggiungiIcona(classe => classeIcona); 
                 gui.chiudiDiv; 
@@ -498,10 +498,10 @@ BEGIN
 	gui.CHIUDIDIV; 
 	END chiudiRigaForm; 
 
-procedure aggiungiBottoneSubmit (nome varchar2 default null, value VARCHAR2 default '') is
+procedure aggiungiBottoneSubmit (ident varchar2 default null, nome varchar2 default null, value VARCHAR2 default '') is
 BEGIN 
 	gui.APRIDIV(classe => 'form-submit');   	
-                    gui.AGGIUNGIINPUT (nome => nome, tipo => 'submit', value => value);
+                    gui.AGGIUNGIINPUT (ident => ident, nome => nome, tipo => 'submit', value => value);
                 gui.CHIUDIDIV;
 END aggiungiBottoneSubmit; 
 

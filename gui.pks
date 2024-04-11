@@ -162,6 +162,8 @@ create or replace package gui as
 		tipo        varchar2 default 'text',
 		classeicona varchar2 default '',
 		nome        varchar2,
+		required    BOOLEAN default true,
+		ident VARCHAR2 default '',  
 		placeholder varchar2 default ''
 	);
 
@@ -183,6 +185,7 @@ create or replace package gui as
 	procedure chiudirigaform;
 
 	procedure aggiungibottonesubmit(
+		ident varchar2 default null,
 		nome varchar2 default null, 
 		value varchar2 default ''
 	);
