@@ -11,7 +11,7 @@ procedure Reindirizza(indirizzo varchar2);
 procedure aCapo(volte number default 1);
 procedure ApriBody(idSessione int default 0, ruolo VARCHAR2);
 
-procedure ChiudiPagina;
+procedure ChiudiPagina(scriptJS VARCHAR2 default '');
 
 procedure BottoneTopBar(testo varchar2 default '', nome varchar2 default '', valore varchar2 default '');
 
@@ -80,8 +80,8 @@ procedure AggiungiCampoFormHidden(nome VARCHAR2, value VARCHAR2 default '');
 procedure aggiungiRigaForm;
 procedure chiudiRigaForm;
 procedure aggiungiBottoneSubmit (value VARCHAR2 default ''); 
-PROCEDURE aggiungiGruppoInput; 
-procedure chiudiGruppoInput; 
+PROCEDURE aggiungiGruppoInput;
+procedure chiudiGruppoInput;
 PROCEDURE chiudiForm;
 
 procedure cancella(linktest varchar2) ;

@@ -39,11 +39,12 @@ begin
 
 end ApriBody;
 
-procedure ChiudiPagina is
+procedure ChiudiPagina(scriptJS VARCHAR2 default '') is
 begin
 	htp.prn('</div>'); /*container*/
 	htp.prn('</div>'); /*content-container*/
 	gui.Footer;
+	htp.prn('<script>'||costanti.tableSortScript|| CHR(10) || scriptJS ||'</script>');
 	htp.print('</body>');
 
 end ChiudiPagina;
@@ -420,12 +421,12 @@ begin
 	if successo then 
 		htp.prn('<div id="popup-message" class="message-box success">');
 			htp.prn('<p>'|| testo ||'</p>');
-        	htp.prn('<button class="bottone-popup" onclick="nascondipopup()">Chiudi</button>');
+        	htp.prn('<button class="bottone-popup" onclick="nascondiPopup()">Chiudi</button>');
 		htp.prn('</div>');
 	else 
 		htp.prn('<div id="popup-message" class="message-box error">');
 			htp.prn('<p>'|| testo ||'</p>');
-			htp.prn('<button class="bottone-popup" onclick="nascondipopup()">Chiudi</button>');
+			htp.prn('<button class="bottone-popup" onclick="nascondiPopup()">Chiudi</button>');
 		htp.prn('</div>');
 	end if;
 end AggiungiPopup;
