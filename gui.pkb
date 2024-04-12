@@ -495,15 +495,15 @@ create or replace PACKAGE BODY gui as
 	end AggiungiLabel;
 
 
-	procedure AggiungiBottoneTabella(testo VARCHAR2 default '') is
+	procedure AggiungiBottoneTabella(testo VARCHAR2 default '', url VARCHAR2) is
 	BEGIN
-		htp.prn('<button type="submit" class="button-tab"> '|| testo ||' </button>');
+		htp.prn('<td><div class="button-add-container"><a href="' || url || '"><button class="button-tab" type="submit"> '|| testo ||' </button></a></div></td>');
 	end AggiungiBottoneTabella;
 
-PROCEDURE BottoneAggiungi(testo VARCHAR2 DEFAULT '', url VARCHAR2) IS
-BEGIN
-    htp.prn('<div class="button-add-container"><a href="' || url || '"><button class="button-add" type="submit"> '|| testo ||' </button></a></div>');
-END BottoneAggiungi;
+	PROCEDURE BottoneAggiungi(testo VARCHAR2 DEFAULT '', url VARCHAR2) IS
+	BEGIN
+		htp.prn('<div class="button-add-container"><a href="' || url || '"><button class="button-add" type="submit"> '|| testo ||' </button></a></div>');
+	END BottoneAggiungi;
 
 
 	procedure aggiungiIcona (classe VARCHAR2 default '') IS
