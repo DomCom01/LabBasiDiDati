@@ -6,40 +6,51 @@ begin
 	htp.prn('<head><meta http-equiv="refresh" content="0;url=' || indirizzo || '"></head>');
 end Reindirizza;
 
-procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default 0, ruolo VARCHAR2 default 'Cliente') is
+procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default -1,  scriptJS VARCHAR2 default '') is
 begin
 	htp.htmlOpen;
 	htp.headOpen;
 	htp.title(titolo);
 	htp.print('
-  		<meta charset="utf-8">
-  		<meta name="viewport" content="width=device-width, initial-scale=1">
-  	'); 
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+	'); 
 	htp.print('<style> ' || costanti.stile || '</style>');
-	htp.print('<script type="text/javascript">' || costanti.scriptJS || '</script>'); -- Aggiunto script di base
- 	htp.headClose; 
-	gui.ApriBody(idSessione, ruolo);
+	htp.print('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+'); /*FONTAwesome*/
+	htp.print('<script type="text/javascript">' || costanti.scriptjs || CHR(10) || scriptJS || CHR(10)|| costanti.dropdownScript || '</script>'); -- Aggiunto script di base
+	htp.headClose; 
+	gui.ApriBody(idSessione);
 
 end ApriPagina;
 
-procedure ApriBody(idSessione int default 0, ruolo VARCHAR2) is
+procedure ApriBody(idSessione int) is
+	ruolo varchar2(10);
 begin
-  htp.print('<body>');
-  gui.TopBar(null, ruolo); --Modificare if sotto per aggiungere TopBar con saldo e menu profilo se utente registrato, altrimenti niente
-  gui.ApriDiv('', 'container');
-  gui.ApriDiv('', 'contentContainer');
-  /*if (idSessione = 0) then  -- Sessione di tipo 'Ospite'
-	modGUI.InserisciLoginERegistrati;
-	modGUI.ChiudiDiv;
-  else
-	-- Fare una query alla tabella Sessioni per aggiungere l'username dell'utente in alto a destra
-	modGUI.InserisciLogout(idSessione);
-	modGUI.ChiudiDiv;
-  end if;*/
+
+	htp.print('<body>');
+
+	if idSessione = -1 then --Sessione ospite
+		gui.topbar(idSessione, '');
+
+		gui.ApriDiv('', 'container');
+			gui.ApriDiv('', 'contentContainer');
+		return;
+	end if;
+
+	ruolo := SessionHandler.getRuolo(idSessione);
+
+	if LENGTH(' '||ruolo||'') = 1 then -- Controllo sessione inesistente, Mettiamo anche il controllo del ruolo(ruolo = [ruolo passato per parametro]) o lo lasciamo ai gruppi delle operazioni?
+		gui.reindirizza('http://131.114.73.203:8080/apex/l_ceccotti.gui.homePage?p_success=T');
+	end if;
+
+		gui.TopBar(SessionHandler.getIDUSER(idSessione), ruolo);
+		gui.ApriDiv('', 'container');
+			gui.ApriDiv('', 'contentContainer');
 
 end ApriBody;
 
-procedure ChiudiPagina(scriptJS VARCHAR2 default '') is
+procedure ChiudiPagina is
 begin
 	htp.prn('</div>'); /*container*/
 	htp.prn('</div>'); /*content-container*/
@@ -113,87 +124,88 @@ begin
 
 end ChiudiDiv;
 
-procedure TopBar(saldo varchar2 default null, ruolo VARCHAR2) is
+procedure TopBar(id_user int, ruolo VARCHAR2) is
+	nome_ varchar2(20);
+	cognome_ varchar2(20);
+	saldo_ CLIENTI.SALDO%TYPE;
 BEGIN
 	gui.ApriDiv(ident => 'top-bar');
 
 	gui.APRIDIV(ident => 'bottoneSinistra');
-	CASE ruolo
-
-    	when 'Cliente' then --Cliente 
-
-			gui.BottoneTopBar(testo => 'Clienti');
-			
-			gui.BottoneTopBar(testo => 'Prenotazioni'); 
-
-    	when 'Autista' THEN --Autista
-
-			gui.apriDiv(classe => 'topbar-dropdown');
-				gui.BottoneTopBar(testo => 'Prenotazioni');
-				gui.apriDiv(ident => 'topbardropdown-content', classe => 'topbardropdown-content');
-					for i in 1..3 loop
+		gui.apriDiv(classe => 'topbar-dropdown');
+			gui.BottoneTopBar(testo => 'Gruppo 1');
+			gui.apriDiv(ident => 'topbardropdown-content', classe => 'topbardropdown-content');
+				for i in 1..3 loop
+					gui.indirizzo('Link1');
 						htp.prn('<span>Link1</span>');
-					end loop;
-				gui.chiudiDiv();
+					gui.chiudiIndirizzo;
+				end loop;
 			gui.chiudiDiv();
+		gui.chiudiDiv();
 
-			gui.apriDiv(classe => 'topbar-dropdown');
-				gui.BottoneTopBar(testo => 'Taxi');
-				gui.apriDiv(ident => 'topbardropdown-content', classe => 'topbardropdown-content');
-					for i in 1..3 loop
+
+		gui.apriDiv(classe => 'topbar-dropdown');
+			gui.BottoneTopBar(testo => 'Gruppo 2');
+			gui.apriDiv(ident => 'topbardropdown-content', classe => 'topbardropdown-content');
+				for i in 1..3 loop
+					gui.indirizzo('Link1');
 						htp.prn('<span>Link1</span>');
-					end loop;
-				gui.chiudiDiv();
+					gui.chiudiIndirizzo;
+				end loop;
 			gui.chiudiDiv();
+		gui.chiudiDiv();
 
-
-			gui.apriDiv(classe => 'topbar-dropdown');
-				gui.BottoneTopBar(testo => 'Turni');
-				gui.apriDiv(ident => 'topbardropdown-content', classe => 'topbardropdown-content');
-					for i in 1..3 loop
+		gui.apriDiv(classe => 'topbar-dropdown');
+			gui.BottoneTopBar(testo => 'Gruppo 3');
+			gui.apriDiv(ident => 'topbardropdown-content', classe => 'topbardropdown-content');
+				for i in 1..3 loop
+					gui.indirizzo('Link1');
 						htp.prn('<span>Link1</span>');
-					end loop;
-				gui.chiudiDiv();
+					gui.chiudiIndirizzo;
+				end loop;
 			gui.chiudiDiv();
+		gui.chiudiDiv();
 
-    	when 'Responsabile' then --Autista Referente
+		gui.apriDiv(classe => 'topbar-dropdown');
+			gui.BottoneTopBar(testo => 'Gruppo 4');
+			gui.apriDiv(ident => 'topbardropdown-content', classe => 'topbardropdown-content');
+				for i in 1..3 loop
+					gui.indirizzo('Link1');
+						htp.prn('<span>Link1</span>');
+					gui.chiudiIndirizzo;
+				end loop;
+			gui.chiudiDiv();
+		gui.chiudiDiv();
 
-			gui.BottoneTopBar(testo => 'Prenotazioni'); 
-			gui.BottoneTopBar(testo => 'Taxi'); 
-			gui.BottoneTopBar(testo => 'Turni');
-
-    	when 'Operatore' then --Operatore
-
-			gui.BottoneTopBar(testo => 'Prenotazioni');  
-			gui.BottoneTopBar(testo => 'Turni');
-
-    	when 'Manager' then --Manager
-
-			gui.BottoneTopBar(testo => 'Clienti'); 
-			gui.BottoneTopBar(testo => 'Prenotazioni'); 
-			gui.BottoneTopBar(testo => 'Taxi'); 
-			gui.BottoneTopBar(testo => 'Turni'); 
-
-      	when 'Contabile' then --Contabile
-
-			gui.BottoneTopBar(testo => 'Taxi'); 
-
-   	END CASE;
-	
 	gui.CHIUDIDIV;
 	
-	gui.APRIDIV(classe=> 'bottoniDestra');
-	if saldo is not null then
-		gui.BottonePrimario(testo => 'Saldo: ' || saldo || '€');
-	else
-		gui.BottonePrimario(testo => 'Saldo: 0.00€');
+	if id_user = -1 or ruolo is null then 
+		gui.ChiudiDiv();
+		return;
 	end if;
 
-	if ruolo is null then
-		gui.BottonePrimario(testo => 'Login');
-	else 
-		gui.BottonePrimario(testo => 'Logout'); 
-	end if;
+	gui.APRIDIV(classe=> 'bottoniDestra');
+
+		if ruolo = 'Cliente' then
+			
+			SELECT NOME, COGNOME, SALDO into nome_, cognome_, saldo_ FROM CLIENTI WHERE IDCLIENTE = id_user; 
+
+		else
+			
+			SELECT NOME, COGNOME into nome_, cognome_ FROM DIPENDENTI WHERE MATRICOLA = id_user;
+			saldo_ := null; 
+
+		end if;
+
+		if saldo_ is not null then
+			gui.BottonePrimario(testo => 'Saldo: ' || saldo_ || '€');
+		end if;
+
+		gui.bottonePrimario(testo => nome_ || ' ' || cognome_ ||' | '||ruolo);
+
+		gui.indirizzo('Link to logica logout');
+			gui.BottonePrimario(testo => 'Logout'); 
+		gui.chiudiIndirizzo;
 	gui.CHIUDIDIV;
 
 	gui.ChiudiDiv();
@@ -299,9 +311,9 @@ begin
 	end if;
 end AggiungiCampoFormFiltro;
 
-procedure AggiungiCampoFormHidden(nome VARCHAR2, value VARCHAR2 default '') is
+procedure AggiungiCampoFormHidden(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '') is
 BEGIN
-	htp.prn('<input type="hidden" name="'|| nome ||'" value="'||value||'">');
+	htp.prn('<input hidden type="'||tipo||'" name="'|| nome ||'" value="'||value||'">');
 end AggiungiCampoFormHidden;
 
 procedure ApriSelectFormFiltro(nome varchar2, placeholder VARCHAR2) IS
@@ -370,10 +382,10 @@ end aggiungiParagrafo;
 procedure aggiungiDropdown(testo VARCHAR2 default 'testo', opzioni stringArray default null) is
 BEGIN
 	gui.apriDiv(classe => 'dropdown');
-		gui.apriDiv(classe => 'dropbtn', onclick => 'apriMenu(this.parentNode)');
-			htp.prn('<span class="text"></span>');
+		htp.prn('<button class="dropbtn" onclick="apriMenu()">');
+			htp.prn('<span class="text">'|| testo ||'</span>');
 			htp.prn('<span class="arrow"></span>');
-		htp.prn('</div>');
+		htp.prn('</button>');
 		gui.apriDiv(ident => 'dropdown-content', classe => 'dropdown-content');
 		for i in 1..opzioni.count loop
 			gui.apriDiv(ident => 'option');
@@ -590,14 +602,4 @@ end aCapo;
 
 end gui;
 
-/*
-	acapo multipli: Fatto
-	readonly input: Fatto
-	popup: non si chiude
-	riguardare css form: sistemato testo che diventava invisibile
-	riguardare StringArray(Non si estende): Cambiato 
-	modificare il form per far passare un valore diverso da quello visualizzato: fatto in selezioneSingola
-	bottone con link: fatto(modificato BottoneAggiungi)
-	Modificare selezioneMultipla
-	orario diverso in base alla lingua del sistema
-*/
+

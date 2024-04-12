@@ -34,6 +34,38 @@ document.querySelectorAll("th").forEach(th => th.addEventListener("click", (() =
     .forEach(tr => table.appendChild(tr) );
 })));';
 
+dropdownScript constant VARCHAR2(32767) := '
+ 
+ const updateHiddenInput = (inputName, checkbox, symbol = ";") => {
+    if (!checkbox) throw new Error("Checkbox non trovata");
+    if (!symbol) symbol = ";";
+
+    const input = document.getElementsByName(inputName)[0];
+
+    if (!input) throw new Error("Elemento " + inputName + " non trovato");
+
+    const values = input.getAttribute("value");
+    const value = checkbox.getAttribute("value");
+
+    const newValues = values ? values.split(symbol) : [];
+    if (checkbox.checked) {
+        // aggiungi value a values
+        newValues.push(value);
+        newValues.sort();
+        input.setAttribute("value", newValues.join(symbol));
+    } else {
+        // elimina value da values
+        const index = newValues.indexOf(value);
+
+        if (index == -1)
+            return;
+
+        newValues.splice(index, 1);
+        input.setAttribute("value", newValues.join(symbol));
+    }
+}';
+
+
 /* 32767 è la dimensione massima di varchar2 */
 scriptjs constant varchar2(32767) := q'[
 
@@ -233,6 +265,11 @@ html{
   padding-right: 10px;
 }
 
+.bottoniDestra {
+  display: flex; /* Make the wrapper a flexbox container */
+  flex-shrink: 0; /* Prevent wrapper from shrinking */
+}
+
 /* CSS */
 
 .button-48 {
@@ -301,7 +338,6 @@ body{
   padding: 0px;
   font-family: Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
   background-color: #e3e3e3;
-  box-sizing: border-box;
 }
 
 .container{
@@ -344,10 +380,8 @@ body{
 
     th{
         background-color: rgba(0, 0, 0, 0.241);
-        height: 100%;
-        width: 100%;
+        height: 45px;
         font-size: large;
-        cursor: pointer;
     }
 
     th:first-child{
@@ -372,6 +406,28 @@ body{
 
     button{
       background-color: #000000; 
+      color: white; 
+      padding: 7px 20px;
+      border: none; 
+      border-radius: 10px; 
+      cursor: pointer;
+    }
+}
+
+    td:last-child{
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        border: 0px;
+    }
+
+    img{
+        width: 15px;
+        height: 15px;
+    }
+
+    button{
+      background-color: #000000; 
       color: white;
       padding: 5px;
       border: none;
@@ -381,7 +437,6 @@ body{
       min-width: 30px;
     }
 }
-
 .inputTAB{
   
   display: table;
@@ -1072,5 +1127,4 @@ option .tick::before {
 }
 
 ';
-
-END costanti;
+end costanti;

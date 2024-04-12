@@ -1,15 +1,16 @@
 SET DEFINE OFF;
+SET DEFINE OFF;
 create or replace PACKAGE gui as
 
 type StringArray is table of varchar2(30) not null;
 
 emptyArray StringArray;
 
-procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default 0, ruolo VARCHAR2 default 'Cliente');
+procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default -1,  scriptJS VARCHAR2 default '');
 
 procedure Reindirizza(indirizzo varchar2);
 procedure aCapo(volte number default 1);
-procedure ApriBody(idSessione int default 0, ruolo VARCHAR2);
+procedure ApriBody(idSessione int default 0);
 
 procedure ChiudiPagina(scriptJS VARCHAR2 default '');
 
@@ -27,6 +28,8 @@ procedure TopBar(saldo varchar2 default null, ruolo VARCHAR2);
 procedure AggiungiPopup(successo boolean, testo VARCHAR2 default 'Errore!', indirizzo varchar2 default '');
 
 -- Procedure per Tabella
+/*ApriTabella ora contiene apri header, aggiungi header, chiudi header e apri body*/
+procedure ApriTabella(elementi StringArray default emptyArray);
 /*ApriTabella ora contiene apri header, aggiungi header, chiudi header e apri body*/
 procedure ApriTabella(elementi StringArray default emptyArray);
 procedure AggiungiRigaTabella;
@@ -76,12 +79,12 @@ procedure aggiungiSelezioneMultipla(elementi StringArray, titolo varchar2 defaul
 procedure aggiungiFormHiddenRigaTabella(azione varchar2 default '');
 procedure chiudiFormHiddenRigaTabella;
 -------------------
-procedure AggiungiCampoFormHidden(nome VARCHAR2, value VARCHAR2 default '');
+procedure AggiungiCampoFormHidden(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '');
 procedure aggiungiRigaForm;
 procedure chiudiRigaForm;
 procedure aggiungiBottoneSubmit (value VARCHAR2 default ''); 
-PROCEDURE aggiungiGruppoInput;
-procedure chiudiGruppoInput;
+PROCEDURE aggiungiGruppoInput; 
+procedure chiudiGruppoInput; 
 PROCEDURE chiudiForm;
 
 procedure cancella(linktest varchar2) ;
