@@ -20,7 +20,7 @@ begin
 '); /*FONTAwesome*/
 	htp.print('<script type="text/javascript">' || costanti.scriptjs || '</script>'); -- Aggiunto script di base
  	htp.headClose; 
-	gui.ApriBody(idSessione, SessionHandler.getRuolo(idSessione));
+	gui.ApriBody(idSessione, ruolo => 'Cliente' /*SessionHandler.getRuolo(idSessione)*/);
 
 end ApriPagina;
 
@@ -252,7 +252,8 @@ END AggiungiPulsanteModifica;
 
 procedure AggiungiElementoTabella(elemento VARCHAR2 default '') IS
 BEGIN
-	htp.prn('<td>'|| elemento || '</td>');
+	htp.prn('<td>'||elemento||'</td>');  
+
 end AggiungiElementoTabella;
 
 
@@ -262,7 +263,7 @@ begin
             	<table class="inputTAB">');
 end ApriFormFiltro;
 
-procedure AggiungiCampoFormFiltro(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '') IS
+procedure AggiungiCampoFormFiltro(tipo VARCHAR2 default 'text', nome VARCHAR2 default NULL, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '') IS
 begin
 	if(tipo = 'submit') then
 	
@@ -276,7 +277,7 @@ begin
 		htp.prn('<td>
 			<div class="formField">
 				<label  id="'||ident||'">'||placeholder||'</label>');
-				gui.aggiungiInput(tipo, nome, value ,'', required, false,'filterInput', ident, pattern, minimo, massimo);
+				gui.aggiungiInput(tipo, nome, value ,'', required, false, 'filterInput', ident, pattern, minimo, massimo);
 			htp.prn('</div>
 		</td>');
 	end if;
@@ -401,29 +402,19 @@ END Footer;
 
 /*Form*/
 
-procedure aggiungiForm (classe VARCHAR2 default '', name VARCHAR2 default '', url VARCHAR2 default '') IS
+procedure aggiungiForm(classe VARCHAR2 default '', name VARCHAR2 default '', url VARCHAR2 default '') IS
 BEGIN
-	htp.prn ('<form method="GET" class="'||classe||'" name="'||name||'" action="'||url||'"">'); 
-	gui.APRIDIV(classe => 'form-container'); 
+    htp.prn('<form method="GET" class="' || classe || '" name="' || name || '" action="' || url || '">');
+    gui.ApriDiv(classe => 'form-container');
 END aggiungiForm;
 
 procedure chiudiForm IS
 BEGIN
-	gui.CHIUDIDIV;
+	gui.CHIUDIDIV; --form-container
 	htp.prn ('</form>'); 
 END chiudiForm; 
 
-procedure AggiungiInput(tipo        varchar2 default 'text',
-		nome        varchar2,
-		value       varchar2 default '',
-		placeholder varchar2 default '',
-		required    boolean default false,
-		readonly    boolean default false,
-		classe      varchar2 default '',
-		ident       varchar2 default '',
-		pattern     varchar2 default '',
-		minimo      varchar2 default '',
-		massimo     varchar2 default '') as
+procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, readonly BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '') as
 BEGIN
 	htp.prn('<input 
 		class="'||classe||'" 
@@ -438,6 +429,10 @@ BEGIN
 	if required then 
 		htp.prn(' required ');
 	end if;
+
+	if readonly then 
+		htp.prn(' readonly ');
+	end if; 
 
 	if pattern is not null then
 		htp.prn('pattern="'||pattern||'" ');
@@ -454,16 +449,15 @@ begin
 end AggiungiLabel;
 
 
-procedure AggiungiBottoneTabella(testo VARCHAR2 default '', classe VARCHAR2 default 'button-tab', url VARCHAR2) is
+procedure AggiungiBottoneTabella(testo VARCHAR2 default '', classe VARCHAR2 default 'button-tab') is
 BEGIN
-htp.prn('<td><div class="button-add-container"><a href="' || url || '" class="' || classe || '">' || testo || '</a></div></td>');
+	htp.prn('<td><button type="submyt" class="' || classe || '"> '|| testo ||' </button></td>' );
 end AggiungiBottoneTabella;
 
-PROCEDURE BottoneAggiungi(testo VARCHAR2 DEFAULT '', classe VARCHAR2 DEFAULT 'button-add', url VARCHAR2) IS
+procedure BottoneAggiungi(testo VARCHAR2 default '', classe VARCHAR2 default 'button-add') is
 BEGIN
-    htp.prn('<div class="button-add-container"><a href="' || url || '" class="' || classe || '">' || testo || '</a></div>');
-END BottoneAggiungi;
-
+	htp.prn('<div class="button-add-container"><button class="' || classe || '"type="submyt"> '|| testo ||' </button></div>' );
+end BottoneAggiungi;
 
 procedure aggiungiIcona (classe VARCHAR2 default '') IS
 BEGIN
@@ -489,7 +483,6 @@ begin
                 gui.apriDiv (classe => 'input-icon'); 
                     gui.aggiungiIcona(classe => classeIcona); 
                 gui.chiudiDiv; 
-
  	gui.chiudiDiv; 
 	end if;  
 
@@ -525,20 +518,19 @@ END chiudiGruppoInput;
 ------------------ Aggiunto per fare delle prove per le procedure nel gruppo operazioni
 procedure aggiungiFormHiddenRigaTabella(azione varchar2 default '') is
 begin
-	htp.prn('<form action="'||azione||'" > <td>');
+	htp.prn('<form action="'||azione||'" >');
 end aggiungiFormHiddenRigaTabella;
 
 
 procedure chiudiFormHiddenRigaTabella is
 begin
-	htp.prn(' </td> </form>');
+	htp.prn('</form>');
 end chiudiFormHiddenRigaTabella;
-
------------------
 
 procedure aCapo is
 BEGIN
 	htp.prn('<br>');
 end aCapo;
+
 
 end gui;
