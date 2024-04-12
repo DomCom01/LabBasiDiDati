@@ -184,12 +184,14 @@ create or replace package gui as
 
 	procedure aggiungibottonetabella (
 		testo  varchar2 default '',
-		classe varchar2 default 'button-tab'
+		classe varchar2 default 'button-tab', 
+		url varchar2 
 	);
 	
 	procedure bottoneaggiungi (
 		testo  varchar2 default '',
-		classe varchar2 default 'button-add'
+		classe varchar2 default 'button-add',
+		url VARCHAR2 
 	);
 
 end gui;
