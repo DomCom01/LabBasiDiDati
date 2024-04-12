@@ -548,36 +548,24 @@ h1{
     content: "\f00c";
   }
 
-
-.form-submit{
-    display: flex;
-    justify-content : flex-end; 
-
-  a {
-    height: 100%;
-    width: 30%;
-    margin: 0px;
-  }
-    
   input[type=submit]{
-    height: 100%;
-    width: 30%;
-    margin: 0px;
-    border-radius: 5px 5px 5px 5px;
-    background-color: #f0d685;
-    font-size : large; 
-    font-weight: bold;  
-  }
+      height: 100%;
+      width: 30%;
+      margin: 0px;
+      border-radius: 0px 5px 5px 0px;
+      background-color: #f0d685;
+      font-size : large; 
+      font-weight: bold;  
+    }
 
-  input[type=submit]:hover {
-    height: 100%;
-    width: 30%;
-    margin: 0px;
-    border-radius: 5px 5px 5px 5px;
-    background-color: #cfab3a;
-    font-size: large;
-  }
-} 
+    input[type=submit]:hover {
+      height: 100%;
+      width: 30%;
+      margin: 0px;
+      border-radius: 0px 5px 5px 0px;
+      background-color: #cfab3a;
+      font-size: large;
+    } 
 
   input:checked + label:after {
     opacity: 1;
@@ -917,7 +905,6 @@ option .tick::before {
 
 
 .button-add-container {
-  background-color: blue;
   position: relative;
   
 }
@@ -934,36 +921,19 @@ option .tick::before {
   transform: translateY(-100%);
 }
 .button-tab {
-  appearance: none;
-  background-color: #0c0b07;
-  border-width: 0;
-  box-sizing: border-box;
-  color: #FFFFFF;
-  cursor: pointer;
-  display: inline-block;
-  /*font-family: Clarkson,Helvetica,sans-serif;*/
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 0;
-  line-height: 1em;
-  margin: 1;
-  margin-right: 1px;
-  opacity: 1;
-  outline: 0;
-  padding: 1.5em 2.2em;
   position: relative;
-  text-align: center;
-  text-decoration: none;
-  text-rendering: geometricprecision;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  vertical-align: baseline;
-  white-space: nowrap;
+  background-color: black;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  top: 50%;
+  right: 0;
+  transform: translateY(-100%);
 }
 ';
 end costanti;
-
 
 /*
 
