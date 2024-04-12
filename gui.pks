@@ -85,7 +85,7 @@ procedure aggiungiFrecceTabella;
 
 procedure cancella(linktest varchar2);
 
-procedure AggiungiBottoneTabella(testo VARCHAR2 default '', url VARCHAR2);
+procedure AggiungiBottoneTabella(testo VARCHAR2 default '');
 procedure BottoneAggiungi(testo VARCHAR2 DEFAULT '', url VARCHAR2);
 
 ------------------------------- home page

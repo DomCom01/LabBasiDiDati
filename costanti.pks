@@ -32,7 +32,11 @@ document.querySelectorAll("th").forEach(th => th.addEventListener("click", (() =
   Array.from(table.querySelectorAll("tr:nth-child(n+2)"))
     .sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
     .forEach(tr => table.appendChild(tr) );
-})));';
+})));
+
+
+
+';
 
 dropdownScript constant VARCHAR2(32767) := '
  
@@ -148,6 +152,18 @@ function inviaRichiesta(url) {
     alert("Si è verificato un errore inaspettato. Contattare l'amministratore di sistema."+err);
   }
 }
+
+function updatePagination(direction){
+
+  if(direction = "forward"){
+    console.log("ciao");
+  }else{
+    console.log("ciao1");
+  }
+
+}
+
+
 ]';
 
 stile constant varchar(32767) := '
@@ -1038,7 +1054,7 @@ option .tick::before {
   cursor: pointer;
   top: 50%;
   right: 0;
-  transform: translateY(-100%);
+  /*transform: translateY(-100%);*/
 }
 
 

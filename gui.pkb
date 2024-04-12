@@ -232,6 +232,8 @@ create or replace PACKAGE BODY gui as
 	BEGIN
 		--htp.prn('</tbody>');
 		htp.prn('</table>');
+		gui.AGGIUNGIFRECCETABELLA;
+
 	end ChiudiTabella;
 
 	procedure AggiungiRigaTabella IS
@@ -495,9 +497,9 @@ create or replace PACKAGE BODY gui as
 	end AggiungiLabel;
 
 
-	procedure AggiungiBottoneTabella(testo VARCHAR2 default '', url VARCHAR2) is
+	procedure AggiungiBottoneTabella(testo VARCHAR2 default '') is
 	BEGIN
-		htp.prn('<td><div class="button-add-container"><a href="' || url || '"><button class="button-tab" type="submit"> '|| testo ||' </button></a></div></td>');
+		htp.prn('<div class="button-add-container"><button class="button-tab" type="submit"> '|| testo ||' </button></div>');
 	end AggiungiBottoneTabella;
 
 	PROCEDURE BottoneAggiungi(testo VARCHAR2 DEFAULT '', url VARCHAR2) IS
@@ -506,7 +508,7 @@ create or replace PACKAGE BODY gui as
 	END BottoneAggiungi;
 
 
-	procedure aggiungiIcona (classe VARCHAR2 default '') IS
+	procedure aggiungiIcona(classe VARCHAR2 default '') IS
 	BEGIN
 		htp.prn ('<i class="'||classe||'"></i>'); 
 		end aggiungiIcona; 
@@ -591,10 +593,10 @@ create or replace PACKAGE BODY gui as
 	procedure aggiungiFrecceTabella is
 	begin
 		apridiv(classe=>'arrows-container');
-			apriDiv(classe=>'table-arrow rotate');
+			apriDiv(classe=>'table-arrow rotate', onclick => 'updatePagination('||CHR(39)||'back'||CHR(39)||', this)');
 				htp.prn('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M7.293 4.707 14.586 12l-7.293 7.293 1.414 1.414L17.414 12 8.707 3.293 7.293 4.707z"/></svg>');
 			chiudiDiv;
-			apriDiv(classe=>'table-arrow');
+			apriDiv(classe=>'table-arrow', onclick => 'updatePagination('||CHR(39)||'forward'||CHR(39)||', this)');
 				htp.prn('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M7.293 4.707 14.586 12l-7.293 7.293 1.414 1.414L17.414 12 8.707 3.293 7.293 4.707z"/></svg>');
 			chiudiDiv;
 		chiudiDiv;
