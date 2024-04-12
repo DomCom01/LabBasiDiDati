@@ -179,15 +179,13 @@ create or replace package gui as
 	procedure aggiungirigaform;
 	procedure chiudirigaform;
 	procedure aggiungibottonesubmit (
-		nome  varchar2,
+		ident varchar2 default null,
+		nome  varchar2 default null,
 		value varchar2 default ''
 	);
 	procedure aggiungigruppoinput;
 	procedure chiudigruppoinput;
 	procedure chiudiform;
-
-	procedure cancella;
-
 
 	procedure aggiungibottonetabella (
 		testo  varchar2 default '',

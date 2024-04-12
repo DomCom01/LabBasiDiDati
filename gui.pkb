@@ -276,7 +276,7 @@ begin
 		htp.prn('<td>
 			<div class="formField">
 				<label  id="'||ident||'">'||placeholder||'</label>');
-				gui.aggiungiInput(tipo, nome, value ,'', required, 'filterInput', ident, pattern, minimo, massimo);
+				gui.aggiungiInput(tipo, nome, value ,'', required, false,'filterInput', ident, pattern, minimo, massimo);
 			htp.prn('</div>
 		</td>');
 	end if;
@@ -413,7 +413,17 @@ BEGIN
 	htp.prn ('</form>'); 
 END chiudiForm; 
 
-procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '') as
+procedure AggiungiInput(tipo        varchar2 default 'text',
+		nome        varchar2,
+		value       varchar2 default '',
+		placeholder varchar2 default '',
+		required    boolean default false,
+		readonly    boolean default false,
+		classe      varchar2 default '',
+		ident       varchar2 default '',
+		pattern     varchar2 default '',
+		minimo      varchar2 default '',
+		massimo     varchar2 default '') as
 BEGIN
 	htp.prn('<input 
 		class="'||classe||'" 
