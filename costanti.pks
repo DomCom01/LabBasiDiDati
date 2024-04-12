@@ -183,12 +183,17 @@ html{
   opacity: 1;
   outline: 0 solid transparent;
   padding: 8px 18px;
+  margin-right: 5px;
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
   width: fit-content;
   word-break: break-word;
   border: none;
+}
+
+.bottone:last-child{
+  margin:0px !important;
 }
 
 .bottone2 {
@@ -233,7 +238,15 @@ html{
   padding: 1px 0px 1px 0px;
   top:0px;
   left:0px;
-  z-index:999; /*mi assicuro che la top bar sia sempre il primo elemento della pagina*/   
+  z-index:999; /*mi assicuro che la top bar sia sempre il primo elemento della pagina*/
+  
+
+  a{
+    outline:none;
+    text-decoration: none;
+    color: black;
+  }
+
 }
 
 .bottoniSinistra {
@@ -262,7 +275,7 @@ html{
   font-weight: 500;
   letter-spacing: 0;
   line-height: 1vh;
-  margin: 0px;
+  margin-right: 0px;
   opacity: 1;
   outline: 0;
   padding: 2.5vh 2.2em;
@@ -358,7 +371,7 @@ body{
 
     th{
         background-color: rgba(0, 0, 0, 0.241);
-        height: 100%;
+        height: 45px;
         width: 100%;
         font-size: large;
         cursor: pointer;
@@ -1078,6 +1091,24 @@ option .tick::before {
 .bottone-popup:focus {
   box-shadow: 0px 0.5px 1px rgba(0, 0, 0, 0.1), 0px 0px 0px 3.5px rgba(58, 108, 217, 0.5);
   outline: 0;
+}
+
+.arrows-container{
+  width: 100%;
+  display:flex;
+  height:45px;
+  margin: 3px 0px 3px 0px;
+  justify-content:center;
+  align-items:center;
+}
+
+.table-arrow{
+  cursor: pointer;
+  margin: 0px 4px 0px 4px;
+}
+
+.rotate{
+  transform: rotate(180deg);
 }
 
 ';

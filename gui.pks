@@ -11,7 +11,7 @@ procedure Reindirizza(indirizzo varchar2);
 
 procedure aCapo(volte number default 1);
 
-procedure ApriBody(idSessione int, ruolo VARCHAR);
+procedure ApriBody(idSessione int);
 
 procedure ChiudiPagina(scriptJS VARCHAR2 default '');
 
@@ -23,7 +23,7 @@ procedure ApriDiv(ident varchar2 default '', classe varchar2 default '', onclick
 
 procedure ChiudiDiv;
 
-procedure TopBar(saldo varchar2 default null, ruolo VARCHAR2);
+procedure TopBar(id_user int, ruolo VARCHAR2);
 
 procedure AggiungiPopup(successo boolean, testo VARCHAR2 default 'Errore!', indirizzo varchar2 default '');
 
@@ -62,7 +62,7 @@ procedure Footer;
 
 procedure aggiungiForm(classe VARCHAR2 default '', name VARCHAR2 default '', url VARCHAR2 default '');
 procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', 
-                pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '', readonly boolean default False);
+                pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '', readonly boolean default False, selected BOOLEAN default false);
 procedure AggiungiLabel(target VARCHAR2, testo VARCHAR2);
 procedure aggiungiIcona (classe VARCHAR2 default ''); 
 procedure aggiungiCampoForm (tipo VARCHAR2 default 'text', classeIcona VARCHAR2 default '', nome VARCHAR2, placeholder VARCHAR2 default '');
@@ -80,9 +80,16 @@ PROCEDURE aggiungiGruppoInput;
 procedure chiudiGruppoInput; 
 PROCEDURE chiudiForm;
 
+-------------------------
+procedure aggiungiFrecceTabella;
+
 procedure cancella(linktest varchar2);
 
 procedure AggiungiBottoneTabella(testo VARCHAR2 default '');
 procedure BottoneAggiungi(testo VARCHAR2 default '');
+
+------------------------------- home page
+
+procedure HomePage(p_success varchar2 default ' ', cEmail VARCHAR2 default null, p_password varchar2 default null, tipo_utente varchar2 default null);
 
 end gui;
