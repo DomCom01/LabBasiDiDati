@@ -50,15 +50,15 @@ begin
 
 end ApriBody;
 
-procedure ChiudiPagina is
-begin
-	htp.prn('</div>'); /*container*/
-	htp.prn('</div>'); /*content-container*/
-	gui.Footer;
-	htp.prn('<script>'||costanti.tableSortScript|| CHR(10) || scriptJS ||'</script>');
-	htp.print('</body>');
+	procedure ChiudiPagina(scriptJS VARCHAR2 default '') is
+	begin
+		htp.prn('</div>'); /*container*/
+		htp.prn('</div>'); /*content-container*/
+		gui.Footer;
+		htp.prn('<script>'||costanti.tableSortScript|| CHR(10) || scriptJS ||'</script>');
+		htp.print('</body>');
 
-end ChiudiPagina;
+	end ChiudiPagina;
 
 procedure indirizzo(indirizzo VARCHAR2 default '') is
 begin
@@ -342,31 +342,34 @@ begin
 	htp.prn('</table> </form>');
 end chiudiFormFiltro;
 
-procedure aggiungiDropdownFormFiltro(testo VARCHAR2 default 'testo', placeholder VARCHAR2 default 'testo', nomiParametri stringArray default null ,opzioni stringArray default null) is 
-begin
-	htp.prn('<td>
-			<div class="formField">');
-	if placeholder is not null then
-		htp.prn('<label >'||placeholder||'</label>');
-	else htp.prn('<label class="hidden" >_</label>');
-	end if;
-	
-	gui.apriDiv(classe => 'multiSelect');
-		htp.prn('<div class="multiSelectBtn" onclick="apriMultiSelect()">');
-			htp.prn('<span class="text">'|| testo ||'</span>');
-			htp.prn('<span class="arrow"></span>');
-		htp.prn('</div>');
-		gui.apriDiv(ident => 'multiSelect-content', classe => 'multiSelect-content');
-		for i in 1..opzioni.count loop
-			gui.apriDiv(ident => 'option');
-				htp.prn('<input type="checkbox" name="'|| nomiParametri(i) ||'" />');
-				htp.prn('<span>'|| opzioni(i) ||'</span>');
+procedure aggiungiDropdownFormFiltro(testo VARCHAR2 default 'testo', placeholder VARCHAR2 default 'testo', ids stringArray default emptyArray ,names stringArray default emptyArray, hiddenParameter varchar2 default '') is 
+	begin
+
+		htp.prn('<td>
+				<div class="formField">');
+		if placeholder is not null then
+			htp.prn('<label >'||placeholder||'</label>');
+		else htp.prn('<label class="hidden" >_</label>');
+		end if;
+		
+		gui.apriDiv(classe => 'multiSelect');
+			gui.apriDiv(classe => 'multiSelectBtn', onclick => 'apriMultiSelect(this.parentNode)');
+				htp.prn('<span class="text">'|| testo ||'</span>');
+				htp.prn('<span class="arrow"></span>');
+			htp.prn('</div>');
+			gui.apriDiv(ident => 'multiSelect-content', classe => 'multiSelect-content');
+			
+			for i in 1..ids.count loop
+				gui.apriDiv(ident => 'option');
+					htp.prn('<input type="checkbox" name="'|| names(i) ||'id="' ||ids(i)|| '" value="' ||ids(i)||'" onchange="updateHiddenInput('||chr(39)||hiddenParameter||chr(39)||', this)"/>');
+					htp.prn('<span>'|| names(i) ||'</span>');
+				gui.chiudiDiv();
+			end loop;
+			
 			gui.chiudiDiv();
-		end loop;
 		gui.chiudiDiv();
-	gui.chiudiDiv();
-				
-	htp.prn('</div> </td>');
+					
+		htp.prn('</div> </td>');
 end aggiungiDropdownFormFiltro;
 
 procedure aggiungiIntestazione(testo VARCHAR2 default 'Intestazione', dimensione VARCHAR2 default 'h1', class VARCHAR2 default '') is
@@ -382,10 +385,10 @@ end aggiungiParagrafo;
 procedure aggiungiDropdown(testo VARCHAR2 default 'testo', opzioni stringArray default null) is
 BEGIN
 	gui.apriDiv(classe => 'dropdown');
-		htp.prn('<button class="dropbtn" onclick="apriMenu()">');
-			htp.prn('<span class="text">'|| testo ||'</span>');
+		gui.apriDiv(classe => 'dropbtn', onclick => 'apriMenu(this.parentNode)');
+			htp.prn('<span class="text"></span>');
 			htp.prn('<span class="arrow"></span>');
-		htp.prn('</button>');
+		htp.prn('</div>');
 		gui.apriDiv(ident => 'dropdown-content', classe => 'dropdown-content');
 		for i in 1..opzioni.count loop
 			gui.apriDiv(ident => 'option');
@@ -473,7 +476,7 @@ END chiudiForm;
 
 procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '', placeholder VARCHAR2 default '', 
 	required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', 
-	massimo VARCHAR2 default '', readonly boolean default False) as
+	massimo VARCHAR2 default '', readonly boolean default False, selected boolean default false) as
 BEGIN
 	htp.prn('<input 
 		class="'||classe||'" 
@@ -495,6 +498,10 @@ BEGIN
 
 	if readonly then
 		htp.prn('readonly');
+	end if;
+
+	if selected then
+		htp.prn('checked');
 	end if;
 	htp.prn('>');
 
@@ -599,7 +606,96 @@ BEGIN
 	END LOOP;
 end aCapo;
 
+procedure aggiungiFrecceTabella is
+	begin
+		apridiv(classe=>'arrows-container');
+			apriDiv(classe=>'table-arrow rotate');
+				htp.prn('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M7.293 4.707 14.586 12l-7.293 7.293 1.414 1.414L17.414 12 8.707 3.293 7.293 4.707z"/></svg>');
+			chiudiDiv;
+			apriDiv(classe=>'table-arrow');
+				htp.prn('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M7.293 4.707 14.586 12l-7.293 7.293 1.414 1.414L17.414 12 8.707 3.293 7.293 4.707z"/></svg>');
+			chiudiDiv;
+		chiudiDiv;
+	end aggiungiFrecceTabella;
+
+
+	procedure HomePage(p_success varchar2 default ' ', cEmail VARCHAR2 default null, p_password varchar2 default null, tipo_utente varchar2 default null) is
+		idSess int;
+	begin
+		gui.apriPagina('Home');
+
+			gui.aggiungiIntestazione('Home Page', 'h1');
+			gui.acapo(2);
+
+			if p_success = 'T' then
+				gui.aggiungiPopup(false, 'Sessione scaduta o inesistente, esegui il login per continuare a utilizzare i nostri servizi');
+				gui.acapo(2);
+			elsif p_success = 'L' then
+				gui.aggiungiPopup(false, 'Login non riuscito, Email o Password errati');
+				gui.acapo(2);
+			elsif p_success = 'S' then
+				gui.aggiungiPopup(true, 'Login riuscito, Benvenuto');
+				gui.acapo(2);
+			end if;
+
+			if((cEmail is null or p_password is null) and  p_success <> 'S') then
+                --gui.ApriFormFiltro('http://131.114.73.203:8080/apex/l_ceccotti.gui.homePage');
+                gui.aggiungiForm(url=> 'http://131.114.73.203:8080/apex/l_ceccotti.gui.homePage');
+					gui.AGGIUNGIINTESTAZIONE('Inserisci email e password', 'h2');
+					gui.aggiungiRigaForm;
+						gui.aggiungiGruppoInput;
+							gui.aggiungiCampoForm('email', 'fa fa-envelope', 'cEmail', 'Email');
+							--gui.AggiungiLabel('','');
+							gui.aggiungiCampoForm('password', 'fa fa-key', 'p_password', 'Password');
+						gui.chiudiGruppoInput;
+					gui.chiudiRigaForm;
+					gui.aggiungiRigaForm;
+						
+						gui.APRIDIV (classe => 'col-half'); 
+                			--gui.aggiungiIntestazione(testo => '', dimensione => 'h4');
+							gui.AGGIUNGIGRUPPOINPUT; 
+								gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'tipo_cliente', tipo => 'radio', value => 'D', selected => true);
+								gui.AGGIUNGILABEL (target => 'tipo_cliente', testo => 'Dipendente');  
+								gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'tipo_dipendente', tipo => 'radio', value => 'C');
+								gui.AGGIUNGILABEL (target => 'tipo_dipendente', testo => 'Cliente'); 
+							gui.CHIUDIGRUPPOINPUT;  
+						gui.CHIUDIDIV;
+
+					gui.chiudiRigaForm;
+					gui.aggiungiRigaForm;
+						gui.aggiungiGruppoInput;
+								gui.aggiungiBottoneSubmit('Accedi');
+							gui.chiudiGruppoInput;
+					gui.chiudiRigaForm;
+				gui.chiudiForm;
+				
+            elsif p_success <> 'S' then
+
+				if tipo_utente is null then 
+					gui.reindirizza('http://131.114.73.203:8080/apex/l_ceccotti.gui.homePage?p_success=L');
+					--gui.aggiungiIntestazione('Ciao', 'h1');
+				end if;
+
+				if tipo_utente = 'C' then
+                	--idSess:=LOGINLOGOUT.AGGIUNGISESSIONECLIENTE(cEmail,p_password);
+					idSess:=2;
+				--else 
+					--idSess:=LOGINLOGOUT.AGGIUNGISESSIONE__DIPENDENTI__(cEmail,password);
+				end if;
+
+                if(idSess = -2) then--login riuscito
+                    --Questa è la nostra implementazione di redirect, per testarla rinviamo su un'altra pagina a caso l'utente dopo aver completato il login con successo
+                    gui.reindirizza('http://131.114.73.203:8080/apex/l_ceccotti.gui.homePage?p_success=L');
+				else
+					gui.reindirizza('http://131.114.73.203:8080/apex/l_ceccotti.gui.homePage?p_success=S');
+                end if;
+            end if;
+
+			if p_success = 'S' then
+				htp.prn('<img src="https://freesvg.org/img/maninclassictaxi-1920.png"/>');
+			end if;
+
+		gui.chiudiPagina();
+	end HomePage;
 
 end gui;
-
-
