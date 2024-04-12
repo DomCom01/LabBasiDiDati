@@ -1,62 +1,129 @@
-SET DEFINE OFF;
-create or replace PACKAGE gui as
+   SET DEFINE OFF;
+create or replace package gui as
+	type stringarray is
+		varray(15) of varchar2(30); -- Tipo array di stringhe 
 
-TYPE StringArray IS VARRAY(15) OF VARCHAR2(30); -- Tipo array di stringhe 
+	emptyarray stringarray;
+	procedure apripagina (
+		titolo     varchar2 default 'Senza titolo',
+		idsessione int default -1
+	);
 
-emptyArray StringArray;
+	procedure reindirizza (
+		indirizzo varchar2
+	);
 
-procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default -1);
+	procedure acapo;
 
-procedure Reindirizza(indirizzo varchar2);
+	procedure apribody (
+		idsessione int,
+		ruolo      varchar
+	);
 
-PROCEDURE aCapo;
+	procedure chiudipagina;
 
-procedure ApriBody(idSessione int, ruolo VARCHAR);
+	procedure bottonetopbar (
+		testo  varchar2 default '',
+		nome   varchar2 default '',
+		valore varchar2 default ''
+	);
 
-procedure ChiudiPagina;
+	procedure bottoneprimario (
+		testo  varchar2 default '',
+		nome   varchar2 default '',
+		valore varchar2 default ''
+	);
 
-procedure BottoneTopBar(testo varchar2 default '', nome varchar2 default '', valore varchar2 default '');
+	procedure apridiv (
+		ident  varchar2 default '',
+		classe varchar2 default ''
+	);
 
-procedure BottonePrimario(testo varchar2 default '', nome varchar2 default '', valore varchar2 default '');
+	procedure chiudidiv;
 
-procedure ApriDiv(ident varchar2 default '', classe varchar2 default '');
+	procedure topbar (
+		saldo varchar2 default null,
+		ruolo varchar2
+	);
 
-procedure ChiudiDiv;
-
-procedure TopBar(saldo varchar2 default null, ruolo VARCHAR2);
-
-procedure AggiungiPopup(successo boolean, testo VARCHAR2 default 'Errore!');
+	procedure aggiungipopup (
+		successo boolean,
+		testo    varchar2 default 'Errore!'
+	);
 
 -- Procedure per Tabella
 /*ApriTabella ora contiene apri header, aggiungi header, chiudi header e apri body*/
-procedure ApriTabella(elementi StringArray default emptyArray);
-procedure AggiungiRigaTabella;
-procedure ChiudiRigaTabella;
-procedure AggiungiElementoTabella(elemento VARCHAR2 default '');
-procedure AggiungiPulsanteCancellazione(proceduraEliminazione VARCHAR2 default '');
-procedure AggiungiPulsanteModifica(collegamento1 VARCHAR2 default '');
-procedure ChiudiTabella;
+	procedure apritabella (
+		elementi stringarray default emptyarray
+	);
+	procedure aggiungirigatabella;
+	procedure chiudirigatabella;
+	procedure aggiungielementotabella (
+		elemento varchar2 default ''
+	);
+	procedure aggiungipulsantecancellazione (
+		proceduraeliminazione varchar2 default ''
+	);
+	procedure aggiungipulsantemodifica (
+		collegamento1 varchar2 default ''
+	);
+	procedure chiuditabella;
 
 
 --procedure per Filtro Tabella
-procedure ApriFormFiltro(azione VARCHAR default '');
-procedure AggiungiCampoFormFiltro(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '');
+	procedure apriformfiltro (
+		azione varchar default ''
+	);
+	procedure aggiungicampoformfiltro (
+		tipo        varchar2 default 'text',
+		nome        varchar2,
+		value       varchar2 default '',
+		placeholder varchar2 default '',
+		required    boolean default false,
+		classe      varchar2 default '',
+		ident       varchar2 default '',
+		pattern     varchar2 default '',
+		minimo      varchar2 default '',
+		massimo     varchar2 default ''
+	);
 /* Per aggiungere una nuova riga al form basta chiamare AggiungiRigaTabella */
-procedure chiudiFormFiltro;
-procedure ApriSelectFormFiltro(nome varchar2, placeholder VARCHAR2);
-procedure AggiungiOpzioneSelect(value VARCHAR2, selected BOOLEAN, testo VARCHAR2 default '');
-procedure ChiudiSelectFormFiltro;
+	procedure chiudiformfiltro;
+	procedure apriselectformfiltro (
+		nome        varchar2,
+		placeholder varchar2
+	);
+	procedure aggiungiopzioneselect (
+		value    varchar2,
+		selected boolean,
+		testo    varchar2 default ''
+	);
+	procedure chiudiselectformfiltro;
 
 --Procedure titoli e testi
-procedure aggiungiIntestazione(testo VARCHAR2 default 'Intestazione', dimensione VARCHAR2 default 'h1', class VARCHAR2 default '');
-procedure aggiungiParagrafo(testo VARCHAR2 default 'testo', class VARCHAR2 default '');
+	procedure aggiungiintestazione (
+		testo      varchar2 default 'Intestazione',
+		dimensione varchar2 default 'h1',
+		class      varchar2 default ''
+	);
+	procedure aggiungiparagrafo (
+		testo varchar2 default 'testo',
+		class varchar2 default ''
+	);
 
 --Dropdown con selezione multipla
-procedure aggiungiDropdown(testo VARCHAR2 default 'testo', opzioni stringArray default null);
-procedure aggiungiDropdownFormFiltro(testo VARCHAR2 default 'testo', placeholder VARCHAR2 default 'testo', nomiParametri stringArray default null, opzioni stringArray default null);
+	procedure aggiungidropdown (
+		testo   varchar2 default 'testo',
+		opzioni stringarray default null
+	);
+	procedure aggiungidropdownformfiltro (
+		testo         varchar2 default 'testo',
+		placeholder   varchar2 default 'testo',
+		nomiparametri stringarray default null,
+		opzioni       stringarray default null
+	);
 
 --Footer
-procedure Footer;
+	procedure footer;
 
 --Form
 
@@ -93,27 +160,44 @@ procedure Footer;
 		tipo        varchar2 default 'text',
 		classeicona varchar2 default '',
 		nome        varchar2,
-		required    BOOLEAN default true,
-		ident VARCHAR2 default '',  
+		required    boolean default true,
+		ident       varchar2 default '',
 		placeholder varchar2 default ''
 	);
 
 ------------------- Aggiunto per fare delle prove per le procedure nel gruppo operazioni
-procedure aggiungiFormHiddenRigaTabella(azione varchar2 default '');
-procedure chiudiFormHiddenRigaTabella;
+	procedure aggiungiformhiddenrigatabella (
+		azione varchar2 default ''
+	);
+	procedure chiudiformhiddenrigatabella;
 -------------------
-procedure AggiungiCampoFormHidden(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '');
-procedure aggiungiRigaForm;
-procedure chiudiRigaForm;
-procedure aggiungiBottoneSubmit (nome VARCHAR2, value VARCHAR2 default ''); 
-PROCEDURE aggiungiGruppoInput; 
-procedure chiudiGruppoInput; 
-PROCEDURE chiudiForm;
+	procedure aggiungicampoformhidden (
+		tipo  varchar2 default 'text',
+		nome  varchar2,
+		value varchar2 default ''
+	);
+	procedure aggiungirigaform;
+	procedure chiudirigaform;
+	procedure aggiungibottonesubmit (
+		nome  varchar2,
+		value varchar2 default ''
+	);
+	procedure aggiungigruppoinput;
+	procedure chiudigruppoinput;
+	procedure chiudiform;
 
-procedure cancella;
+	procedure cancella;
 
 
-procedure AggiungiBottoneTabella(testo VARCHAR2 default '', classe VARCHAR2 default 'button-tab', url VARCHAR2);
-PROCEDURE BottoneAggiungi(testo VARCHAR2 DEFAULT '', classe VARCHAR2 DEFAULT 'button-add', url VARCHAR2);
+	procedure aggiungibottonetabella (
+		testo  varchar2 default '',
+		classe varchar2 default 'button-tab',
+		url    varchar2
+	);
+	procedure bottoneaggiungi (
+		testo  varchar2 default '',
+		classe varchar2 default 'button-add',
+		url    varchar2
+	);
 
 end gui;
