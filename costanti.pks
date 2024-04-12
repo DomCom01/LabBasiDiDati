@@ -1,5 +1,4 @@
 SET DEFINE OFF;
-
 create or replace package costanti as
 
 tableSortScript CONSTANT VARCHAR2(32767) := '
@@ -82,90 +81,46 @@ function apriMenu(dropdown) {
   }
 }
 
-function mostraConferma(riga) {
-    // Controlla se la riga di conferma è già presente
-    if (!riga.nextElementSibling || !riga.nextElementSibling.classList.contains('rigaConferma')) {
-        // Crea la riga di conferma
-        var nuovaRiga = document.createElement("tr");
-        nuovaRiga.classList.add('rigaConferma'); 
-        var nuovaCella = nuovaRiga.insertCell(0);
-        nuovaCella.colSpan = riga.cells.length; // Imposta il colspan sulla base del numero di colonne nella riga(Non funziona)
-        nuovaCella.innerHTML = "Sicuro di voler cancellare? <button onclick=\"confermaEliminazione(this.parentNode.parentNode)\">Sì</button> <button onclick=\"annullaEliminazione(this.parentNode.parentNode)\">No</button>";
-        riga.parentNode.insertBefore(nuovaRiga, riga.nextSibling);
+function confermaEliminazione(url) {
+    var conferma = confirm("Sei sicuro di voler eliminare?");
+    if (conferma) {
+        
+        inviaRichiesta(url);
     }
 }
 
-function mostraConferma(riga, url) {
-    // Controlla se la riga di conferma è già presente altrimenti la crea
-    if (!riga.nextElementSibling || !riga.nextElementSibling.classList.contains('rigaConferma')) {
-        var nuovaRiga = document.createElement("tr");
-        nuovaRiga.classList.add('rigaConferma'); 
-        var nuovaCella = nuovaRiga.insertCell(0);
-        nuovaCella.colSpan = riga.cells.length; //Non funziona
-        
-        nuovaCella.innerHTML = "Sicuro di voler cancellare? " + 
-                                "<button onclick=\"apriURL('" + url + "')\">Sì</button> " + 
-                                "<button onclick=\"annullaEliminazione(this.parentNode.parentNode)\">No</button>";
-        
-        // Inserisci la nuova riga dopo la riga corrente
-        riga.parentNode.insertBefore(nuovaRiga, riga.nextSibling);
-    }
+function inviaRichiesta(url) {
+  try {
+    // Simula l'invio di una richiesta al server con AJAX
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url, true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          // Gestisci la risposta del server
+          if (xhr.responseText === 'true') {
+            alert("Eliminazione avvenuta con successo");
+            window.location.reload(); // Ricarica la pagina 
+          } else {
+            alert("Eliminazione non eseguita. Si è verificato un errore.");
+          }
+        } else {
+          alert("Errore durante la richiesta di eliminazione. (Codice di stato: " + xhr.status + ")");
+        }
+      }
+    };
+    // Invia la richiesta con il valore di azione
+    xhr.send(null);
+  } catch (err) {
+    console.error("Errore in inviaRichiesta:", err);
+    alert("Si è verificato un errore inaspettato. Contattare l'amministratore di sistema."+err);
+  }
 }
-
-function apriURL(url) {
-    window.location.href = url; // Apre l'URL nella stessa finestra
-}
-
-function annullaEliminazione(rigaConferma) {
-    // Rimuove la riga di conferma se viene cliccato no
-    rigaConferma.parentNode.removeChild(rigaConferma);
-}
-
-function mostraPopup() {
-    var popup = document.getElementById("popup-message");
-    popup.style.display = "block";
-}
-
-// Funzione per nascondere il popup
-function nascondiPopup() {
-    var popup = document.getElementById("popup-message");
-    popup.style.display = "none";
-}
-
 ]';
 
-dropdownScript constant VARCHAR2(32767) := '
- 
- const updateHiddenInput = (inputName, checkbox, symbol = ";") => {
-    if (!checkbox) throw new Error("Checkbox non trovata");
-    if (!symbol) symbol = ";";
-
-    const input = document.getElementsByName(inputName)[0];
-
-    if (!input) throw new Error("Elemento " + inputName + " non trovato");
-
-    const values = input.getAttribute("value");
-    const value = checkbox.getAttribute("value");
-
-    const newValues = values ? values.split(symbol) : [];
-    if (checkbox.checked) {
-        // aggiungi value a values
-        newValues.push(value);
-        newValues.sort();
-        input.setAttribute("value", newValues.join(symbol));
-    } else {
-        // elimina value da values
-        const index = newValues.indexOf(value);
-
-        if (index == -1)
-            return;
-
-        newValues.splice(index, 1);
-        input.setAttribute("value", newValues.join(symbol));
-    }
-}';
-
 stile constant varchar(32767) := '
+
 html{
   margin:0px;
 }
@@ -1025,7 +980,6 @@ option .tick::before {
 
 
 .button-add-container {
-  background-color: blue;
   position: relative;
 }
 
@@ -1042,30 +996,17 @@ option .tick::before {
   transform: translateY(-100%);
 }
 .button-tab {
-  appearance: none;
-  background-color: #0c0b07;
-  border-width: 0;
-  box-sizing: border-box;
-  color: #FFFFFF;
-  cursor: pointer;
-  display: inline-block;
-  /*font-family: Clarkson,Helvetica,sans-serif;*/
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 0;
-  line-height: 1em;
-  opacity: 1;
-  outline: 0;
-  padding: 5px 8px 5px 8px !important;
   position: relative;
-  text-align: center;
-  text-decoration: none;
-  text-rendering: geometricprecision;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  vertical-align: baseline;
-  white-space: nowrap;
+  background-color: black;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+
+  top: 50%;
+  right: 0;
+  transform: translateY(-100%);
 }
 
 .bottone-popup {
@@ -1107,9 +1048,74 @@ option .tick::before {
   margin: 0px 4px 0px 4px;
 }
 
+.bottone-popup {
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 14px;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  border-radius: 6px;
+  color: #3D3D3D;
+  background: #fff;
+  border: none;
+  box-shadow: 0px 0.5px 1px rgba(0, 0, 0, 0.1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  cursor: pointer; 
+}
+
+.bottone-popup:hover {
+    cursor: pointer; 
+}
+
+.bottone-popup:focus {
+  box-shadow: 0px 0.5px 1px rgba(0, 0, 0, 0.1), 0px 0px 0px 3.5px rgba(58, 108, 217, 0.5);
+  outline: 0;
+}
+
+.arrows-container{
+  width: 100%;
+  display:flex;
+  height:45px;
+  margin: 3px 0px 3px 0px;
+  justify-content:center;
+  align-items:center;
+}
+
+.table-arrow{
+  cursor: pointer;
+  margin: 0px 4px 0px 4px;
+}
 .rotate{
   transform: rotate(180deg);
 }
 
 ';
 end costanti;
+
+
+/*
+
+function mostraConferma(riga) {
+    // Controlla se la riga di conferma è già presente
+    if (!riga.nextElementSibling || !riga.nextElementSibling.classList.contains('rigaConferma')) {
+        // Crea la riga di conferma
+        var nuovaRiga = document.createElement("tr");
+        nuovaRiga.classList.add('rigaConferma'); 
+        var nuovaCella = nuovaRiga.insertCell(0);
+        nuovaCella.colSpan = riga.cells.length; // Imposta il colspan sulla base del numero di colonne nella riga(Non funziona)
+        nuovaCella.innerHTML = "Sicuro di voler cancellare? <button onclick=\"confermaEliminazione(this.parentNode.parentNode)\">Sì</button> <button onclick=\"annullaEliminazione(this.parentNode.parentNode)\">No</button>";
+        riga.parentNode.insertBefore(nuovaRiga, riga.nextSibling);
+    }
+}
+
+function confermaEliminazione(rigaConferma) {
+    //Per ora semplicemente ricarica la pagina
+    window.location.reload();
+}
+
+function annullaEliminazione(rigaConferma) {
+    // Rimuove la riga di conferma se viene cliccato no
+    rigaConferma.parentNode.removeChild(rigaConferma);
+}
+*/
