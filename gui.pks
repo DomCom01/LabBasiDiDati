@@ -86,12 +86,10 @@ procedure aggiungiFrecceTabella;
 procedure cancella(linktest varchar2);
 
 procedure AggiungiBottoneTabella(testo VARCHAR2 default '');
-procedure BottoneAggiungi(testo VARCHAR2 default '');
+procedure BottoneAggiungi(testo VARCHAR2 DEFAULT '', url VARCHAR2);
 
 ------------------------------- home page
 
-procedure AggiungiBottoneTabella(testo VARCHAR2 default '', classe VARCHAR2 default 'button-tab', url VARCHAR2);
-PROCEDURE BottoneAggiungi(testo VARCHAR2 DEFAULT '', classe VARCHAR2 DEFAULT 'button-add', url VARCHAR2);
 procedure HomePage(p_success varchar2 default ' ', cEmail VARCHAR2 default null, p_password varchar2 default null, tipo_utente varchar2 default null);
 
 end gui;

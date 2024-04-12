@@ -500,9 +500,9 @@ create or replace PACKAGE BODY gui as
 		htp.prn('<button type="submit" class="button-tab"> '|| testo ||' </button>');
 	end AggiungiBottoneTabella;
 
-PROCEDURE BottoneAggiungi(testo VARCHAR2 DEFAULT '', classe VARCHAR2 DEFAULT 'button-add', url VARCHAR2) IS
+PROCEDURE BottoneAggiungi(testo VARCHAR2 DEFAULT '', url VARCHAR2) IS
 BEGIN
-    htp.prn('<div class="button-add-container"><a href="' || url || '" class="' || classe || '">' || testo || '</a></div>');
+    htp.prn('<div class="button-add-container"><a href="' || url || '"><button class="button-add" type="submit"> '|| testo ||' </button></a></div>');
 END BottoneAggiungi;
 
 

@@ -34,6 +34,37 @@ document.querySelectorAll("th").forEach(th => th.addEventListener("click", (() =
     .forEach(tr => table.appendChild(tr) );
 })));';
 
+dropdownScript constant VARCHAR2(32767) := '
+ 
+ const updateHiddenInput = (inputName, checkbox, symbol = ";") => {
+    if (!checkbox) throw new Error("Checkbox non trovata");
+    if (!symbol) symbol = ";";
+
+    const input = document.getElementsByName(inputName)[0];
+
+    if (!input) throw new Error("Elemento " + inputName + " non trovato");
+
+    const values = input.getAttribute("value");
+    const value = checkbox.getAttribute("value");
+
+    const newValues = values ? values.split(symbol) : [];
+    if (checkbox.checked) {
+        // aggiungi value a values
+        newValues.push(value);
+        newValues.sort();
+        input.setAttribute("value", newValues.join(symbol));
+    } else {
+        // elimina value da values
+        const index = newValues.indexOf(value);
+
+        if (index == -1)
+            return;
+
+        newValues.splice(index, 1);
+        input.setAttribute("value", newValues.join(symbol));
+    }
+}';
+
 /* 32767 è la dimensione massima di varchar2 */
 scriptjs constant varchar2(32767) := q'[
 
@@ -996,18 +1027,32 @@ option .tick::before {
   transform: translateY(-100%);
 }
 .button-tab {
-  position: relative;
-  background-color: black;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
+  appearance: none;
+  background-color: #0c0b07;
+  border-width: 0;
+  box-sizing: border-box;
+  color: #FFFFFF;
   cursor: pointer;
-
-  top: 50%;
-  right: 0;
-  transform: translateY(-100%);
+  display: inline-block;
+  /*font-family: Clarkson,Helvetica,sans-serif;*/
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1em;
+  opacity: 1;
+  outline: 0;
+  padding: 5px 8px 5px 8px !important;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  text-rendering: geometricprecision;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: baseline;
+  white-space: nowrap;
 }
+
 
 .bottone-popup {
   flex-direction: column;
