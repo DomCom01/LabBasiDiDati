@@ -1,23 +1,23 @@
 SET DEFINE OFF;
+SET DEFINE OFF;
 create or replace PACKAGE gui as
 
-TYPE StringArray IS VARRAY(15) OF VARCHAR2(30); -- Tipo array di stringhe 
+type StringArray is table of varchar2(30) not null;
 
 emptyArray StringArray;
 
-procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default -1, scriptJS VARCHAR2 default '');
+procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default -1,  scriptJS VARCHAR2 default '');
 
 procedure Reindirizza(indirizzo varchar2);
-
 procedure aCapo(volte number default 1);
-
-procedure ApriBody(idSessione int);
+procedure ApriBody(idSessione int default 0);
 
 procedure ChiudiPagina(scriptJS VARCHAR2 default '');
 
 procedure BottoneTopBar(testo varchar2 default '', nome varchar2 default '', valore varchar2 default '');
 
 procedure BottonePrimario(testo varchar2 default '', nome varchar2 default '', valore varchar2 default '');
+
 
 procedure ApriDiv(ident varchar2 default '', classe varchar2 default '', onclick varchar2 default '');
 
@@ -35,6 +35,10 @@ procedure ChiudiRigaTabella;
 procedure AggiungiElementoTabella(elemento VARCHAR2 default '');
 procedure AggiungiPulsanteCancellazione(proceduraEliminazione VARCHAR2 default '');
 procedure AggiungiPulsanteModifica(collegamento1 VARCHAR2 default '');
+procedure AggiungiPulsanteGenerale(
+    proceduraEliminazione VARCHAR2 DEFAULT '',
+	testo VARCHAR2
+);
 procedure ChiudiTabella;
 
 
@@ -54,19 +58,19 @@ procedure aggiungiParagrafo(testo VARCHAR2 default 'testo', class VARCHAR2 defau
 --Dropdown con selezione multipla
 procedure aggiungiDropdown(testo VARCHAR2 default 'testo', opzioni stringArray default null);
 procedure aggiungiDropdownFormFiltro(testo VARCHAR2 default 'testo', placeholder VARCHAR2 default 'testo', ids stringArray default emptyArray ,names stringArray default emptyArray, hiddenParameter varchar2 default '');
-
 --Footer
 procedure Footer;
 
 --Form
 
 procedure aggiungiForm(classe VARCHAR2 default '', name VARCHAR2 default '', url VARCHAR2 default '');
-procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', 
-                pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '', readonly boolean default False, selected BOOLEAN default false);
+procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '', placeholder VARCHAR2 default '', 
+	required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', 
+	massimo VARCHAR2 default '', readonly boolean default False, selected boolean default False);
 procedure AggiungiLabel(target VARCHAR2, testo VARCHAR2);
 procedure aggiungiIcona (classe VARCHAR2 default ''); 
 procedure aggiungiCampoForm (tipo VARCHAR2 default 'text', classeIcona VARCHAR2 default '', nome VARCHAR2, placeholder VARCHAR2 default '');
-procedure aggiungiSelezioneSingola(elementi StringArray, titolo varchar2 default '', ident varchar2);
+procedure aggiungiSelezioneSingola(elementi StringArray, valoreEffettivo StringArray default null, titolo varchar2 default '', ident varchar2);
 procedure aggiungiSelezioneMultipla(elementi StringArray, titolo varchar2 default '', ident varchar2);
 ------------------- Aggiunto per fare delle prove per le procedure nel gruppo operazioni
 procedure aggiungiFormHiddenRigaTabella(azione varchar2 default '');
@@ -75,20 +79,22 @@ procedure chiudiFormHiddenRigaTabella;
 procedure AggiungiCampoFormHidden(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '');
 procedure aggiungiRigaForm;
 procedure chiudiRigaForm;
-procedure aggiungiBottoneSubmit (nome VARCHAR2, value VARCHAR2 default ''); 
+procedure aggiungiBottoneSubmit (value VARCHAR2 default ''); 
 PROCEDURE aggiungiGruppoInput; 
 procedure chiudiGruppoInput; 
 PROCEDURE chiudiForm;
+-------------------
 
--------------------------
 procedure aggiungiFrecceTabella;
 
-procedure cancella(linktest varchar2);
+procedure cancella(linktest varchar2) ;
 
-procedure AggiungiBottoneTabella(testo VARCHAR2 default '', url VARCHAR2);
-procedure BottoneAggiungi(testo VARCHAR2 DEFAULT '', url VARCHAR2);
 
-------------------------------- home page
+
+procedure AggiungiBottoneTabella(testo VARCHAR2 default '', classe VARCHAR2 default 'button-tab');
+procedure BottoneAggiungi(testo VARCHAR2 default '', classe VARCHAR2 default 'button-add', indirizzo varchar2);
+
+---------------------- Homepage
 
 procedure HomePage(p_success varchar2 default ' ', cEmail VARCHAR2 default null, p_password varchar2 default null, tipo_utente varchar2 default null);
 
