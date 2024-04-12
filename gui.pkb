@@ -435,16 +435,15 @@ begin
 end AggiungiLabel;
 
 
-procedure AggiungiBottoneTabella(testo VARCHAR2 default '', classe VARCHAR2 default 'button-tab') is
+procedure AggiungiBottoneTabella(testo VARCHAR2 default '', classe VARCHAR2 default 'button-tab', url VARCHAR2) is
 BEGIN
-	htp.prn('<td><button type="submyt" class="' || classe || '"> '|| testo ||' </button></td>' );
+htp.prn('<td><div class="button-add-container"><a href="' || url || '" class="' || classe || '">' || testo || '</a></div></td>');
 end AggiungiBottoneTabella;
 
-procedure BottoneAggiungi(testo VARCHAR2 default '', classe VARCHAR2 default 'button-add') is
+PROCEDURE BottoneAggiungi(testo VARCHAR2 DEFAULT '', classe VARCHAR2 DEFAULT 'button-add', url VARCHAR2) IS
 BEGIN
-	htp.prn('<div class="button-add-container"><button class="' || classe || '"type="submyt"> '|| testo ||' </button></div>' );
-end BottoneAggiungi;
-
+    htp.prn('<div class="button-add-container"><a href="' || url || '" class="' || classe || '">' || testo || '</a></div>');
+END BottoneAggiungi;
 
 
 procedure aggiungiIcona (classe VARCHAR2 default '') IS
