@@ -91,8 +91,8 @@ procedure cancella(linktest varchar2) ;
 
 
 
-procedure AggiungiBottoneTabella(testo VARCHAR2 default '', classe VARCHAR2 default 'button-tab');
-procedure BottoneAggiungi(testo VARCHAR2 default '', classe VARCHAR2 default 'button-add', indirizzo varchar2);
+PROCEDURE AggiungiBottoneTabella(testo VARCHAR2 DEFAULT '', classe VARCHAR2 DEFAULT 'button-tab', url VARCHAR2 DEFAULT '');
+PROCEDURE BottoneAggiungi(testo VARCHAR2 DEFAULT '', classe VARCHAR2 DEFAULT 'button-add', url VARCHAR2);
 
 ---------------------- Homepage
 
