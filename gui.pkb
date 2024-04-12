@@ -20,7 +20,7 @@ begin
 '); /*FONTAwesome*/
 	htp.print('<script type="text/javascript">' || costanti.scriptjs || '</script>'); -- Aggiunto script di base
  	htp.headClose; 
-	gui.ApriBody(idSessione, ruolo => 'Cliente');
+	gui.ApriBody(idSessione, ruolo => 'Cliente' /*SessionHandler.getRuolo(idSessione)*/);
 
 end ApriPagina;
 
@@ -188,7 +188,7 @@ end TopBar;
 -- Procedura Tabella senza filtro provvisoria
 procedure ApriTabella(elementi StringArray default emptyArray) is
 begin
-	htp.prn('<table class="tab"> ');
+	htp.prn('<table class="tab">');
 	htp.prn('<thead>');
 	htp.prn('<tr>');
 	for i in 1..elementi.count loop
@@ -214,36 +214,46 @@ BEGIN
 	htp.prn('</tr>');
 end ChiudiRigaTabella;
 
-procedure AggiungiPulsanteCancellazione(
+PROCEDURE AggiungiPulsanteCancellazione (
     proceduraEliminazione VARCHAR2 DEFAULT ''
 ) IS
 BEGIN
-    htp.prn('<td><button onclick="confermaEliminazione('||proceduraEliminazione||')">
-    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16l-1.58 14.22A2 2 0 0 1 16.432 22H7.568a2 2 0 0 1-1.988-1.78zm3.345-2.853A2 2 0 0 1 9.154 2h5.692a2 2 0 0 1 1.81 1.147L18 6H6zM2 6h20m-12 5v5m4-5v5"/>
-    </svg>
-    </button></td>');
+    htp.prn('<td>');
+    htp.prn('<input type="hidden" id="inputElimina" value="true"/>');
+    htp.prn('<button id="buttonElimina" onclick="confermaEliminazione('||proceduraEliminazione||')">');
+    htp.prn('<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">');
+    htp.prn('<path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16l-1.58 14.22A2 2 0 0 1 16.432 22H7.568a2 2 0 0 1-1.988-1.78zm3.345-2.853A2 2 0 0 1 9.154 2h5.692a2 2 0 0 1 1.81 1.147L18 6H6zM2 6h20m-12 5v5m4-5v5"/>');
+    htp.prn('</svg>');
+    htp.prn('</button>');
+    htp.prn('</td>');
+    htp.prn('<script>');
+    htp.prn('document.querySelector("#buttonElimina").addEventListener("click", function() {');
+    htp.prn('document.getElementById("inputElimina").setAttribute("name", "Elimina");');
+    htp.prn('});');
+    htp.prn('</script>');
 END AggiungiPulsanteCancellazione;
 
-
-/*Da togliere*/
-procedure cancella IS
+PROCEDURE AggiungiPulsanteModifica(collegamento1 VARCHAR2 DEFAULT '') IS
 BEGIN
-	gui.AggiungiPopup(True, 'Ciao');
-end cancella;
-
-procedure AggiungiPulsanteModifica(collegamento1 VARCHAR2 default '') IS
-BEGIN
-	htp.prn('<td><a href="'||collegamento1||'" target="_blank">
-		<button>
-		<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" fill-opacity="0" d="M20 7L17 4L15 6L18 9L20 7Z"><animate fill="freeze" attributeName="fill-opacity" begin="1.2s" dur="0.15s" values="0;0.3"/></path><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="20" stroke-dashoffset="20" d="M3 21H21"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="20;0"/></path><path stroke-dasharray="44" stroke-dashoffset="44" d="M7 17V13L17 3L21 7L11 17H7"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.4s" dur="0.6s" values="44;0"/></path><path stroke-dasharray="8" stroke-dashoffset="8" d="M14 6L18 10"><animate fill="freeze" attributeName="stroke-dashoffset" begin="1s" dur="0.2s" values="8;0"/></path></g></svg>
-		</button></a>');
-	htp.prn('</td>');
+    htp.prn('<td>');    
+    htp.prn('<input type="hidden" id="inputModifica" value="true">');
+    htp.prn('<a href="' || collegamento1 || '" target="_blank">');
+    htp.prn('<button id="buttonModifica">');
+    htp.prn('<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" fill-opacity="0" d="M20 7L17 4L15 6L18 9L20 7Z"><animate fill="freeze" attributeName="fill-opacity" begin="1.2s" dur="0.15s" values="0;0.3"/></path><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="20" stroke-dashoffset="20" d="M3 21H21"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="20;0"/></path><path stroke-dasharray="44" stroke-dashoffset="44" d="M7 17V13L17 3L21 7L11 17H7"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.4s" dur="0.6s" values="44;0"/></path><path stroke-dasharray="8" stroke-dashoffset="8" d="M14 6L18 10"><animate fill="freeze" attributeName="stroke-dashoffset" begin="1s" dur="0.2s" values="8;0"/></path></g></svg>');
+    htp.prn('</button></a>');
+    htp.prn('</td>');
+    htp.prn('<script>');
+    htp.prn('document.querySelector("#buttonModifica").addEventListener("click", function() {');
+    htp.prn('window.location.href = "' || collegamento1 || '";');  -- Naviga verso la pagina di modifica quando il pulsante viene cliccato
+    htp.prn('});');
+    htp.prn('</script>');
 END AggiungiPulsanteModifica;
+
 
 procedure AggiungiElementoTabella(elemento VARCHAR2 default '') IS
 BEGIN
-	htp.prn('<td>'|| elemento || '</td>');
+	htp.prn('<td>'||elemento||'</td>');  
+
 end AggiungiElementoTabella;
 
 
@@ -253,7 +263,7 @@ begin
             	<table class="inputTAB">');
 end ApriFormFiltro;
 
-procedure AggiungiCampoFormFiltro(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '') IS
+procedure AggiungiCampoFormFiltro(tipo VARCHAR2 default 'text', nome VARCHAR2 default NULL, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '') IS
 begin
 	if(tipo = 'submit') then
 	
@@ -267,7 +277,7 @@ begin
 		htp.prn('<td>
 			<div class="formField">
 				<label  id="'||ident||'">'||placeholder||'</label>');
-				gui.aggiungiInput(tipo, nome, value ,'', required, 'filterInput', ident, pattern, minimo, massimo);
+				gui.aggiungiInput(tipo, nome, value ,'', required, false, 'filterInput', ident, pattern, minimo, massimo);
 			htp.prn('</div>
 		</td>');
 	end if;
@@ -310,7 +320,7 @@ begin
 			<div class="formField">');
 	if placeholder is not null then
 		htp.prn('<label >'||placeholder||'</label>');
-	else htp.prn('<label class="hidden" >_</label>');
+	else htp.prn('<label class="hidden" >_</label>');	
 	end if;
 	
 	gui.apriDiv(classe => 'multiSelect');
@@ -392,19 +402,19 @@ END Footer;
 
 /*Form*/
 
-procedure aggiungiForm (classe VARCHAR2 default '', name VARCHAR2 default '', url VARCHAR2 default '') IS
+procedure aggiungiForm(classe VARCHAR2 default '', name VARCHAR2 default '', url VARCHAR2 default '') IS
 BEGIN
-	htp.prn ('<form method="GET" class="'||classe||'" name="'||name||'" action="'||url||'"">'); 
-	gui.APRIDIV(classe => 'form-container'); 
+    htp.prn('<form method="GET" class="' || classe || '" name="' || name || '" action="' || url || '">');
+    gui.ApriDiv(classe => 'form-container');
 END aggiungiForm;
 
 procedure chiudiForm IS
 BEGIN
-	gui.CHIUDIDIV;
+	gui.CHIUDIDIV; --form-container
 	htp.prn ('</form>'); 
 END chiudiForm; 
 
-procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '') as
+procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, readonly BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '') as
 BEGIN
 	htp.prn('<input 
 		class="'||classe||'" 
@@ -419,6 +429,10 @@ BEGIN
 	if required then 
 		htp.prn(' required ');
 	end if;
+
+	if readonly then 
+		htp.prn(' readonly ');
+	end if; 
 
 	if pattern is not null then
 		htp.prn('pattern="'||pattern||'" ');
@@ -451,14 +465,13 @@ BEGIN
 	htp.prn ('<i class="'||classe||'"></i>'); 
 	end aggiungiIcona; 
 
-procedure aggiungiCampoForm (tipo VARCHAR2 default 'text', classeIcona VARCHAR2 default '', nome VARCHAR2, placeholder VARCHAR2 default '') IS
+procedure aggiungiCampoForm (tipo VARCHAR2 default 'text', classeIcona VARCHAR2 default '', nome VARCHAR2, required BOOLEAN default true, ident VARCHAR2 default '', placeholder VARCHAR2 default '') IS
 begin
 
 	if tipo = 'text'
 	then
 		gui.APRIDIV (classe => 'input-group input-group-icon');    
-
-                gui.aggiungiInput (nome => nome, placeholder => placeholder, required => true, classe => '');
+                gui.aggiungiInput (nome => nome, placeholder => placeholder, required => required, ident => ident,  classe => '');
                 gui.apriDiv (classe => 'input-icon'); 
                     gui.aggiungiIcona(classe => classeIcona); 
                 gui.chiudiDiv; 
@@ -467,11 +480,10 @@ begin
 	else
 		gui.APRIDIV (classe => 'input-group input-group-icon');     
 
-                gui.aggiungiInput (tipo => tipo, nome => nome, placeholder => placeholder, required => true, classe => '');
+                gui.aggiungiInput (tipo => tipo, nome => nome, placeholder => placeholder, required => required, classe => '');
                 gui.apriDiv (classe => 'input-icon'); 
                     gui.aggiungiIcona(classe => classeIcona); 
                 gui.chiudiDiv; 
-
  	gui.chiudiDiv; 
 	end if;  
 
@@ -487,10 +499,10 @@ BEGIN
 	gui.CHIUDIDIV; 
 	END chiudiRigaForm; 
 
-procedure aggiungiBottoneSubmit (nome VARCHAR2, value VARCHAR2 default '') is
-BEGIN
-	gui.APRIDIV(classe => 'form-submit');   
-                    gui.AGGIUNGIINPUT (nome => nome, tipo => 'submit', value => value);
+procedure aggiungiBottoneSubmit (ident varchar2 default null, nome varchar2 default null, value VARCHAR2 default '') is
+BEGIN 
+	gui.APRIDIV(classe => 'form-submit');   	
+                    gui.AGGIUNGIINPUT (ident => ident, nome => nome, tipo => 'submit', value => value);
                 gui.CHIUDIDIV;
 END aggiungiBottoneSubmit; 
 
@@ -507,16 +519,14 @@ END chiudiGruppoInput;
 ------------------ Aggiunto per fare delle prove per le procedure nel gruppo operazioni
 procedure aggiungiFormHiddenRigaTabella(azione varchar2 default '') is
 begin
-	htp.prn('<form action="'||azione||'" > <td>');
+	htp.prn('<form action="'||azione||'" >');
 end aggiungiFormHiddenRigaTabella;
 
 
 procedure chiudiFormHiddenRigaTabella is
 begin
-	htp.prn(' </td> </form>');
+	htp.prn('</form>');
 end chiudiFormHiddenRigaTabella;
-
------------------
 
 procedure aCapo is
 BEGIN

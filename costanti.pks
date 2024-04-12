@@ -548,24 +548,36 @@ h1{
     content: "\f00c";
   }
 
-  input[type=submit]{
-      height: 100%;
-      width: 30%;
-      margin: 0px;
-      border-radius: 0px 5px 5px 0px;
-      background-color: #f0d685;
-      font-size : large; 
-      font-weight: bold;  
-    }
 
-    input[type=submit]:hover {
-      height: 100%;
-      width: 30%;
-      margin: 0px;
-      border-radius: 0px 5px 5px 0px;
-      background-color: #cfab3a;
-      font-size: large;
-    } 
+.form-submit{
+    display: flex;
+    justify-content : flex-end; 
+
+  a {
+    height: 100%;
+    width: 30%;
+    margin: 0px;
+  }
+    
+  input[type=submit]{
+    height: 100%;
+    width: 30%;
+    margin: 0px;
+    border-radius: 5px 5px 5px 5px;
+    background-color: #f0d685;
+    font-size : large; 
+    font-weight: bold;  
+  }
+
+  input[type=submit]:hover {
+    height: 100%;
+    width: 30%;
+    margin: 0px;
+    border-radius: 5px 5px 5px 5px;
+    background-color: #cfab3a;
+    font-size: large;
+  }
+} 
 
   input:checked + label:after {
     opacity: 1;
