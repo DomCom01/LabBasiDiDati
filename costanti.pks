@@ -1038,7 +1038,6 @@ option .tick::before {
   cursor: pointer;
   top: 50%;
   right: 0;
-  transform: translateY(-100%);
 }
 
 
