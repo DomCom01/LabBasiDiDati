@@ -6,7 +6,7 @@ begin
 	htp.prn('<head><meta http-equiv="refresh" content="0;url=' || indirizzo || '"></head>');
 end Reindirizza;
 
-procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default 0, ruolo VARCHAR2 default 'Cl') is
+procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default 0, ruolo VARCHAR2 default 'Cliente') is
 begin
 	htp.htmlOpen;
 	htp.headOpen;
@@ -90,7 +90,7 @@ begin
 
 end BottonePrimario;
 
-procedure ApriDiv(ident varchar2 default '', classe varchar2 default '') is
+procedure ApriDiv(ident varchar2 default '', classe varchar2 default '', onclick varchar2 default '') is
 begin
 	htp.print('<div');
   	if ident is not null then
@@ -99,6 +99,9 @@ begin
   	if classe is not null then
     	htp.print(' class="' || classe || '"');
  	 end if;
+	if onclick is not null then
+		htp.print(' onclick="'||onclick||'"');
+	end if;
  	htp.print('>');
 
 end ApriDiv;
@@ -112,11 +115,7 @@ end ChiudiDiv;
 procedure TopBar(saldo varchar2 default null, ruolo VARCHAR2) is
 BEGIN
 	gui.ApriDiv(ident => 'top-bar');
-	/*if saldo is null then
-		gui.Bottone(testo => 'Saldo: 0.00 €', classe => 'bottone');
-	else
-		gui.Bottone(testo => 'Saldo: ' || saldo || '€', classe => 'bottone');
-	end if;*/
+
 	gui.APRIDIV(ident => 'bottoneSinistra');
 	CASE ruolo
 
@@ -185,7 +184,10 @@ BEGIN
 	gui.APRIDIV(classe=> 'bottoniDestra');
 	if saldo is not null then
 		gui.BottonePrimario(testo => 'Saldo: ' || saldo || '€');
+	else
+		gui.BottonePrimario(testo => 'Saldo: 0.00€');
 	end if;
+
 	if ruolo is null then
 		gui.BottonePrimario(testo => 'Login');
 	else 
@@ -200,23 +202,16 @@ end TopBar;
 procedure ApriTabella(elementi StringArray default emptyArray) is
 begin
 	htp.prn('<table class="tab"> ');
-	htp.prn('<thead>');
+	--htp.prn('<thead>');
 	htp.prn('<tr>');
-end ApriTabella;	
-
-procedure AggiungiHeaderTabella(elemento VARCHAR2 default '') IS
-BEGIN
-	htp.prn('<th>'|| elemento ||'</th>');
-end AggiungiHeaderTabella;
-
-procedure AggiungiHeadersTabella(elementi StringArray default emptyArray) is
-begin
 	for i in 1..elementi.count loop
-		htp.prn('<th>'|| elementi(i) ||'</th>');
+		htp.prn('<th>
+					'|| elementi(i) || '
+				</th>');
 	end loop;
-	htp.prn('</thead>');
-	htp.prn('<tbody>');
-end AggiungiHeadersTabella;
+	--htp.prn('</thead>');
+	--htp.prn('<tbody>');
+end ApriTabella;
 
 procedure ChiudiTabella IS
 BEGIN
@@ -374,10 +369,10 @@ end aggiungiParagrafo;
 procedure aggiungiDropdown(testo VARCHAR2 default 'testo', opzioni stringArray default null) is
 BEGIN
 	gui.apriDiv(classe => 'dropdown');
-		htp.prn('<button class="dropbtn" onclick="apriMenu()">');
-			htp.prn('<span class="text">'|| testo ||'</span>');
+		gui.apriDiv(classe => 'dropbtn', onclick => 'apriMenu(this.parentNode)');
+			htp.prn('<span class="text"></span>');
 			htp.prn('<span class="arrow"></span>');
-		htp.prn('</button>');
+		htp.prn('</div>');
 		gui.apriDiv(ident => 'dropdown-content', classe => 'dropdown-content');
 		for i in 1..opzioni.count loop
 			gui.apriDiv(ident => 'option');
@@ -550,7 +545,7 @@ BEGIN
 	gui.CHIUDIDIV; 
 END chiudiRigaForm; 
 
-procedure aggiungiBottoneSubmit (nome VARCHAR2, value VARCHAR2 default '') is
+procedure aggiungiBottoneSubmit (value VARCHAR2 default '') is
 BEGIN
 	gui.APRIDIV(classe => 'form-submit');   
 		/*Nome è vuoto perchè altrimenti aggiunge 

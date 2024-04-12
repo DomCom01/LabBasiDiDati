@@ -5,7 +5,7 @@ type StringArray is table of varchar2(30) not null;
 
 emptyArray StringArray;
 
-procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default 0, ruolo VARCHAR2 default 'Cl');
+procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default 0, ruolo VARCHAR2 default 'Cliente');
 
 procedure Reindirizza(indirizzo varchar2);
 procedure aCapo(volte number default 1);
@@ -18,7 +18,7 @@ procedure BottoneTopBar(testo varchar2 default '', nome varchar2 default '', val
 procedure BottonePrimario(testo varchar2 default '', nome varchar2 default '', valore varchar2 default '');
 
 
-procedure ApriDiv(ident varchar2 default '', classe varchar2 default '');
+procedure ApriDiv(ident varchar2 default '', classe varchar2 default '', onclick varchar2 default '');
 
 procedure ChiudiDiv;
 
@@ -79,7 +79,7 @@ procedure chiudiFormHiddenRigaTabella;
 procedure AggiungiCampoFormHidden(nome VARCHAR2, value VARCHAR2 default '');
 procedure aggiungiRigaForm;
 procedure chiudiRigaForm;
-procedure aggiungiBottoneSubmit (nome VARCHAR2, value VARCHAR2 default ''); 
+procedure aggiungiBottoneSubmit (value VARCHAR2 default ''); 
 PROCEDURE aggiungiGruppoInput; 
 procedure chiudiGruppoInput; 
 PROCEDURE chiudiForm;
