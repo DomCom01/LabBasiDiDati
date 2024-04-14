@@ -1,5 +1,70 @@
 SET DEFINE OFF;
-create or replace package costanti as
+create or replace PACKAGE costanti as
+
+tableSortScript CONSTANT VARCHAR2(32767) := '
+var lastSortedTH;
+var ordTH = true;
+    
+const getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent;
+
+const comparer = (idx, asc) => (a, b) => ((v1, v2) => 
+  v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
+  )(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx));
+
+document.querySelectorAll("th").forEach(th => th.addEventListener("click", (() => {
+  const table = th.closest("table");
+  const l = th.innerText.length;
+  
+  if(lastSortedTH == th) {
+    ordTH ?
+      th.innerText = th.innerText.substring(0, l-1) + "▴"
+      : th.innerText = th.innerText.substring(0, l-1) + "▾";
+  }else {
+
+    if (lastSortedTH)  lastSortedTH.innerText = lastSortedTH.innerText.substring( 0, lastSortedTH.innerText.length-1);
+    ordTH ? th.innerText += " ▴"
+        : th.innerText += " ▾";
+    lastSortedTH = th;
+  }
+
+  ordTH = !ordTH;
+
+  Array.from(table.querySelectorAll("tr:nth-child(n+2)"))
+    .sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
+    .forEach(tr => table.appendChild(tr) );
+})));';
+
+dropdownScript constant VARCHAR2(32767) := '
+ 
+ const updateHiddenInput = (inputName, checkbox, symbol = ";") => {
+    if (!checkbox) throw new Error("Checkbox non trovata");
+    if (!symbol) symbol = ";";
+
+    const input = document.getElementsByName(inputName)[0];
+
+    if (!input) throw new Error("Elemento " + inputName + " non trovato");
+
+    const values = input.getAttribute("value");
+    const value = checkbox.getAttribute("value");
+
+    const newValues = values ? values.split(symbol) : [];
+    if (checkbox.checked) {
+        // aggiungi value a values
+        newValues.push(value);
+        newValues.sort();
+        input.setAttribute("value", newValues.join(symbol));
+    } else {
+        // elimina value da values
+        const index = newValues.indexOf(value);
+
+        if (index == -1)
+            return;
+
+        newValues.splice(index, 1);
+        input.setAttribute("value", newValues.join(symbol));
+    }
+}';
+
 
 /* 32767 è la dimensione massima di varchar2 */
 scriptjs constant varchar2(32767) := q'[
@@ -8,9 +73,9 @@ function closeBox(id){
   document.getElementById(id).classList.add("error-box-hidden");
 }
 
-function apriMultiSelect() {
-  var contenutoMenu = document.getElementById("multiSelect-content");
-  var freccia = document.querySelector(".multiSelectBtn .arrow");
+function apriMultiSelect(multiselect) {
+  var contenutoMenu = multiselect.querySelector(".multiSelect-content");
+  var freccia = multiselect.querySelector(".multiSelectBtn .arrow");
   var opzioni = contenutoMenu.querySelectorAll("#option");
 
   if (contenutoMenu.style.display === "none" || contenutoMenu.style.display === "") {
@@ -28,9 +93,9 @@ function apriMultiSelect() {
   }
 }
 
-function apriMenu() {
-  var contenutoMenu = document.getElementById("dropdown-content");
-  var freccia = document.querySelector(".dropbtn .arrow");
+function apriMenu(dropdown) {
+  var contenutoMenu = dropdown.querySelector(".dropdown-content");
+  var freccia = dropdown.querySelector(".dropbtn .arrow");
   var opzioni = contenutoMenu.querySelectorAll(".option");
 
   if (contenutoMenu.style.display === "none" || contenutoMenu.style.display === "") {
@@ -48,46 +113,46 @@ function apriMenu() {
   }
 }
 
-function confermaEliminazione(url) {
-    var conferma = confirm("Sei sicuro di voler eliminare?");
-    if (conferma) {
+function mostraConferma(riga, url) {
+    // Controlla se la riga di conferma è già presente altrimenti la crea
+    if (!riga.nextElementSibling || !riga.nextElementSibling.classList.contains('rigaConferma')) {
+        var nuovaRiga = document.createElement("tr");
+        nuovaRiga.classList.add('rigaConferma'); 
+        var nuovaCella = nuovaRiga.insertCell(0);
+        nuovaCella.colSpan = riga.cells.length; //Non funziona
         
-        inviaRichiesta(url);
+        nuovaCella.innerHTML = "Sicuro di voler cancellare? " + 
+                                "<button onclick=\"apriURL('" + url + "')\">Sì</button> " + 
+                                "<button onclick=\"annullaEliminazione(this.parentNode.parentNode)\">No</button>";
+        
+        // Inserisci la nuova riga dopo la riga corrente
+        riga.parentNode.insertBefore(nuovaRiga, riga.nextSibling);
     }
 }
 
-function inviaRichiesta(url) {
-  try {
-    // Simula l'invio di una richiesta al server con AJAX
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", url, true);
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState === 4) {
-        if (xhr.status === 200) {
-          // Gestisci la risposta del server
-          if (xhr.responseText === 'true') {
-            alert("Eliminazione avvenuta con successo");
-            window.location.reload(); // Ricarica la pagina 
-          } else {
-            alert("Eliminazione non eseguita. Si è verificato un errore.");
-          }
-        } else {
-          alert("Errore durante la richiesta di eliminazione. (Codice di stato: " + xhr.status + ")");
-        }
-      }
-    };
-    // Invia la richiesta con il valore di azione
-    xhr.send(null);
-  } catch (err) {
-    console.error("Errore in inviaRichiesta:", err);
-    alert("Si è verificato un errore inaspettato. Contattare l'amministratore di sistema."+err);
-  }
+function apriURL(url) {
+    window.location.href = url; // Apre l'URL nella stessa finestra
 }
+
+function annullaEliminazione(rigaConferma) {
+    // Rimuove la riga di conferma se viene cliccato no
+    rigaConferma.parentNode.removeChild(rigaConferma);
+}
+
+function mostraPopup() {
+    var popup = document.getElementById("popup-message");
+    popup.style.display = "block";
+}
+
+// Funzione per nascondere il popup
+function nascondiPopup() {
+    var popup = document.getElementById("popup-message");
+    popup.style.display = "none";
+}
+
 ]';
 
 stile constant varchar(32767) := '
-
 html{
   margin:0px;
 }
@@ -111,7 +176,6 @@ html{
   width: fit-content;
   word-break: break-word;
   border: none;
-  margin-right: 20px;
 }
 
 .bottone2 {
@@ -150,9 +214,10 @@ html{
   justify-content: space-between; /* Distributes buttons evenly */
   align-items: center; /* Aligns buttons vertically */
   background-color: #0c0b07;
-  padding: 1px;
+  height: 6vh;
   width:100%;
   position: fixed;
+  padding: 1px 0px 1px 0px;
   top:0px;
   left:0px;
   z-index:999; /*mi assicuro che la top bar sia sempre il primo elemento della pagina*/   
@@ -161,7 +226,12 @@ html{
 .bottoniSinistra {
   display: flex; /* Make the wrapper a flexbox container */
   flex-shrink: 0; /* Prevent wrapper from shrinking */
-  height: 8vh;
+}
+
+.bottoniDestra {
+  display: flex; /* Make the wrapper a flexbox container */
+  flex-shrink: 0; /* Prevent wrapper from shrinking */
+  padding-right: 10px;
 }
 
 .bottoniDestra {
@@ -178,17 +248,16 @@ html{
   box-sizing: border-box;
   color: #FFFFFF;
   cursor: pointer;
-  display: inline-block;
+  /*display: inline-block;*/
   /*font-family: Clarkson,Helvetica,sans-serif;*/
   font-size: 14px;
   font-weight: 500;
   letter-spacing: 0;
-  line-height: 1em;
-  margin: 1;
-  margin-right: 1px;
+  line-height: 1vh;
+  margin: 0px;
   opacity: 1;
   outline: 0;
-  padding: 1.5em 2.2em;
+  padding: 2.5vh 2.2em;
   position: relative;
   text-align: center;
   text-decoration: none;
@@ -233,8 +302,9 @@ html{
 
 /* Roba tabella */
 body{ 
-  width: 100vw;
+  max-width: 100vw;
   margin: 0px;
+  padding: 0px;
   font-family: Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
   background-color: #e3e3e3;
 }
@@ -248,7 +318,7 @@ body{
 
 .contentContainer{
   width: 80%; /* Allargato per far entrare bene anche tabelle grandi */
-  min-height: 82.7vh;
+  min-height: calc(84vh - 2px);
   padding-top: 10vh;
   margin:0px;
 }
@@ -313,16 +383,28 @@ body{
     }
 }
 
-.tab td:last-child{
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    border: 0px;
-}
+    td:last-child{
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        border: 0px;
+    }
 
-.tab img{
-    width: 15px;
-    height: 15px;
+    img{
+        width: 15px;
+        height: 15px;
+    }
+
+    button{
+      background-color: #000000; 
+      color: white;
+      padding: 5px;
+      border: none;
+      margin: 0px;
+      border-radius: 10px; 
+      cursor: pointer;
+      min-width: 30px;
+    }
 }
 .inputTAB{
   
@@ -451,7 +533,6 @@ h1{
     display: flex;
     justify-content : flex-end; 
 }
-
 .form-container {
   position : relative; 
   max-width: 38em;
@@ -477,6 +558,7 @@ h1{
     -o-transition: 0.35s ease-in-out;
     transition: 0.35s ease-in-out;
     transition: all 0.35s ease-in-out;
+    color: #000000;
   }
 
   input[type="radio"] {
@@ -709,12 +791,11 @@ h1{
   justify-content: center;
   align-items: center;
   background-color: #0c0b07;
-  padding-top: 1px;
-  padding-bottom: 1px;
+  padding: 1px 0px 1px 0px;
   margin:0px;
   width:100%;
+  height: 6vh;
   left:0px;
-  margin-bottom : 0px; 
 }
 
 .message-box{
@@ -811,16 +892,53 @@ h1{
 
 }
 
+/* TOP BAR DROPDOWN*/
+.topbar-dropdown{
+  display: inline-block;
+}
+
+.topbardropdown-content {
+  overflow: hidden;
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  height:auto;
+  margin-top:1px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  border: 1px solid #ddd;
+  z-index: 1;
+  cursor: pointer;
+
+  span{
+    width: auto;
+    float: none;
+    padding: 12px 16px;
+    display: block;
+    text-align: left;
+  }
+
+  span:hover{
+    background-color: #f0d5856b;
+  }
+}
+
+.topbar-dropdown:hover .topbardropdown-content{
+  display:block;
+}
+
+
 /* DROPDOWN */
 
 .dropdown {
   position: relative;
 
   select {
-    width: 100%;
-    height: 100%;
-    border: none;
-    background-color: transparent;
+    width: 50%;
+    line-height: 1.4;
+    border: 1px solid #e5e5e5;
+    border-radius: 3px;
+    background-color: #f9f9f9;
     padding: 10px;
     margin: 0;
     box-sizing: border-box;
@@ -834,11 +952,12 @@ h1{
 }
 
 .dropbtn {
-  width: 101px;
+  width: 50%;
   padding: 10px;
   box-sizing: border-box;
-  background-color: #000000;
-  border: none;
+  background-color: #f9f9f9;
+  border: 1px solid #e5e5e5;
+  border-radius: 3px;
   cursor: pointer;
   color: #FFFFFF;
   font-size: 10px;
@@ -853,13 +972,16 @@ h1{
 .dropdown-content {
   position: absolute;
   top: 100%;
+  overflow: scroll;
   left: 0;
-  width: 100px;
+  width: 50%;
   z-index: 1;
   display: none;
   background-color: #f1f1f1;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  border: 1px solid #ddd;
+  border: 1px solid;
+  border-radius: 3px;
+  border-color: #bd8200;
 
   
   option {
@@ -910,7 +1032,7 @@ option .tick::before {
   height: 0;
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
-  border-top: 6px solid #fff;
+  border-top: 6px solid #4f4f4f;
   transform: rotate(-90deg);
   transition: transform 0.3s;
 }
@@ -918,10 +1040,10 @@ option .tick::before {
 
 .button-add-container {
   position: relative;
-  
 }
 .button-add {
   position: absolute;
+  text-decoration: none;
   background-color: black;
   color: white;
   padding: 10px 20px;
@@ -934,6 +1056,7 @@ option .tick::before {
 }
 .button-tab {
   position: relative;
+  text-decoration: none;
   background-color: black;
   color: white;
   padding: 10px 20px;
@@ -944,32 +1067,31 @@ option .tick::before {
   right: 0;
   transform: translateY(-100%);
 }
+
+.bottone-popup {
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 14px;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  border-radius: 6px;
+  color: #3D3D3D;
+  background: #fff;
+  border: none;
+  box-shadow: 0px 0.5px 1px rgba(0, 0, 0, 0.1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  cursor: pointer; 
+}
+
+.bottone-popup:hover {
+    cursor: pointer; 
+}
+
+.bottone-popup:focus {
+  box-shadow: 0px 0.5px 1px rgba(0, 0, 0, 0.1), 0px 0px 0px 3.5px rgba(58, 108, 217, 0.5);
+  outline: 0;
+}
+
 ';
 end costanti;
-
-
-/*
-
-function mostraConferma(riga) {
-    // Controlla se la riga di conferma è già presente
-    if (!riga.nextElementSibling || !riga.nextElementSibling.classList.contains('rigaConferma')) {
-        // Crea la riga di conferma
-        var nuovaRiga = document.createElement("tr");
-        nuovaRiga.classList.add('rigaConferma'); 
-        var nuovaCella = nuovaRiga.insertCell(0);
-        nuovaCella.colSpan = riga.cells.length; // Imposta il colspan sulla base del numero di colonne nella riga(Non funziona)
-        nuovaCella.innerHTML = "Sicuro di voler cancellare? <button onclick=\"confermaEliminazione(this.parentNode.parentNode)\">Sì</button> <button onclick=\"annullaEliminazione(this.parentNode.parentNode)\">No</button>";
-        riga.parentNode.insertBefore(nuovaRiga, riga.nextSibling);
-    }
-}
-
-function confermaEliminazione(rigaConferma) {
-    //Per ora semplicemente ricarica la pagina
-    window.location.reload();
-}
-
-function annullaEliminazione(rigaConferma) {
-    // Rimuove la riga di conferma se viene cliccato no
-    rigaConferma.parentNode.removeChild(rigaConferma);
-}
-*/

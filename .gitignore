@@ -17,5 +17,25 @@ Sistemisti/LoginLogout.pks
 Sistemisti/SessionHandler.pkb
 Sistemisti/SessionHandler.pks
 
+Test/js.js
+Test/style.css
+Test/index.html
+cancellazioneTurni.sql
+inserimentoTurni.sql
+ModificaTurni.sql
+Patente/visualizzazionePatenti.sql
+Turni/visualizzazioneTurni.sql
+grant.sql
+LabBasiDiDati.code-workspace
+Sistemisti/SessionHandler.pks
+Sistemisti/SessionHandler.pkb
+Sistemisti/LoginLogout.pks
+Sistemisti/LoginLogout.pkb
+Sistemisti/grants.sql
+Sistemisti/CreateSessionTable.sql
+testDropdown.sql
+style.css
+login.pks
+login.pkb
+index.html
 eliminaDB.sql
-.gitignore
