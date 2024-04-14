@@ -23,7 +23,7 @@ procedure ApriDiv(ident varchar2 default '', classe varchar2 default '', onclick
 
 procedure ChiudiDiv;
 
-procedure TopBar(id_user int, ruolo varchar2);
+procedure TopBar(id_user VARCHAR2, username VARCHAR2, ruolo varchar2);
 
 procedure AggiungiPopup(successo boolean, testo VARCHAR2 default 'Errore!', indirizzo varchar2 default '');
 

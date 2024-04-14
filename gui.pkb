@@ -25,26 +25,26 @@ create or replace PACKAGE BODY gui as
 	end ApriPagina;
 
 	procedure ApriBody(idSessione varchar) is
-		idUser int;
+		username VARCHAR2(20);
 	begin
 
 		htp.print('<body>');
 
 		if idSessione = '-1' then --Sessione ospite
-			gui.topbar(idSessione, '');
+			gui.topbar(idSessione, '', '');
 
 			gui.ApriDiv('', 'container');
 				gui.ApriDiv('', 'contentContainer');
 			return;
 		end if;
 
-		idUser := SessionHandler.getIDUSER(idSessione); --Da cambiare con nuovo funzione nel pacchetto sistemisti
+		username := SessionHandler.getUsername(idSessione); --Da cambiare con nuovo funzione nel pacchetto sistemisti
 
-		if idUser is null then 
+		if username is null then 
 			gui.Reindirizza('http://131.114.73.203:8080/apex/l_ceccotti.gui.homePage?p_success=T');
 		end if;
 
-		gui.TopBar(SessionHandler.getIDUSER(idSessione), SessionHandler.getRuolo(idSessione));
+		gui.TopBar(idSessione, username, SessionHandler.getRuolo(idSessione));
 		gui.ApriDiv('', 'container');
 			gui.ApriDiv('', 'contentContainer');
 
@@ -124,11 +124,10 @@ create or replace PACKAGE BODY gui as
 
 	end ChiudiDiv;
 
-	procedure TopBar(id_user int, ruolo VARCHAR2) is
-		nome_ varchar2(20);
-		cognome_ varchar2(20);
+	procedure TopBar(id_user varchar2, username VARCHAR2, ruolo VARCHAR2) is
 		saldo_ CLIENTI.SALDO%TYPE;
 	BEGIN
+		saldo_ := null;
 		gui.ApriDiv(ident => 'top-bar');
 
 		gui.APRIDIV(ident => 'bottoneSinistra');
@@ -187,17 +186,14 @@ create or replace PACKAGE BODY gui as
 		gui.APRIDIV(classe=> 'bottoniDestra');
 
 			if ruolo = 'Cliente' then
-				SELECT NOME, COGNOME, SALDO into nome_, cognome_, saldo_ FROM CLIENTI WHERE IDCLIENTE = id_user; 
-			else
-				SELECT NOME, COGNOME into nome_, cognome_ FROM DIPENDENTI WHERE MATRICOLA = id_user;
-				saldo_ := null;
+				SELECT SALDO into saldo_ FROM CLIENTI WHERE IDCLIENTE = SessionHandler.GETIDUSER(id_user);
 			end if;
 
 			if saldo_ is not null then
 				gui.BottonePrimario(testo => 'Saldo: ' || saldo_ || '€');
 			end if;
 
-			gui.bottonePrimario(testo => nome_ || ' ' || cognome_ ||' | '||ruolo);
+			gui.bottonePrimario(testo => username ||' | '||ruolo);
 
 			gui.indirizzo('Link to logica logout');
 				if(ruolo = 'Cliente') then
