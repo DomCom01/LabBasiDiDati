@@ -223,6 +223,12 @@ html{
   z-index:999; /*mi assicuro che la top bar sia sempre il primo elemento della pagina*/   
 }
 
+a{
+  outline:none;
+  text-decoration: none;
+  color: black;
+}
+
 .bottoniSinistra {
   display: flex; /* Make the wrapper a flexbox container */
   flex-shrink: 0; /* Prevent wrapper from shrinking */
@@ -232,11 +238,6 @@ html{
   display: flex; /* Make the wrapper a flexbox container */
   flex-shrink: 0; /* Prevent wrapper from shrinking */
   padding-right: 10px;
-}
-
-.bottoniDestra {
-  display: flex; /* Make the wrapper a flexbox container */
-  flex-shrink: 0; /* Prevent wrapper from shrinking */
 }
 
 /* CSS */
@@ -307,6 +308,7 @@ body{
   padding: 0px;
   font-family: Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
   background-color: #e3e3e3;
+  box-sizing: border-box;
 }
 
 .container{
@@ -350,7 +352,9 @@ body{
     th{
         background-color: rgba(0, 0, 0, 0.241);
         height: 45px;
+        width: 100%;
         font-size: large;
+        cursor: pointer;
     }
 
     th:first-child{
@@ -375,28 +379,6 @@ body{
 
     button{
       background-color: #000000; 
-      color: white; 
-      padding: 7px 20px;
-      border: none; 
-      border-radius: 10px; 
-      cursor: pointer;
-    }
-}
-
-    td:last-child{
-        display: flex;
-        justify-content: space-evenly;
-        align-items: center;
-        border: 0px;
-    }
-
-    img{
-        width: 15px;
-        height: 15px;
-    }
-
-    button{
-      background-color: #000000; 
       color: white;
       padding: 5px;
       border: none;
@@ -406,6 +388,7 @@ body{
       min-width: 30px;
     }
 }
+
 .inputTAB{
   
   display: table;
@@ -1053,7 +1036,7 @@ option .tick::before {
   cursor: pointer;
   top: 50%;
   right: 0;
-  transform: translateY(-100%);
+  /*transform: translateY(-100%);*/
 }
 
 .bottone-popup {
@@ -1081,5 +1064,22 @@ option .tick::before {
   outline: 0;
 }
 
+.arrows-container{
+  width: 100%;
+  display:flex;
+  height:45px;
+  margin: 3px 0px 3px 0px;
+  justify-content:center;
+  align-items:center;
+}
+
+.table-arrow{
+  cursor: pointer;
+  margin: 0px 4px 0px 4px;
+}
+
+.rotate{
+  transform: rotate(180deg);
+}
 ';
 end costanti;

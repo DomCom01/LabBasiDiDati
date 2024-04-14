@@ -652,7 +652,6 @@ procedure aggiungiFrecceTabella is
 					gui.aggiungiRigaForm;
 						
 						gui.APRIDIV (classe => 'col-half'); 
-                			--gui.aggiungiIntestazione(testo => '', dimensione => 'h4');
 							gui.AGGIUNGIGRUPPOINPUT; 
 								gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'tipo_cliente', tipo => 'radio', value => 'D', selected => true);
 								gui.AGGIUNGILABEL (target => 'tipo_cliente', testo => 'Dipendente');  
@@ -699,3 +698,8 @@ procedure aggiungiFrecceTabella is
 	end HomePage;
 
 end gui;
+
+
+/*
+	bottoni nel form con href insieme all'invia
+*/ 
