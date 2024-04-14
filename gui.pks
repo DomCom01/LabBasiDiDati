@@ -1,16 +1,16 @@
 SET DEFINE OFF;
-SET DEFINE OFF;
+
 create or replace PACKAGE gui as
 
 type StringArray is table of varchar2(30) not null;
 
 emptyArray StringArray;
 
-procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default -1,  scriptJS VARCHAR2 default '');
+procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione varchar default '-1',  scriptJS VARCHAR2 default '');
 
 procedure Reindirizza(indirizzo varchar2);
 procedure aCapo(volte number default 1);
-procedure ApriBody(idSessione int default 0);
+procedure ApriBody(idSessione varchar);
 
 procedure ChiudiPagina(scriptJS VARCHAR2 default '');
 
@@ -23,7 +23,7 @@ procedure ApriDiv(ident varchar2 default '', classe varchar2 default '', onclick
 
 procedure ChiudiDiv;
 
-procedure TopBar(id_user int, ruolo VARCHAR2);
+procedure TopBar(id_user int, ruolo varchar2);
 
 procedure AggiungiPopup(successo boolean, testo VARCHAR2 default 'Errore!', indirizzo varchar2 default '');
 
@@ -85,8 +85,6 @@ procedure chiudiGruppoInput;
 PROCEDURE chiudiForm;
 -------------------
 
-procedure aggiungiFrecceTabella;
-
 procedure cancella(linktest varchar2) ;
 
 
@@ -96,6 +94,7 @@ PROCEDURE BottoneAggiungi(testo VARCHAR2 DEFAULT '', classe VARCHAR2 DEFAULT 'bu
 
 ---------------------- Homepage
 
-procedure HomePage(p_success varchar2 default ' ', cEmail VARCHAR2 default null, p_password varchar2 default null, tipo_utente varchar2 default null);
+procedure HomePage(p_success varchar2 default ' ', cEmail VARCHAR2 default null, p_password varchar2 default null, tipo_utente varchar2 default null, idSessione varchar default '-1');
+procedure LogOut(idUser int, ruolo varchar2);
 
 end gui;
