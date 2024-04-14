@@ -34,10 +34,61 @@ document.querySelectorAll("th").forEach(th => th.addEventListener("click", (() =
     .forEach(tr => table.appendChild(tr) );
 })));
 
+document.querySelectorAll(".tab").forEach(tab => {
+  
+  let tabRows = tab.querySelectorAll("tr");
+
+  for(let i= 14; i < tabRows.length; i++){
+    tabRows[i].style.display = "none";
+  }
+
+});
+
+
+function updatePagination(direction, tableContainer){
+
+  let tab = tableContainer.querySelector(".tab");
+
+  let tabRows = tab.querySelectorAll("tr");
+
+  //Trovo inizio 0 0 0 0 0 0
+  //            pos   (pos+4)
+  let pos = 6;
+  for(let i=1; i<tabRows.length; i++) 
+    if(tabRows[i].style.display == ""){
+      pos = i;
+      break;
+    }
+  console.log(pos);
+
+  if(direction > 0){
+    if(pos + direction*2 > tabRows.length){
+      direction = tabRows.length - (pos + direction);
+    }else if (pos + direction == tabRows.length) direction = 0 ;
+
+    for(let i=pos; i < pos+direction && i < tabRows.length ; i++) {
+      tabRows[direction+i-1].style.display = "";
+      tabRows[i].style.display = "none";
+    }
+  
+  }else{
+
+    if(pos + direction < 1) return;
+
+    for(let i=pos; i < pos-direction; i++) {
+      tabRows[pos+direction+(i-pos)].style.display = "";
+      tabRows[i].style.display = "none";
+    }
+
+  }
+
+
+}
 
 
 ';
 
+-- Funzione Arcangelo;
 dropdownScript constant VARCHAR2(32767) := '
  
  const updateHiddenInput = (inputName, checkbox, symbol = ";") => {
@@ -152,17 +203,6 @@ function inviaRichiesta(url) {
     alert("Si è verificato un errore inaspettato. Contattare l'amministratore di sistema."+err);
   }
 }
-
-function updatePagination(direction){
-
-  if(direction = "forward"){
-    console.log("ciao");
-  }else{
-    console.log("ciao1");
-  }
-
-}
-
 
 ]';
 

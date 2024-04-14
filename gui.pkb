@@ -216,6 +216,7 @@ create or replace PACKAGE BODY gui as
 	-- Procedura Tabella senza filtro provvisoria
 	procedure ApriTabella(elementi StringArray default emptyArray) is
 	begin
+		gui.APRIDIV;
 		htp.prn('<table class="tab"> ');
 		--htp.prn('<thead>');
 		htp.prn('<tr>');
@@ -233,6 +234,7 @@ create or replace PACKAGE BODY gui as
 		--htp.prn('</tbody>');
 		htp.prn('</table>');
 		gui.AGGIUNGIFRECCETABELLA;
+		gui.CHIUDIDIV;
 
 	end ChiudiTabella;
 
@@ -497,14 +499,14 @@ create or replace PACKAGE BODY gui as
 	end AggiungiLabel;
 
 
-	procedure AggiungiBottoneTabella(testo VARCHAR2 default '') is
+	procedure AggiungiBottoneTabella(testo VARCHAR2 default '', classe VARCHAR2 default 'button-tab', url VARCHAR2 default '') is
 	BEGIN
-		htp.prn('<div class="button-add-container"><button class="button-tab" type="submit"> '|| testo ||' </button></div>');
+		htp.prn('<td><div class="button-add-container"><a href="' || url || '" class="' || classe || '">' || testo || '</a></div></td>');
 	end AggiungiBottoneTabella;
 
-	PROCEDURE BottoneAggiungi(testo VARCHAR2 DEFAULT '', url VARCHAR2) IS
+	PROCEDURE BottoneAggiungi(testo VARCHAR2 DEFAULT '', classe VARCHAR2 DEFAULT 'button-add', url VARCHAR2) IS
 	BEGIN
-		htp.prn('<div class="button-add-container"><a href="' || url || '"><button class="button-add" type="submit"> '|| testo ||' </button></a></div>');
+		htp.prn('<div class="button-add-container"><a href="' || url || '" class="' || classe || '">' || testo || '</a></div>');
 	END BottoneAggiungi;
 
 
@@ -593,10 +595,10 @@ create or replace PACKAGE BODY gui as
 	procedure aggiungiFrecceTabella is
 	begin
 		apridiv(classe=>'arrows-container');
-			apriDiv(classe=>'table-arrow rotate', onclick => 'updatePagination('||CHR(39)||'back'||CHR(39)||', this)');
+			apriDiv(classe=>'table-arrow rotate', onclick => 'updatePagination(-5, this.parentNode.parentNode)');--||CHR(39)||'back'||CHR(39)||
 				htp.prn('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M7.293 4.707 14.586 12l-7.293 7.293 1.414 1.414L17.414 12 8.707 3.293 7.293 4.707z"/></svg>');
 			chiudiDiv;
-			apriDiv(classe=>'table-arrow', onclick => 'updatePagination('||CHR(39)||'forward'||CHR(39)||', this)');
+			apriDiv(classe=>'table-arrow', onclick => 'updatePagination(5, this.parentNode.parentNode)');
 				htp.prn('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M7.293 4.707 14.586 12l-7.293 7.293 1.414 1.414L17.414 12 8.707 3.293 7.293 4.707z"/></svg>');
 			chiudiDiv;
 		chiudiDiv;

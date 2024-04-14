@@ -85,8 +85,8 @@ procedure aggiungiFrecceTabella;
 
 procedure cancella(linktest varchar2);
 
-procedure AggiungiBottoneTabella(testo VARCHAR2 default '');
-procedure BottoneAggiungi(testo VARCHAR2 DEFAULT '', url VARCHAR2);
+procedure AggiungiBottoneTabella(testo VARCHAR2 default '', classe VARCHAR2 default 'button-tab', url VARCHAR2 default '');
+procedure BottoneAggiungi(testo VARCHAR2 DEFAULT '',classe VARCHAR2 default 'button-add', url VARCHAR2);
 
 ------------------------------- home page
 
