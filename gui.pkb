@@ -327,7 +327,7 @@ begin
 		htp.prn('<td>
 			<div class="formField">
 				<label  id="'||ident||'">'||placeholder||'</label>');
-				gui.aggiungiInput(tipo, nome, value ,'', required, false, 'filterInput', ident, pattern, minimo, massimo);
+				gui.aggiungiInput(tipo, nome, value ,'', required,'filterInput', ident, pattern, minimo, massimo);
 			htp.prn('</div>
 		</td>');
 	end if;
@@ -666,9 +666,9 @@ procedure aggiungiFrecceTabella is
 					gui.AGGIUNGIINTESTAZIONE('Inserisci email e password', 'h2');
 					gui.aggiungiRigaForm;
 						gui.aggiungiGruppoInput;
-							gui.aggiungiCampoForm('email', 'fa fa-envelope', 'cEmail', 'Email');
+							gui.aggiungiCampoForm('email', 'fa fa-envelope', 'cEmail', true, '',  'Email');
 							--gui.AggiungiLabel('','');
-							gui.aggiungiCampoForm('password', 'fa fa-key', 'p_password', 'Password');
+							gui.aggiungiCampoForm('password', 'fa fa-key', 'p_password', true, '', 'Password');
 						gui.chiudiGruppoInput;
 					gui.chiudiRigaForm;
 					gui.aggiungiRigaForm;
