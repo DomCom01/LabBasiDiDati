@@ -37,7 +37,7 @@ create or replace PACKAGE BODY gui as
 				gui.ApriDiv('', 'contentContainer');
 			return;
 		end if;
-/*
+
 		if not SessionHandler.checkSession(idSessione) then 
 			gui.Reindirizza(costanti.user_root||'gui.homePage?p_success=T');
 			return;
