@@ -2,6 +2,7 @@ SET DEFINE OFF;
 
 create or replace package costanti as
 
+
   user_root CONSTANT VARCHAR(100) := 'http://131.114.73.203:8080/apex/l_ceccotti.';
 
   tableSortScript CONSTANT VARCHAR2(32767) := '
