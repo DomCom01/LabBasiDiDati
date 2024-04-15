@@ -268,11 +268,10 @@ END AggiungiPulsanteCancellazione;
 		</button></td>');
 	END AggiungiPulsanteGenerale;
 
-
 	/*Da togliere*/
 	procedure cancella(linktest varchar2) IS
 	BEGIN
-		gui.aggiungiParagrafo(linktest);
+		gui.aggiungiParagrafo(linktest);	
 	end cancella;
 
 	procedure AggiungiPulsanteModifica(collegamento1 VARCHAR2 default '') IS
@@ -379,7 +378,7 @@ END AggiungiPulsanteCancellazione;
 				
 				for i in 1..ids.count loop
 					gui.apriDiv(ident => 'option');
-						htp.prn('<input type="checkbox" name="'|| names(i) ||'id="' ||ids(i)|| '" value="' ||ids(i)||'" onchange="updateHiddenInput('||chr(39)||hiddenParameter||chr(39)||', this)"/>');
+						htp.prn('<input type="checkbox" name="'|| names(i) ||'" id="' ||ids(i)|| '" value="' ||ids(i)||'" onchange="updateHiddenInput('||chr(39)||hiddenParameter||chr(39)||', this)"/>');
 						htp.prn('<span>'|| names(i) ||'</span>');
 					gui.chiudiDiv();
 				end loop;
@@ -673,11 +672,11 @@ END AggiungiPulsanteCancellazione;
 								gui.AGGIUNGILABEL (target => 'cliente', testo => 'Cliente');
 								gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'autista', tipo => 'radio', value => '02', selected => true);
 								gui.AGGIUNGILABEL (target => 'autista', testo => 'Autista');
-								gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'operatore', tipo => 'radio', value => 'O1');
+								gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'operatore', tipo => 'radio', value => '01');
 								gui.AGGIUNGILABEL (target => 'operatore', testo => 'Operatore');
-								gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'menager', tipo => 'radio', value => 'O3');
+								gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'menager', tipo => 'radio', value => '03');
 								gui.AGGIUNGILABEL (target => 'menager', testo => 'Manager');
-								gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'contabile', tipo => 'radio', value => 'O4');
+								gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'contabile', tipo => 'radio', value => '04');
 								gui.AGGIUNGILABEL (target => 'contabile', testo => 'Contabile');
 							gui.CHIUDIGRUPPOINPUT;  
 						gui.CHIUDIDIV;
@@ -692,7 +691,7 @@ END AggiungiPulsanteCancellazione;
 				
             elsif p_success <> 'S' then
 
-				if tipo_utente is null then 
+				if tipo_utente is null then -- in caso non venga scelto nessun ruolo per l'autenticazione 
 					gui.reindirizza(costanti.user_root||'gui.homePage?p_success=L');
 				end if;
 
