@@ -10,7 +10,7 @@ procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione varchar 
 
 procedure Reindirizza(indirizzo varchar2);
 procedure aCapo(volte number default 1);
-procedure ApriBody(idSessione varchar);
+procedure ApriBody(idSessione varchar2);
 
 procedure ChiudiPagina(scriptJS VARCHAR2 default '');
 
@@ -23,7 +23,7 @@ procedure ApriDiv(ident varchar2 default '', classe varchar2 default '', onclick
 
 procedure ChiudiDiv;
 
-procedure TopBar(id_user VARCHAR2, username VARCHAR2, ruolo varchar2);
+procedure TopBar(id_user int, username VARCHAR2, ruolo varchar2);
 
 procedure AggiungiPopup(successo boolean, testo VARCHAR2 default 'Errore!', indirizzo varchar2 default '');
 
