@@ -343,6 +343,7 @@ dropdownScript constant VARCHAR2(32767) := '
     font-family: Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
     background-color: #e3e3e3;
     box-sizing: border-box;
+    overflow-x:hidden;
   }
 
   .container{
