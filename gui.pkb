@@ -24,27 +24,25 @@ create or replace PACKAGE BODY gui as
 
 	end ApriPagina;
 
-	procedure ApriBody(idSessione varchar) is
+	procedure ApriBody(idSessione varchar2) is
 		username VARCHAR2(20);
 	begin
 
 		htp.print('<body>');
 
 		if idSessione = '-1' then --Sessione ospite
-			gui.topbar(idSessione, '', '');
+			gui.topbar(-1, '', '');
 
 			gui.ApriDiv('', 'container');
 				gui.ApriDiv('', 'contentContainer');
 			return;
 		end if;
 
-		username := SessionHandler.getUsername(idSessione); --Da cambiare con nuovo funzione nel pacchetto sistemisti
-
-		if username is null then 
-			gui.Reindirizza('http://131.114.73.203:8080/apex/l_ceccotti.gui.homePage?p_success=T');
+		if not SessionHandler.checkSession(idSessione) then 
+			gui.Reindirizza(costanti.user_root||'gui.homePage?p_success=T');
 		end if;
 
-		gui.TopBar(idSessione, username, SessionHandler.getRuolo(idSessione));
+		gui.TopBar(SessionHandler.getIdUser(idSessione), SessionHandler.getUsername(idSessione), SessionHandler.getRuolo(idSessione));
 		gui.ApriDiv('', 'container');
 			gui.ApriDiv('', 'contentContainer');
 
@@ -124,7 +122,7 @@ create or replace PACKAGE BODY gui as
 
 	end ChiudiDiv;
 
-	procedure TopBar(id_user varchar2, username VARCHAR2, ruolo VARCHAR2) is
+	procedure TopBar(id_user int, username VARCHAR2, ruolo VARCHAR2) is
 		saldo_ CLIENTI.SALDO%TYPE;
 	BEGIN
 		saldo_ := null;
@@ -186,7 +184,7 @@ create or replace PACKAGE BODY gui as
 		gui.APRIDIV(classe=> 'bottoniDestra');
 
 			if ruolo = 'Cliente' then
-				SELECT SALDO into saldo_ FROM CLIENTI WHERE IDCLIENTE = SessionHandler.GETIDUSER(id_user);
+				SELECT SALDO into saldo_ FROM CLIENTI WHERE IDCLIENTE = id_user;
 			end if;
 
 			if saldo_ is not null then
@@ -197,9 +195,9 @@ create or replace PACKAGE BODY gui as
 
 			gui.indirizzo('Link to logica logout');
 				if(ruolo = 'Cliente') then
-					gui.indirizzo('http://131.114.73.203:8080/apex/l_ceccotti.gui.LogOut?idUser='||id_user||'&ruolo=00');
+					gui.indirizzo(costanti.user_root||'.gui.LogOut?idUser='||id_user||'&ruolo=00');
 				else
-					gui.indirizzo('http://131.114.73.203:8080/apex/l_ceccotti.gui.LogOut?idUser='||id_user||'&ruolo=01');
+					gui.indirizzo(costanti.user_root||'.gui.LogOut?idUser='||id_user||'&ruolo=01');
 				end if;
 					gui.BottonePrimario(testo => 'Logout'); 
 				gui.chiudiIndirizzo;
@@ -655,8 +653,8 @@ END AggiungiPulsanteCancellazione;
 			end if;
 
 			if((cEmail is null or p_password is null) and  p_success <> 'S') then
-                --gui.ApriFormFiltro('http://131.114.73.203:8080/apex/l_ceccotti.gui.homePage');
-                gui.aggiungiForm(url=> 'http://131.114.73.203:8080/apex/l_ceccotti.gui.homePage');
+                --gui.ApriFormFiltro(user_root||'.gui.homePage');
+                gui.aggiungiForm(url=> costanti.user_root||'.gui.homePage');
 					gui.AGGIUNGIINTESTAZIONE('Login', 'h2');
 					gui.aggiungiRigaForm;
 						gui.aggiungiGruppoInput;
@@ -694,15 +692,15 @@ END AggiungiPulsanteCancellazione;
             elsif p_success <> 'S' then
 
 				if tipo_utente is null then 
-					gui.reindirizza('http://131.114.73.203:8080/apex/l_ceccotti.gui.homePage?p_success=L');
+					gui.reindirizza(costanti.user_root||'.gui.homePage?p_success=L');
 				end if;
 
 				idSess := LOGINLOGOUT.AGGIUNGISESSIONE(cEmail,p_password,tipo_utente);
 
                 if idSess is null then 
-                    gui.reindirizza('http://131.114.73.203:8080/apex/l_ceccotti.gui.homePage?p_success=L');
+                    gui.reindirizza(costanti.user_root||'.gui.homePage?p_success=L');
 				else                   
-					gui.reindirizza('http://131.114.73.203:8080/apex/l_ceccotti.gui.homePage?p_success=S&idSessione='||tipo_utente||idSess||'');
+					gui.reindirizza(costanti.user_root||'.gui.homePage?p_success=S&idSessione='||tipo_utente||idSess||'');
                 end if;
 
             end if;
@@ -710,15 +708,15 @@ END AggiungiPulsanteCancellazione;
 		gui.chiudiPagina();
 
 		EXCEPTION
-			WHEN OTHERS THEN  gui.reindirizza('http://131.114.73.203:8080/apex/l_ceccotti.gui.homePage?p_success=L');  -- errore ancora da risolvere'
+			WHEN OTHERS THEN  gui.reindirizza(costanti.user_root||'.gui.homePage?p_success=L');  -- errore ancora da risolvere'
 	end HomePage;
 
 	procedure LogOut(idUser int, ruolo varchar2) is
 	begin
 		if loginlogout.terminaSessione(idUser, ruolo) THEN
-			gui.Reindirizza('http://131.114.73.203:8080/apex/l_ceccotti.gui.homePage?p_success=LOS');
+			gui.Reindirizza(costanti.user_root||'.gui.homePage?p_success=LOS');
 		else
-			gui.Reindirizza('http://131.114.73.203:8080/apex/l_ceccotti.gui.homePage?p_success=LOF');
+			gui.Reindirizza(costanti.user_root||'.gui.homePage?p_success=LOF');
 		end if;
 	end LogOut;
 
