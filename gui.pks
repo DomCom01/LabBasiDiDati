@@ -1,4 +1,4 @@
-   SET DEFINE OFF;
+SET DEFINE OFF;
 create or replace package gui as
 	type stringarray is
 		table of varchar2(30) not null;
@@ -15,6 +15,7 @@ create or replace package gui as
 	procedure acapo (
 		volte number default 1
 	);
+
 	procedure apribody (
 		idsessione int default 0
 	);
@@ -34,7 +35,6 @@ create or replace package gui as
 		nome   varchar2 default '',
 		valore varchar2 default ''
 	);
-
 
 	procedure apridiv (
 		ident   varchar2 default '',
