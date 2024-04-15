@@ -555,7 +555,7 @@ END AggiungiPulsanteCancellazione;
 	then
 		gui.APRIDIV (classe => 'input-group input-group-icon');    
 
-                gui.aggiungiInput (nome => nome, placeholder => placeholder, required => required, classe => '');
+                gui.aggiungiInput (nome => nome, placeholder => placeholder, required => required, ident => ident, classe => '');
                 gui.apriDiv (classe => 'input-icon'); 
                     gui.aggiungiIcona(classe => classeIcona); 
                 gui.chiudiDiv; 
@@ -564,7 +564,7 @@ END AggiungiPulsanteCancellazione;
 		else
 			gui.APRIDIV (classe => 'input-group input-group-icon');     
 
-                gui.aggiungiInput (tipo => tipo, nome => nome, placeholder => placeholder, required => required, classe => '');
+                gui.aggiungiInput (tipo => tipo, nome => nome, placeholder => placeholder, required => required, ident => ident, classe => '');
                 gui.apriDiv (classe => 'input-icon'); 
                     gui.aggiungiIcona(classe => classeIcona); 
                 gui.chiudiDiv; 
@@ -584,12 +584,12 @@ END AggiungiPulsanteCancellazione;
 		gui.CHIUDIDIV; 
 	END chiudiRigaForm; 
 
-	procedure aggiungiBottoneSubmit (value VARCHAR2 default '') is
+	procedure aggiungiBottoneSubmit (ident varchar2 default null, value VARCHAR2 default '') is
 	BEGIN
 		gui.APRIDIV(classe => 'form-submit');   
 			/*Nome è vuoto perchè altrimenti aggiunge 
 				pure il pulsante nell'url*/
-			gui.AGGIUNGIINPUT (nome => '', tipo => 'submit', value => value);
+			gui.AGGIUNGIINPUT (nome => '', tipo => 'submit',ident => ident, value => value);
 		gui.CHIUDIDIV;
 	END aggiungiBottoneSubmit; 
 
@@ -660,9 +660,9 @@ END AggiungiPulsanteCancellazione;
 					gui.AGGIUNGIINTESTAZIONE('Login', 'h2');
 					gui.aggiungiRigaForm;
 						gui.aggiungiGruppoInput;
-							gui.aggiungiCampoForm('email', 'fa fa-envelope', 'cEmail', 'Email');
+							gui.aggiungiCampoForm('email', 'fa fa-envelope', 'cEmail', true , '', 'Email');
 							--gui.AggiungiLabel('','');
-							gui.aggiungiCampoForm('password', 'fa fa-key', 'p_password', 'Password');
+							gui.aggiungiCampoForm('password', 'fa fa-key', 'p_password',true , '', 'Password');
 						gui.chiudiGruppoInput;
 					gui.chiudiRigaForm;
 					gui.aggiungiRigaForm;
@@ -686,7 +686,7 @@ END AggiungiPulsanteCancellazione;
 					gui.chiudiRigaForm;
 					gui.aggiungiRigaForm;
 						gui.aggiungiGruppoInput;
-								gui.aggiungiBottoneSubmit('Accedi');
+								gui.aggiungiBottoneSubmit(value => 'Accedi');
 							gui.chiudiGruppoInput;
 					gui.chiudiRigaForm;
 				gui.chiudiForm;

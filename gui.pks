@@ -155,6 +155,8 @@ procedure TopBar(id_user VARCHAR2, username VARCHAR2, ruolo varchar2);
         tipo        varchar2 default 'text',
         classeicona varchar2 default '',
         nome        varchar2,
+		required BOOLEAN default true,
+		ident VARCHAR2 default '',
         placeholder varchar2 default ''
     );
     procedure aggiungiselezionesingola (
@@ -186,7 +188,6 @@ procedure TopBar(id_user VARCHAR2, username VARCHAR2, ruolo varchar2);
 
     procedure aggiungibottonesubmit (
         ident varchar2 default null,
-        nome  varchar2 default null,
         value varchar2 default ''
     );
     procedure aggiungigruppoinput;
