@@ -37,11 +37,11 @@ create or replace PACKAGE BODY gui as
 				gui.ApriDiv('', 'contentContainer');
 			return;
 		end if;
-
+/*
 		if not SessionHandler.checkSession(idSessione) then 
 			gui.Reindirizza(costanti.user_root||'gui.homePage?p_success=T');
 		end if;
-
+*/
 		gui.TopBar(SessionHandler.getIdUser(idSessione), SessionHandler.getUsername(idSessione), SessionHandler.getRuolo(idSessione));
 		gui.ApriDiv('', 'container');
 			gui.ApriDiv('', 'contentContainer');
