@@ -195,9 +195,9 @@ create or replace PACKAGE BODY gui as
 
 			gui.indirizzo('Link to logica logout');
 				if(ruolo = 'Cliente') then
-					gui.indirizzo(costanti.user_root||'.gui.LogOut?idUser='||id_user||'&ruolo=00');
+					gui.indirizzo(costanti.user_root||'gui.LogOut?idUser='||id_user||'&ruolo=00');
 				else
-					gui.indirizzo(costanti.user_root||'.gui.LogOut?idUser='||id_user||'&ruolo=01');
+					gui.indirizzo(costanti.user_root||'gui.LogOut?idUser='||id_user||'&ruolo=01');
 				end if;
 					gui.BottonePrimario(testo => 'Logout'); 
 				gui.chiudiIndirizzo;
@@ -633,7 +633,7 @@ create or replace PACKAGE BODY gui as
 
 			if((cEmail is null or p_password is null) and  p_success <> 'S') then
                 --gui.ApriFormFiltro(user_root||'.gui.homePage');
-                gui.aggiungiForm(url=> costanti.user_root||'.gui.homePage');
+                gui.aggiungiForm(url=> costanti.user_root||'gui.homePage');
 					gui.AGGIUNGIINTESTAZIONE('Login', 'h2');
 					gui.aggiungiRigaForm;
 						gui.aggiungiGruppoInput;
@@ -671,15 +671,15 @@ create or replace PACKAGE BODY gui as
             elsif p_success <> 'S' then
 
 				if tipo_utente is null then 
-					gui.reindirizza(costanti.user_root||'.gui.homePage?p_success=L');
+					gui.reindirizza(costanti.user_root||'gui.homePage?p_success=L');
 				end if;
 
 				idSess := LOGINLOGOUT.AGGIUNGISESSIONE(cEmail,p_password,tipo_utente);
 
                 if idSess is null then 
-                    gui.reindirizza(costanti.user_root||'.gui.homePage?p_success=L');
+                    gui.reindirizza(costanti.user_root||'gui.homePage?p_success=L');
 				else                   
-					gui.reindirizza(costanti.user_root||'.gui.homePage?p_success=S&idSessione='||tipo_utente||idSess||'');
+					gui.reindirizza(costanti.user_root||'gui.homePage?p_success=S&idSessione='||tipo_utente||idSess||'');
                 end if;
 
             end if;
@@ -687,15 +687,15 @@ create or replace PACKAGE BODY gui as
 		gui.chiudiPagina();
 
 		EXCEPTION
-			WHEN OTHERS THEN  gui.reindirizza(costanti.user_root||'.gui.homePage?p_success=L');  -- errore ancora da risolvere'
+			WHEN OTHERS THEN  gui.reindirizza(costanti.user_root||'gui.homePage?p_success=L');  -- errore ancora da risolvere'
 	end HomePage;
 
 	procedure LogOut(idUser int, ruolo varchar2) is
 	begin
 		if loginlogout.terminaSessione(idUser, ruolo) THEN
-			gui.Reindirizza(costanti.user_root||'.gui.homePage?p_success=LOS');
+			gui.Reindirizza(costanti.user_root||'gui.homePage?p_success=LOS');
 		else
-			gui.Reindirizza(costanti.user_root||'.gui.homePage?p_success=LOF');
+			gui.Reindirizza(costanti.user_root||'gui.homePage?p_success=LOF');
 		end if;
 	end LogOut;
 
