@@ -40,8 +40,9 @@ create or replace PACKAGE BODY gui as
 
 		if not SessionHandler.checkSession(idSessione) then 
 			gui.Reindirizza(costanti.user_root||'gui.homePage?p_success=T');
+			return;
 		end if;
-
+		
 		gui.TopBar(SessionHandler.getIdUser(idSessione), SessionHandler.getUsername(idSessione), SessionHandler.getRuolo(idSessione));
 		gui.ApriDiv('', 'container');
 			gui.ApriDiv('', 'contentContainer');
