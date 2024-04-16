@@ -40,6 +40,7 @@ Per aggiungere i pulsanti seguire questo pattern qui:
 procedure apriElementoPulsanti;
 procedure AggiungiPulsanteCancellazione(proceduraEliminazione VARCHAR2 default '');
 procedure AggiungiPulsanteModifica(collegamento1 VARCHAR2 default '');
+/*Cambiare nome parametro*/
 procedure AggiungiPulsanteGenerale(proceduraEliminazione VARCHAR2 DEFAULT '', testo VARCHAR2);
 procedure chiudiElementoPulsanti;
 

@@ -425,7 +425,7 @@ BEGIN
 		
 		for i in 1..ids.count loop
 			gui.apriDiv(ident => 'option');
-				htp.prn('<input type="checkbox" name="'|| names(i) ||'" id="' ||ids(i)|| '" value="' ||ids(i)||'" onchange="updateHiddenInput('||chr(39)||hiddenParameter||chr(39)||', this)"/>');
+				htp.prn('<input type="checkbox" id="' ||ids(i)|| '" value="' ||ids(i)||'" onchange="updateHiddenInput('||chr(39)||hiddenParameter||chr(39)||', this)"/>');
 				htp.prn('<label for="'|| ids(i) ||'">'|| names(i) ||'</label>');
 			gui.chiudiDiv();
 		end loop;
