@@ -6,7 +6,7 @@ type StringArray is table of varchar2(30) not null;
 
 emptyArray StringArray;
 
-procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default -1,  scriptJS VARCHAR2 default '');
+procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione VARCHAR default '-1',  scriptJS VARCHAR2 default '');
 
 procedure Reindirizza(indirizzo varchar2);
 procedure aCapo(volte number default 1);
@@ -81,7 +81,7 @@ procedure aggiungiSelezioneMultipla(testo VARCHAR2 default 'testo', placeholder 
 -------------------
 procedure AggiungiCampoFormHidden(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '');
 procedure aggiungiBottoneSubmit (value VARCHAR2 default ''); 
-PROCEDURE aggiungiGruppoInput; 
+PROCEDURE aggiungiGruppoInput(classe varchar2 default 'form-row'); 
 procedure chiudiGruppoInput; 
 PROCEDURE chiudiForm;
 -------------------
