@@ -580,9 +580,9 @@ BEGIN
 
 	end aggiungiCampoForm;	
 
-procedure aggiungiGruppoInput(classe varchar2 default 'form-row') is   --
+procedure aggiungiGruppoInput is
 BEGIN
-	gui.APRIDIV(classe => classe);
+	gui.APRIDIV(classe => 'form-row');
 		gui.APRIDIV (classe => 'input-group');
 END aggiungiGruppoInput; 
 
@@ -665,7 +665,7 @@ end chiudiElementoPulsanti;
 					
                 			--gui.aggiungiIntestazione(testo => '', dimensione => 'h4');
 							gui.apriDiv(classe => 'row');
-							gui.AGGIUNGIGRUPPOINPUT(); 
+							gui.AGGIUNGIGRUPPOINPUT; 
 								gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'cliente', tipo => 'radio', value => '00');
 								gui.AGGIUNGILABEL (target => 'cliente', testo => 'Cliente');
 								gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'autista', tipo => 'radio', value => '02', selected => true);

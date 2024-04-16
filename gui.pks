@@ -36,6 +36,10 @@ procedure AggiungiElementoTabella(elemento VARCHAR2 default '');
 
 /*
 Per aggiungere i pulsanti seguire questo pattern qui:
+	ApriElementoPulsanti
+		aggiungiPulsante
+		aggiungiPulsante
+	ChiudiElementoPulsanti
 */
 procedure apriElementoPulsanti;
 procedure AggiungiPulsanteCancellazione(collegamento VARCHAR2 default '');
@@ -73,6 +77,10 @@ procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCH
 	massimo VARCHAR2 default '', readonly boolean default False, selected boolean default False, step varchar default null);
 procedure AggiungiLabel(target VARCHAR2, testo VARCHAR2);
 procedure aggiungiIcona (classe VARCHAR2 default ''); 
+
+PROCEDURE aggiungiGruppoInput; --Delimita i campi di input del form
+procedure chiudiGruppoInput; 
+
 procedure aggiungiCampoForm (tipo VARCHAR2 default 'text', classeIcona VARCHAR2 default '', nome VARCHAR2, placeholder VARCHAR2 default '');
 procedure aggiungiSelezioneSingola(elementi StringArray, valoreEffettivo StringArray default null, titolo varchar2 default '', ident varchar2);
 procedure aggiungiSelezioneMultipla(testo VARCHAR2 default 'testo', placeholder VARCHAR2 default 'testo', ids stringArray default emptyArray ,names stringArray default emptyArray, hiddenParameter varchar2 default '');
@@ -80,8 +88,6 @@ procedure aggiungiSelezioneMultipla(testo VARCHAR2 default 'testo', placeholder 
 -------------------
 procedure AggiungiCampoFormHidden(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '');
 procedure aggiungiBottoneSubmit (value VARCHAR2 default ''); 
-PROCEDURE aggiungiGruppoInput(classe varchar2 default 'form-row'); 
-procedure chiudiGruppoInput; 
 PROCEDURE chiudiForm;
 -------------------
 
