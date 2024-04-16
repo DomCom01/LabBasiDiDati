@@ -155,16 +155,8 @@ begin
 				gui.chiudiDiv();
 			gui.chiudiDiv();
 
-			gui.apriDiv(classe => 'topbar-dropdown');
-				gui.BottoneTopBar(testo => 'Gruppo 3');
-				gui.apriDiv(ident => 'topbardropdown-content', classe => 'topbardropdown-content');
-					for i in 1..3 loop
-						gui.indirizzo('Link1');
-							htp.prn('<span>Link1</span>');
-						gui.chiudiIndirizzo;
-					end loop;
-				gui.chiudiDiv();
-			gui.chiudiDiv();
+			gui.dropdowntopbar(titolo => 'gruppo 3', names => gui.StringArray('Registrazione', 'Visualizza Profilo', 'Associa convenzione'),
+			proceduresNames => gui.StringArray ('operazioniClienti.registrazioneCliente', 'operazioniClienti.visualizzaProfilo', '#')); 
 
 			gui.apriDiv(classe => 'topbar-dropdown');
 				gui.BottoneTopBar(testo => 'Gruppo 4');
@@ -209,6 +201,28 @@ begin
 
 		gui.ChiudiDiv();
 	end TopBar;
+
+	procedure dropdowntopbar (
+		titolo varchar2 default 'esempio', 
+		names stringarray default emptyarray,
+		proceduresNames stringarray default emptyarray
+	)IS
+	BEGIN
+		if names.count = proceduresNames.count then 
+			gui.apriDiv(classe => 'topbar-dropdown');
+				gui.BottoneTopBar(testo => titolo);
+				gui.apriDiv(ident => 'topbardropdown-content', classe => 'topbardropdown-content');
+					for i in 1..names.count  loop
+						gui.indirizzo(''||costanti.user_root || proceduresNames(i)||''); --da rivedere
+							htp.prn('<span>'||names(i)||'</span>');
+						gui.chiudiIndirizzo;
+					end loop;
+				gui.chiudiDiv();
+			gui.chiudiDiv();
+		end if; 
+		
+
+		END dropdowntopbar;
 
 	-- Procedura Tabella senza filtro provvisoria
 	procedure ApriTabella(elementi StringArray default emptyArray) is

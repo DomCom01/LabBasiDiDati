@@ -50,6 +50,12 @@ procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione VARCHAR 
 		ruolo    varchar2
 	);
 
+	procedure dropdowntopbar (
+		titolo varchar2 default 'esempio', 
+		names stringarray default emptyarray,
+		proceduresNames stringarray default emptyarray
+	);
+
 	procedure aggiungipopup (
 		successo  boolean,
 		testo     varchar2 default 'Errore!',
