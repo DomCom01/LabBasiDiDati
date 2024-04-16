@@ -700,8 +700,3 @@ end chiudiElementoPulsanti;
 
 end gui;
 
-
-/*
-	bottoni nel form con href insieme all'invia
-	unire aggiungiinput e aggiungicampoform?
-*/ 

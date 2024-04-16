@@ -6,7 +6,7 @@ type StringArray is table of varchar2(30) not null;
 
 emptyArray StringArray;
 
-procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione varchar default '-1',  scriptJS VARCHAR2 default '');
+procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default -1,  scriptJS VARCHAR2 default '');
 
 procedure Reindirizza(indirizzo varchar2);
 procedure aCapo(volte number default 1);
@@ -84,8 +84,6 @@ PROCEDURE aggiungiGruppoInput;
 procedure chiudiGruppoInput; 
 PROCEDURE chiudiForm;
 -------------------
-
-procedure aggiungiFrecceTabella;
 
 
 
