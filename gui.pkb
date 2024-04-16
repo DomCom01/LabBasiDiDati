@@ -646,9 +646,9 @@ end chiudiElementoPulsanti;
                 gui.aggiungiForm(url=> 'http://131.114.73.203:8080/apex/l_ceccotti.gui.homePage');
 					gui.AGGIUNGIINTESTAZIONE('Inserisci email e password', 'h2');
 					gui.aggiungiGruppoInput;
-						gui.aggiungiCampoForm('email', 'fa fa-envelope', 'cEmail', 'Email');
+						gui.aggiungiCampoForm('email', 'fa fa-envelope', 'cEmail', true, '', 'Email');
 						--gui.AggiungiLabel('','');
-						gui.aggiungiCampoForm('password', 'fa fa-key', 'p_password', 'Password');
+						gui.aggiungiCampoForm('password', 'fa fa-key', 'p_password',true, '', 'Password');
 					gui.chiudiGruppoInput;
 				
 					
