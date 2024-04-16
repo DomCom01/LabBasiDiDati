@@ -2,7 +2,7 @@ SET DEFINE OFF;
 
 create or replace PACKAGE gui as
 
-type StringArray is table of varchar2(30) not null;
+type StringArray is table of varchar2(100) not null;
 
 emptyArray StringArray;
 
