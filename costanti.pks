@@ -1172,7 +1172,6 @@ dropdownScript constant VARCHAR2(32767) := '
   ';
 end costanti;
 
-
 /*
 
 function mostraConferma(riga) {
