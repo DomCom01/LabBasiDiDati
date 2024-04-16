@@ -33,12 +33,16 @@ procedure ApriTabella(elementi StringArray default emptyArray);
 procedure AggiungiRigaTabella;
 procedure ChiudiRigaTabella;
 procedure AggiungiElementoTabella(elemento VARCHAR2 default '');
+
+/*
+Per aggiungere i pulsanti seguire questo pattern qui:
+*/
+procedure apriElementoPulsanti;
 procedure AggiungiPulsanteCancellazione(proceduraEliminazione VARCHAR2 default '');
 procedure AggiungiPulsanteModifica(collegamento1 VARCHAR2 default '');
-procedure AggiungiPulsanteGenerale(
-    proceduraEliminazione VARCHAR2 DEFAULT '',
-	testo VARCHAR2
-);
+procedure AggiungiPulsanteGenerale(proceduraEliminazione VARCHAR2 DEFAULT '', testo VARCHAR2);
+procedure chiudiElementoPulsanti;
+
 procedure ChiudiTabella;
 
 
@@ -66,26 +70,22 @@ procedure Footer;
 procedure aggiungiForm(classe VARCHAR2 default '', name VARCHAR2 default '', url VARCHAR2 default '');
 procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '', placeholder VARCHAR2 default '', 
 	required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', 
-	massimo VARCHAR2 default '', readonly boolean default False, selected boolean default False);
+	massimo VARCHAR2 default '', readonly boolean default False, selected boolean default False, step varchar default null);
 procedure AggiungiLabel(target VARCHAR2, testo VARCHAR2);
 procedure aggiungiIcona (classe VARCHAR2 default ''); 
 procedure aggiungiCampoForm (tipo VARCHAR2 default 'text', classeIcona VARCHAR2 default '', nome VARCHAR2, placeholder VARCHAR2 default '');
 procedure aggiungiSelezioneSingola(elementi StringArray, valoreEffettivo StringArray default null, titolo varchar2 default '', ident varchar2);
-procedure aggiungiSelezioneMultipla(elementi StringArray, titolo varchar2 default '', ident varchar2);
-------------------- Aggiunto per fare delle prove per le procedure nel gruppo operazioni
-procedure aggiungiFormHiddenRigaTabella(azione varchar2 default '');
-procedure chiudiFormHiddenRigaTabella;
+procedure aggiungiSelezioneMultipla(testo VARCHAR2 default 'testo', placeholder VARCHAR2 default 'testo', ids stringArray default emptyArray ,names stringArray default emptyArray, hiddenParameter varchar2 default '');
+
 -------------------
 procedure AggiungiCampoFormHidden(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '');
-procedure aggiungiRigaForm;
-procedure chiudiRigaForm;
 procedure aggiungiBottoneSubmit (value VARCHAR2 default ''); 
 PROCEDURE aggiungiGruppoInput; 
 procedure chiudiGruppoInput; 
 PROCEDURE chiudiForm;
 -------------------
 
-procedure cancella(linktest varchar2) ;
+procedure aggiungiFrecceTabella;
 
 
 
@@ -98,3 +98,10 @@ procedure HomePage(p_success varchar2 default ' ', cEmail VARCHAR2 default null,
 procedure LogOut(idUser int, ruolo varchar2);
 
 end gui;
+
+/*
+	unire rigaform e gruppo input: lasciato solo gruppo input;
+	modificare stile dropdown e aggiungere drpdwnformfiltro nella selezione multipla
+	rimuovere td da pulsanti tabella per metterli in una sola colonna e metterli in aggiungiFormHiddenRigaTabella e chiudi(apri elemento pulsanti)
+	aggiungere roba lucche: fatto;
+*/

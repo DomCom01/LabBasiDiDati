@@ -1,8 +1,7 @@
 SET DEFINE OFF;
+create or replace PACKAGE costanti as
 
-create or replace package costanti as
-
-  user_root CONSTANT VARCHAR(100) := 'http://131.114.73.203:8080/apex/l_ceccotti.';
+user_root CONSTANT VARCHAR(100) := 'http://131.114.73.203:8080/apex/l_ceccotti.';
 
   tableSortScript CONSTANT VARCHAR2(32767) := '
   var lastSortedTH;
@@ -41,8 +40,8 @@ create or replace package costanti as
 
 -- Funzione Arcangelo;
 dropdownScript constant VARCHAR2(32767) := '
- 
- const updateHiddenInput = (inputName, checkbox, symbol = ";") => {
+
+const updateHiddenInput = (inputName, checkbox, symbol = ";") => {
     if (!checkbox) throw new Error("Checkbox non trovata");
     if (!symbol) symbol = ";";
 
@@ -118,40 +117,20 @@ dropdownScript constant VARCHAR2(32767) := '
     }
   }
 
-  function confermaEliminazione(url) {
-      var conferma = confirm("Sei sicuro di voler eliminare?");
-      if (conferma) {
-          
-          inviaRichiesta(url);
-      }
-  }
-
-  function inviaRichiesta(url) {
-    try {
-      // Simula l'invio di una richiesta al server con AJAX
-      var xhr = new XMLHttpRequest();
-      xhr.open("GET", url, true);
-      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-      xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4) {
-          if (xhr.status === 200) {
-            // Gestisci la risposta del server
-            if (xhr.responseText === 'true') {
-              alert("Eliminazione avvenuta con successo");
-              window.location.reload(); // Ricarica la pagina 
-            } else {
-              alert("Eliminazione non eseguita. Si è verificato un errore.");
-            }
-          } else {
-            alert("Errore durante la richiesta di eliminazione. (Codice di stato: " + xhr.status + ")");
-          }
-        }
-      };
-      // Invia la richiesta con il valore di azione
-      xhr.send(null);
-    } catch (err) {
-      console.error("Errore in inviaRichiesta:", err);
-      alert("Si è verificato un errore inaspettato. Contattare l'amministratore di sistema."+err);
+function mostraConferma(riga, url) {
+    // Controlla se la riga di conferma è già presente altrimenti la crea
+    if (!riga.nextElementSibling || !riga.nextElementSibling.classList.contains('rigaConferma')) {
+        var nuovaRiga = document.createElement("tr");
+        nuovaRiga.classList.add('rigaConferma'); 
+        var nuovaCella = nuovaRiga.insertCell(0);
+        nuovaCella.colSpan = riga.cells.length; //Non funziona
+        
+        nuovaCella.innerHTML = "Sicuro di voler cancellare? " + 
+                                "<button onclick=\"apriURL('" + url + "')\">Sì</button> " + 
+                                "<button onclick=\"annullaEliminazione(this.parentNode.parentNode)\">No</button>";
+        
+        // Inserisci la nuova riga dopo la riga corrente
+        riga.parentNode.insertBefore(nuovaRiga, riga.nextSibling);
     }
   }
 
@@ -159,21 +138,21 @@ dropdownScript constant VARCHAR2(32767) := '
       window.location.href = url; // Apre l'URL nella stessa finestra
     }
 
-  function annullaEliminazione(rigaConferma) {
-      // Rimuove la riga di conferma se viene cliccato no
-      rigaConferma.parentNode.removeChild(rigaConferma);
-  }
+function annullaEliminazione(rigaConferma) {
+    // Rimuove la riga di conferma se viene cliccato no
+    rigaConferma.parentNode.removeChild(rigaConferma);
+}
 
   function mostraPopup() {
       var popup = document.getElementById("popup-message");
       popup.style.display = "block";
   }
 
-  // Funzione per nascondere il popup
-  function nascondiPopup() {
-      var popup = document.getElementById("popup-message");
-      popup.style.display = "none";
-  }
+// Funzione per nascondere il popup
+function nascondiPopup() {
+    var popup = document.getElementById("popup-message");
+    popup.style.display = "none";
+}
 
   ]';
 
@@ -209,23 +188,23 @@ dropdownScript constant VARCHAR2(32767) := '
     margin:0px !important;
   }
 
-  .bottone2 {
-    background-color: #cfab3a;
-    border-radius: 12px;
-    color: #000;
-    cursor: pointer;
-    font-weight: bold;
-    padding: 10px 15px;
-    text-align: center;
-    transition: 200ms;
-    width: fit-content;
-    box-sizing: border-box;
-    border: 0;
-    font-size: 16px;
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
-  }
+.bottone2 {
+  background-color: #cfab3a;
+  border-radius: 12px;
+  color: #000;
+  cursor: pointer;
+  font-weight: bold;
+  padding: 10px 15px;
+  text-align: center;
+  transition: 200ms;
+  width: fit-content;
+  box-sizing: border-box;
+  border: 0;
+  font-size: 16px;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
 
   .bottone2:not(:disabled):hover,
   .bottone2:not(:disabled):focus {
@@ -240,70 +219,68 @@ dropdownScript constant VARCHAR2(32767) := '
     cursor: not-allowed;
   }
 
-  #top-bar {
-    display: flex; /* Makes the top bar a flexbox container */
-    justify-content: space-between; /* Distributes buttons evenly */
-    align-items: center; /* Aligns buttons vertically */
-    background-color: #0c0b07;
-    height: 6vh;
-    width:100%;
-    position: fixed;
-    padding: 1px 0px 1px 0px;
-    top:0px;
-    left:0px;
-    z-index:999; /*mi assicuro che la top bar sia sempre il primo elemento della pagina*/
-    
+#top-bar {
+  display: flex; /* Makes the top bar a flexbox container */
+  justify-content: space-between; /* Distributes buttons evenly */
+  align-items: center; /* Aligns buttons vertically */
+  background-color: #0c0b07;
+  height: 6vh;
+  width:100%;
+  position: fixed;
+  padding: 1px 0px 1px 0px;
+  top:0px;
+  left:0px;
+  z-index:999; /*mi assicuro che la top bar sia sempre il primo elemento della pagina*/   
+}
 
-    a{
-      outline:none;
-      text-decoration: none;
-      color: black;
-    }
-
-  }
+a{
+  outline:none;
+  text-decoration: none;
+  color: black;
+}
 
   .bottoniSinistra {
     display: flex; /* Make the wrapper a flexbox container */
     flex-shrink: 0; /* Prevent wrapper from shrinking */
   }
 
-  .bottoniDestra {
-    display: flex; /* Make the wrapper a flexbox container */
-    flex-shrink: 0; /* Prevent wrapper from shrinking */
-    padding-right: 10px;
-  }
+.bottoniDestra {
+  display: flex; /* Make the wrapper a flexbox container */
+  flex-shrink: 0; /* Prevent wrapper from shrinking */
+  padding-right: 10px;
+}
 
   /* CSS */
 
-  .button-48 {
-    appearance: none;
-    background-color: #0c0b07;
-    border-width: 0;
-    box-sizing: border-box;
-    color: #FFFFFF;
-    cursor: pointer;
-    /*display: inline-block;*/
-    /*font-family: Clarkson,Helvetica,sans-serif;*/
-    font-size: 14px;
-    font-weight: 500;
-    letter-spacing: 0;
-    line-height: 1vh;
-    margin-right: 0px;
-    opacity: 1;
-    outline: 0;
-    padding: 2.5vh 2.2em;
-    position: relative;
-    text-align: center;
-    text-decoration: none;
-    text-rendering: geometricprecision;
-    /*text-transform: uppercase;*/
-    transition: opacity 300ms cubic-bezier(.694, 0, 0.335, 1),background-color 100ms cubic-bezier(.694, 0, 0.335, 1),color 100ms cubic-bezier(.694, 0, 0.335, 1);
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
-    vertical-align: baseline;
-    white-space: nowrap;
-  }
+.button-48 {
+  appearance: none;
+  background-color: #0c0b07;
+  border-width: 0;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  /*display: inline-block;*/
+  /*font-family: Clarkson,Helvetica,sans-serif;*/
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1vh;
+  margin-right: 0px;
+  opacity: 1;
+  outline: 0;
+  padding: 2.5vh 2.2em;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  text-rendering: geometricprecision;
+  /*text-transform: uppercase;*/
+  transition: opacity 300ms cubic-bezier(.694, 0, 0.335, 1),background-color 100ms cubic-bezier(.694, 0, 0.335, 1),color 100ms cubic-bezier(.694, 0, 0.335, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: baseline;
+  white-space: nowrap;
+}
 
   .button-48:before {
     animation: opacityFallbackOut .5s step-end forwards;
@@ -334,16 +311,16 @@ dropdownScript constant VARCHAR2(32767) := '
     position: relative;
   }
 
-  /* Roba tabella */
-  body{ 
-    max-width: 100vw;
-    margin: 0px;
-    padding: 0px;
-    font-family: Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
-    background-color: #e3e3e3;
-    box-sizing: border-box;
-    overflow-x:hidden;
-  }
+/* Roba tabella */
+body{ 
+  max-width: 100vw;
+  margin: 0px;
+  padding: 0px;
+  font-family: Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
+  background-color: #e3e3e3;
+  box-sizing: border-box;
+  overflow-x:hidden;
+}
 
   .container{
     display: flex;
@@ -383,21 +360,21 @@ dropdownScript constant VARCHAR2(32767) := '
         background-color: rgba(27, 26, 26, 0.065);
       }
 
-      th{
-          background-color: rgba(0, 0, 0, 0.241);
-          height: 45px;
-          width: 100%;
-          font-size: large;
-          cursor: pointer;
-      }
+    th{
+        background-color: rgba(0, 0, 0, 0.241);
+        height: 45px;
+        width: 100%;
+        font-size: large;
+        cursor: pointer;
+    }
 
       th:first-child{
           border-top-left-radius: 5px;
       }
 
-      th:last-child{
-          border-top-right-radius: 5px;
-      }
+    th:last-child{
+        border-top-right-radius: 5px;
+    }
 
       td:last-child{
           display: flex;
@@ -411,29 +388,29 @@ dropdownScript constant VARCHAR2(32767) := '
           height: 15px;
       }
 
-      button{
-        background-color: #000000; 
-        color: white;
-        padding: 5px;
-        border: none;
-        margin: 0px;
-        border-radius: 10px; 
-        cursor: pointer;
-        min-width: 30px;
-      }
-  }
+    button{
+      background-color: #000000; 
+      color: white;
+      padding: 5px;
+      border: none;
+      margin: 0px;
+      border-radius: 10px; 
+      cursor: pointer;
+      min-width: 30px;
+    }
+}
 
-  .inputTAB{
-    
-    display: table;
-    border-collapse: collapse;
-    border-radius: 5px;
-    width: 100%;
-    height:auto;
-    table-layout: fixed;
-    border-style: hidden;
-    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.565);
-    background-color: rgba(27, 26, 26, 0.065);
+.inputTAB{
+  
+  display: table;
+  border-collapse: collapse;
+  border-radius: 5px;
+  width: 100%;
+  height:auto;
+  table-layout: fixed;
+  border-style: hidden;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.565);
+  background-color: rgba(27, 26, 26, 0.065);
 
     td{
         margin: 0px;
@@ -635,16 +612,14 @@ dropdownScript constant VARCHAR2(32767) := '
       content: "";
     }
 
-    input[type="checkbox"] + label:after {
-      position: absolute;
-      top: 0.45em;
-      left: 0.2em;
-      font-size: 0.8em;
-      color: #fff;
-      opacity: 0;
-      font-family: FontAwesome;
-      content: "\f00c";
-    }
+  input[type="checkbox"] + label:after {
+    position: absolute;
+    top: 0.45em;
+    left: 0.2em;
+    font-size: 0.8em;
+    color: #fff;
+    opacity: 0;
+  }
 
     input[type=submit]{
         height: 100%;
@@ -1038,53 +1013,51 @@ dropdownScript constant VARCHAR2(32767) := '
   }
 
 
-  .button-add-container {
-    position: relative;
-  }
+.button-add-container {
+  position: relative;
+}
+.button-add {
+  position: absolute;
+  text-decoration: none;
+  background-color: black;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  top: 50%;
+  right: 0;
+  transform: translateY(-100%);
+}
+.button-tab {
+  position: relative;
+  text-decoration: none;
+  background-color: black;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  top: 50%;
+  right: 0;
+  /*transform: translateY(-100%);*/
+}
 
-  .button-add {
-    position: absolute;
-    text-decoration: none;
-    background-color: black;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    top: 50%;
-    right: 0;
-    transform: translateY(-100%);
-  }
-  .button-tab {  
-    position: relative;
-    text-decoration: none;
-    background-color: black;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    top: 50%;
-    right: 0;
-    /*transform: translateY(-100%);*/
-  }
-
-
-  .bottone-popup {
-    flex-direction: column;
-    align-items: center;
-    padding: 6px 14px;
-    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-    border-radius: 6px;
-    color: #3D3D3D;
-    background: #fff;
-    border: none;
-    box-shadow: 0px 0.5px 1px rgba(0, 0, 0, 0.1);
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
-    cursor: pointer; 
-  }
+.bottone-popup {
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 14px;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  border-radius: 6px;
+  color: #3D3D3D;
+  background: #fff;
+  border: none;
+  box-shadow: 0px 0.5px 1px rgba(0, 0, 0, 0.1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  cursor: pointer; 
+}
 
   .bottone-popup:hover {
       cursor: pointer; 
@@ -1167,5 +1140,5 @@ dropdownScript constant VARCHAR2(32767) := '
     }
   }
 
-  ';
+';
 end costanti;
