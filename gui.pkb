@@ -6,60 +6,58 @@ create or replace PACKAGE BODY gui as
 		htp.prn('<head><meta http-equiv="refresh" content="0;url=' || indirizzo || '"></head>');
 	end Reindirizza;
 
-	procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default -1,  scriptJS VARCHAR2 default '') is
-	begin
-		htp.htmlOpen;
-		htp.headOpen;
-		htp.title(titolo);
-		htp.print('
-			<meta charset="utf-8">
-			<meta name="viewport" content="width=device-width, initial-scale=1">
-		'); 
-		htp.print('<style> ' || costanti.stile || '</style>');
-		htp.print('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-	'); /*FONTAwesome*/
-		htp.print('<script type="text/javascript">' || costanti.scriptjs || CHR(10) || scriptJS || CHR(10)|| costanti.dropdownScript || '</script>'); -- Aggiunto script di base
-		htp.headClose; 
-		gui.ApriBody(idSessione);
+procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default -1,  scriptJS VARCHAR2 default '') is
+begin
+	htp.htmlOpen;
+	htp.headOpen;
+	htp.title(titolo);
+	htp.print('
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+	'); 
+	htp.print('<style> ' || costanti.stile || '</style>');
+	htp.print('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+'); /*FONTAwesome*/
+	htp.print('<script type="text/javascript">' || costanti.scriptjs || CHR(10) || scriptJS || CHR(10)|| costanti.dropdownScript || '</script>'); -- Aggiunto script di base
+	htp.headClose; 
+	gui.ApriBody(idSessione);
 
 	end ApriPagina;
 
-	procedure ApriBody(idSessione int) is
-		ruolo varchar2(10);
+	procedure ApriBody(idSessione varchar2) is
+		username VARCHAR2(20);
 	begin
 
 		htp.print('<body>');
 
-		if idSessione = -1 then --Sessione ospite
-			gui.topbar(idSessione, '');
+		if idSessione = '-1' then --Sessione ospite
+			gui.topbar(-1, '', '');
 
 			gui.ApriDiv('', 'container');
 				gui.ApriDiv('', 'contentContainer');
 			return;
 		end if;
 
-		ruolo := SessionHandler.getRuolo(idSessione);
-
-		if LENGTH(' '||ruolo||'') = 1 then -- Controllo sessione inesistente, Mettiamo anche il controllo del ruolo(ruolo = [ruolo passato per parametro]) o lo lasciamo ai gruppi delle operazioni?
-			gui.reindirizza('http://131.114.73.203:8080/apex/l_ceccotti.gui.homePage?p_success=T');
+		if not SessionHandler.checkSession(idSessione) then 
+			gui.Reindirizza(costanti.user_root||'gui.homePage?p_success=T');
+			return;
 		end if;
-
-			gui.TopBar(SessionHandler.getIDUSER(idSessione), ruolo);
-			gui.ApriDiv('', 'container');
-				gui.ApriDiv('', 'contentContainer');
+		
+		gui.TopBar(SessionHandler.getIdUser(idSessione), SessionHandler.getUsername(idSessione), SessionHandler.getRuolo(idSessione));
+		gui.ApriDiv('', 'container');
+			gui.ApriDiv('', 'contentContainer');
 
 	end ApriBody;
 
+		procedure ChiudiPagina(scriptJS VARCHAR2 default '') is
+		begin
+			htp.prn('</div>'); /*container*/
+			htp.prn('</div>'); /*content-container*/
+			gui.Footer;
+			htp.prn('<script>'||costanti.tableSortScript|| CHR(10) || scriptJS ||'</script>');
+			htp.print('</body>');
 
-	procedure ChiudiPagina(scriptJS VARCHAR2 default '') is
-	begin
-		htp.prn('</div>'); /*container*/
-		htp.prn('</div>'); /*content-container*/
-		gui.Footer;
-		htp.prn('<script>'||costanti.tableSortScript|| CHR(10) || scriptJS ||'</script>');
-		htp.print('</body>');
-
-	end ChiudiPagina;
+		end ChiudiPagina;
 
 	procedure indirizzo(indirizzo VARCHAR2 default '') is
 	begin
@@ -125,11 +123,10 @@ create or replace PACKAGE BODY gui as
 
 	end ChiudiDiv;
 
-	procedure TopBar(id_user int, ruolo VARCHAR2) is
-		nome_ varchar2(20);
-		cognome_ varchar2(20);
+	procedure TopBar(id_user int, username VARCHAR2, ruolo VARCHAR2) is
 		saldo_ CLIENTI.SALDO%TYPE;
 	BEGIN
+		saldo_ := null;
 		gui.ApriDiv(ident => 'top-bar');
 
 		gui.APRIDIV(ident => 'bottoneSinistra');
@@ -180,7 +177,7 @@ create or replace PACKAGE BODY gui as
 
 		gui.CHIUDIDIV;
 		
-		if id_user = -1 or ruolo is null then 
+		if id_user = -1 then 
 			gui.ChiudiDiv();
 			return;
 		end if;
@@ -188,30 +185,28 @@ create or replace PACKAGE BODY gui as
 		gui.APRIDIV(classe=> 'bottoniDestra');
 
 			if ruolo = 'Cliente' then
-				
-				SELECT NOME, COGNOME, SALDO into nome_, cognome_, saldo_ FROM CLIENTI WHERE IDCLIENTE = id_user; 
-
-			else
-				
-				SELECT NOME, COGNOME into nome_, cognome_ FROM DIPENDENTI WHERE MATRICOLA = id_user;
-				saldo_ := null; 
-
+				SELECT SALDO into saldo_ FROM CLIENTI WHERE IDCLIENTE = id_user;
 			end if;
 
 			if saldo_ is not null then
 				gui.BottonePrimario(testo => 'Saldo: ' || saldo_ || '€');
 			end if;
 
-			gui.bottonePrimario(testo => nome_ || ' ' || cognome_ ||' | '||ruolo);
+			gui.bottonePrimario(testo => username ||' | '||ruolo);
 
 			gui.indirizzo('Link to logica logout');
-				gui.BottonePrimario(testo => 'Logout'); 
+				if(ruolo = 'Cliente') then
+					gui.indirizzo(costanti.user_root||'gui.LogOut?idUser='||id_user||'&ruolo=00');
+				else
+					gui.indirizzo(costanti.user_root||'gui.LogOut?idUser='||id_user||'&ruolo=01');
+				end if;
+					gui.BottonePrimario(testo => 'Logout'); 
+				gui.chiudiIndirizzo;
 			gui.chiudiIndirizzo;
 		gui.CHIUDIDIV;
 
 		gui.ChiudiDiv();
 	end TopBar;
-
 
 	-- Procedura Tabella senza filtro provvisoria
 	procedure ApriTabella(elementi StringArray default emptyArray) is
@@ -231,7 +226,7 @@ create or replace PACKAGE BODY gui as
 
 	procedure ChiudiTabella IS
 	BEGIN
-		--htp.prn('</tbody>');
+		htp.prn('</tbody>');
 		htp.prn('</table>');
 		gui.AGGIUNGIFRECCETABELLA;
 		gui.CHIUDIDIV;
@@ -243,32 +238,39 @@ create or replace PACKAGE BODY gui as
 		htp.prn('<tr>');
 	end AggiungiRigaTabella;
 
-	procedure ChiudiRigaTabella IS
-	BEGIN
-		htp.prn('</tr>');
-	end ChiudiRigaTabella;
+procedure ChiudiRigaTabella IS
+BEGIN
+	htp.prn('</tr>');
+end ChiudiRigaTabella;
 
-	procedure AggiungiPulsanteCancellazione(proceduraEliminazione VARCHAR2 default '') IS
-	begin
-		htp.prn('<button onclick="mostraConferma(this.parentNode.parentNode)">
-		<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-		<path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16l-1.58 14.22A2 2 0 0 1 16.432 22H7.568a2 2 0 0 1-1.988-1.78zm3.345-2.853A2 2 0 0 1 9.154 2h5.692a2 2 0 0 1 1.81 1.147L18 6H6zM2 6h20m-12 5v5m4-5v5"/>
-		</svg>
-		</button>');
-	end AggiungiPulsanteCancellazione;
+procedure AggiungiPulsanteModifica(collegamento1 VARCHAR2 default '') IS
+BEGIN
+	htp.prn('<a href="'||collegamento1||'">
+		<button>
+		<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" fill-opacity="0" d="M20 7L17 4L15 6L18 9L20 7Z"><animate fill="freeze" attributeName="fill-opacity" begin="1.2s" dur="0.15s" values="0;0.3"/></path><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="20" stroke-dashoffset="20" d="M3 21H21"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="20;0"/></path><path stroke-dasharray="44" stroke-dashoffset="44" d="M7 17V13L17 3L21 7L11 17H7"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.4s" dur="0.6s" values="44;0"/></path><path stroke-dasharray="8" stroke-dashoffset="8" d="M14 6L18 10"><animate fill="freeze" attributeName="stroke-dashoffset" begin="1s" dur="0.2s" values="8;0"/></path></g></svg>
+		</button></a>');
+END AggiungiPulsanteModifica;
 
-	procedure cancella(linktest varchar2) IS
-	BEGIN
-		gui.aggiungiParagrafo(linktest);
-	end cancella;
+procedure AggiungiPulsanteCancellazione(
+    proceduraEliminazione VARCHAR2 DEFAULT ''
+) IS
+BEGIN
+    htp.prn('<button onclick="mostraConferma(this.parentNode.parentNode, '||proceduraEliminazione||')">
+    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16l-1.58 14.22A2 2 0 0 1 16.432 22H7.568a2 2 0 0 1-1.988-1.78zm3.345-2.853A2 2 0 0 1 9.154 2h5.692a2 2 0 0 1 1.81 1.147L18 6H6zM2 6h20m-12 5v5m4-5v5"/>
+    </svg>
+    </button>');
+END AggiungiPulsanteCancellazione;
 
-	procedure AggiungiPulsanteModifica(collegamento1 VARCHAR2 default '') IS
-	BEGIN
-		htp.prn('<a href="'||collegamento1||'">
-			<button>
-			<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" fill-opacity="0" d="M20 7L17 4L15 6L18 9L20 7Z"><animate fill="freeze" attributeName="fill-opacity" begin="1.2s" dur="0.15s" values="0;0.3"/></path><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="20" stroke-dashoffset="20" d="M3 21H21"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="20;0"/></path><path stroke-dasharray="44" stroke-dashoffset="44" d="M7 17V13L17 3L21 7L11 17H7"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.4s" dur="0.6s" values="44;0"/></path><path stroke-dasharray="8" stroke-dashoffset="8" d="M14 6L18 10"><animate fill="freeze" attributeName="stroke-dashoffset" begin="1s" dur="0.2s" values="8;0"/></path></g></svg>
-			</button></a>');
-	END AggiungiPulsanteModifica;
+procedure AggiungiPulsanteGenerale(
+    proceduraEliminazione VARCHAR2 DEFAULT '',
+	testo VARCHAR2
+) IS
+BEGIN
+    htp.prn('<button onclick="mostraConfermaGenerale(this.parentNode.parentNode, '||proceduraEliminazione||')">
+    '||testo||'
+    </button>');
+END AggiungiPulsanteGenerale;
 
 	procedure AggiungiElementoTabella(elemento VARCHAR2 default '') IS
 	BEGIN
@@ -284,7 +286,6 @@ create or replace PACKAGE BODY gui as
 
 	procedure AggiungiCampoFormFiltro(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '') IS
 	begin
-
 		if(tipo = 'submit') then
 		
 			htp.prn('<td>
@@ -335,33 +336,33 @@ create or replace PACKAGE BODY gui as
 	end chiudiFormFiltro;
 
 	procedure aggiungiDropdownFormFiltro(testo VARCHAR2 default 'testo', placeholder VARCHAR2 default 'testo', ids stringArray default emptyArray ,names stringArray default emptyArray, hiddenParameter varchar2 default '') is 
-	begin
+		begin
 
-		htp.prn('<td>
-				<div class="formField">');
-		if placeholder is not null then
-			htp.prn('<label >'||placeholder||'</label>');
-		else htp.prn('<label class="hidden" >_</label>');
-		end if;
-		
-		gui.apriDiv(classe => 'multiSelect');
-			gui.apriDiv(classe => 'multiSelectBtn', onclick => 'apriMultiSelect(this.parentNode)');
-				htp.prn('<span class="text">'|| testo ||'</span>');
-				htp.prn('<span class="arrow"></span>');
-			htp.prn('</div>');
-			gui.apriDiv(ident => 'multiSelect-content', classe => 'multiSelect-content');
+			htp.prn('<td>
+					<div class="formField">');
+			if placeholder is not null then
+				htp.prn('<label >'||placeholder||'</label>');
+			else htp.prn('<label class="hidden" >_</label>');
+			end if;
 			
-			for i in 1..ids.count loop
-				gui.apriDiv(ident => 'option');
-					htp.prn('<input type="checkbox" name="'|| names(i) ||'id="' ||ids(i)|| '" value="' ||ids(i)||'" onchange="updateHiddenInput('||chr(39)||hiddenParameter||chr(39)||', this)"/>');
-					htp.prn('<span>'|| names(i) ||'</span>');
+			gui.apriDiv(classe => 'multiSelect');
+				gui.apriDiv(classe => 'multiSelectBtn', onclick => 'apriMultiSelect(this.parentNode)');
+					htp.prn('<span class="text">'|| testo ||'</span>');
+					htp.prn('<span class="arrow"></span>');
+				htp.prn('</div>');
+				gui.apriDiv(ident => 'multiSelect-content', classe => 'multiSelect-content');
+				
+				for i in 1..ids.count loop
+					gui.apriDiv(ident => 'option');
+						htp.prn('<input type="checkbox" name="'|| names(i) ||'id="' ||ids(i)|| '" value="' ||ids(i)||'" onchange="updateHiddenInput('||chr(39)||hiddenParameter||chr(39)||', this)"/>');
+						htp.prn('<label for="'||ids(i)||'">'|| names(i) ||'</label>');
+					gui.chiudiDiv();
+				end loop;
+				
 				gui.chiudiDiv();
-			end loop;
-			
 			gui.chiudiDiv();
-		gui.chiudiDiv();
-					
-		htp.prn('</div> </td>');
+						
+			htp.prn('</div> </td>');
 	end aggiungiDropdownFormFiltro;
 
 	procedure aggiungiIntestazione(testo VARCHAR2 default 'Intestazione', dimensione VARCHAR2 default 'h1', class VARCHAR2 default '') is
@@ -374,50 +375,11 @@ create or replace PACKAGE BODY gui as
 		htp.prn('<p class='||class||' >'||testo||'</p>');
 	end aggiungiParagrafo;
 
-	procedure aggiungiSelezioneSingola(elementi StringArray, titolo varchar2 default '', ident varchar2) IS
-	BEGIN
-		htp.prn('<label for="'||ident||'">'||titolo||'</label><br>');
-		htp.prn('<select id="'||ident||'" name="'||ident||'">');
-		for elem in elementi.FIRST..elementi.LAST 
-		LOOP
-			htp.prn('<option value="'||elementi(elem)||'">'||elementi(elem)||'</option>');
-		END LOOP;
-		htp.prn('</select>');
-	END aggiungiSelezioneSingola;
-
-	procedure aggiungiSelezioneMultipla(elementi StringArray, titolo varchar2 default '', ident varchar2) IS
-	BEGIN
-		htp.prn('<label for="'||ident||'">'||titolo||'</label><br>');
-		htp.prn('<select id="'||ident||'" name="'||ident||'" multiple>');
-		for elem in elementi.FIRST..elementi.LAST 
-		LOOP
-			htp.prn('<option value="'||elementi(elem)||'">'||elementi(elem)||'</option>');
-		END LOOP;
-		htp.prn('</select>');
-	END aggiungiSelezioneMultipla;
-
-	-- Procedura per popup di errore/successo
-	procedure AggiungiPopup(successo boolean, testo VARCHAR2 default 'Errore!', indirizzo varchar2 default '') IS
-	begin
-
-		if successo then 
-			htp.prn('<div id="popup-message" class="message-box success" hidden>');
-				htp.prn('<p>'|| testo ||'</p>');
-				htp.prn('<button class="bottone-popup" onclick="nascondiPopup()">Chiudi</button>');
-			htp.prn('</div>');
-		else 
-			htp.prn('<div id="popup-message" class="message-box error" hidden>');
-				htp.prn('<p>'|| testo ||'</p>');
-				htp.prn('<button class="bottone-popup" onclick="nascondiPopup()">Chiudi</button>');
-			htp.prn('</div>');
-		end if;
-	end AggiungiPopup;
-
 	procedure aggiungiDropdown(testo VARCHAR2 default 'testo', opzioni stringArray default null) is
 	BEGIN
 		gui.apriDiv(classe => 'dropdown');
 			gui.apriDiv(classe => 'dropbtn', onclick => 'apriMenu(this.parentNode)');
-				htp.prn('<span class="text">'|| testo ||'</span>');
+				htp.prn('<span class="text"></span>');
 				htp.prn('<span class="arrow"></span>');
 			htp.prn('</div>');
 			gui.apriDiv(ident => 'dropdown-content', classe => 'dropdown-content');
@@ -431,19 +393,82 @@ create or replace PACKAGE BODY gui as
 		gui.chiudiDiv();
 	END aggiungiDropdown;
 
+	procedure aggiungiSelezioneSingola(elementi StringArray, valoreEffettivo StringArray default null, titolo varchar2 default '', ident varchar2) IS
+	BEGIN
+		htp.prn('<label for="'||ident||'">'||titolo||'</label><br>');
+		htp.prn('<select id="'||ident||'" name="'||ident||'">');
+		if valoreEffettivo is null THEN
+			for elem in elementi.FIRST..elementi.LAST
+			LOOP
+				htp.prn('<option value="'||elementi(elem)||'">'||elementi(elem)||'</option>');
+			END LOOP;
+		else
+			for elem in elementi.FIRST..elementi.LAST
+			LOOP
+				htp.prn('<option value="'||valoreEffettivo(elem)||'">'||elementi(elem)||'</option>');
+			END LOOP;
+		end if;
+		htp.prn('</select>');
+	END aggiungiSelezioneSingola;
 
+procedure aggiungiSelezioneMultipla(testo VARCHAR2 default 'testo', placeholder VARCHAR2 default 'testo', ids stringArray default emptyArray ,names stringArray default emptyArray, hiddenParameter varchar2 default '') IS
+BEGIN
+
+	htp.prn('<div class="formField">');
+	if placeholder is not null then
+		htp.prn('<label >'||placeholder||'</label>');
+	else htp.prn('<label class="hidden" >_</label>');
+	end if;
+
+	gui.apriDiv(classe => 'dropdown');
+		gui.apriDiv(classe => 'dropbtn', onclick => 'apriMenu(this.parentNode)');
+			htp.prn('<span class="text">'|| testo ||'</span>');
+			htp.prn('<span class="arrow"></span>');
+		htp.prn('</div>');
+		gui.apriDiv(ident => 'dropdown-content', classe => 'dropdown-content');
+		
+		for i in 1..ids.count loop
+			gui.apriDiv(ident => 'option');
+				htp.prn('<input type="checkbox" name="'|| names(i) ||'" id="' ||ids(i)|| '" value="' ||ids(i)||'" onchange="updateHiddenInput('||chr(39)||hiddenParameter||chr(39)||', this)"/>');
+				htp.prn('<label for="'|| ids(i) ||'">'|| names(i) ||'</label>');
+			gui.chiudiDiv();
+		end loop;
+		
+		gui.chiudiDiv();
+	gui.chiudiDiv();
+				
+	htp.prn('</div>');
+	
+END aggiungiSelezioneMultipla;
+
+	-- Procedura per popup di errore/successo
+	procedure AggiungiPopup(successo boolean, testo VARCHAR2 default 'Errore!', indirizzo varchar2 default '') IS
+	begin
+
+		if successo then 
+			htp.prn('<div id="popup-message" class="message-box success">');
+				htp.prn('<p>'|| testo ||'</p>');
+				htp.prn('<button class="bottone-popup" onclick="nascondiPopup()">Chiudi</button>');
+			htp.prn('</div>');
+		else 
+			htp.prn('<div id="popup-message" class="message-box error">');
+				htp.prn('<p>'|| testo ||'</p>');
+				htp.prn('<button class="bottone-popup" onclick="nascondiPopup()">Chiudi</button>');
+			htp.prn('</div>');
+		end if;
+	end AggiungiPopup;
 
 	procedure Footer is
 	BEGIN
 		gui.APRIDIV(ident => 'footer');
-		--htp.prn('<div>');
+		htp.prn('<footer>');
 		gui.APRIDIV(ident => 'bottoneSinistra');
 			gui.BottoneTopBar(testo => 'Contattaci'); 
 			gui.BottoneTopBar(testo => 'Su di noi'); 
 			gui.BottoneTopBar(testo => 'Termini di servizio'); 
 			gui.BottoneTopBar(testo => 'Privacy'); 
 		gui.CHIUDIDIV;
-		--htp.prn('</div>');
+		htp.prn('</footer>');
 		gui.CHIUDIDIV;
 	END Footer;
 
@@ -461,21 +486,27 @@ create or replace PACKAGE BODY gui as
 		htp.prn ('</form>'); 
 	END chiudiForm; 
 
-	procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '', readonly boolean default False, selected boolean default false) as
-	BEGIN
-		htp.prn('<input 
-			class="'||classe||'" 
-			type="'||tipo||'"
-			id ="'||ident||'" 
-			name="'|| nome ||'" 
-			placeholder="'||placeholder||'" 
-			value="'||value||'"
-			min="'||minimo||'"
-			max="'||massimo||'"');
+procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '', placeholder VARCHAR2 default '', 
+	required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', 
+	massimo VARCHAR2 default '', readonly boolean default False, selected boolean default false, step varchar default null) as
+BEGIN
+	htp.prn('<input 
+		class="'||classe||'" 
+		type="'||tipo||'"
+		id ="'||ident||'" 
+		name="'|| nome ||'" 
+		placeholder="'||placeholder||'" 
+		value="'||value||'"
+		min="'||minimo||'"
+		max="'||massimo||'"');
 
-		if required then 
-			htp.prn(' required ');
-		end if;
+	if required then 
+		htp.prn(' required ');
+	end if;
+
+	if step IS NOT NULL THEN
+        htp.prn(' step="'|| step ||'"');
+    end if;
 
 		if pattern is not null then
 			htp.prn('pattern="'||pattern||'" ');
@@ -485,10 +516,11 @@ create or replace PACKAGE BODY gui as
 			htp.prn('readonly');
 		end if;
 
-		if selected then
-			htp.prn('checked');
-		end if;
-		htp.prn(' >');
+	if selected then
+		htp.prn('checked');
+	end if;
+
+	htp.prn('>');
 
 
 	end AggiungiInput;
@@ -509,11 +541,10 @@ create or replace PACKAGE BODY gui as
 		htp.prn('<div class="button-add-container"><a href="' || url || '" class="' || classe || '">' || testo || '</a></div>');
 	END BottoneAggiungi;
 
-
-	procedure aggiungiIcona(classe VARCHAR2 default '') IS
+	procedure aggiungiIcona (classe VARCHAR2 default '') IS
 	BEGIN
 		htp.prn ('<i class="'||classe||'"></i>'); 
-		end aggiungiIcona; 
+	end aggiungiIcona; 
 
 	procedure aggiungiCampoForm (tipo VARCHAR2 default 'text', classeIcona VARCHAR2 default '', nome VARCHAR2, placeholder VARCHAR2 default '') IS
 	begin
@@ -541,46 +572,39 @@ create or replace PACKAGE BODY gui as
 
 	end aggiungiCampoForm;	
 
-	procedure aggiungiRigaForm is
-	BEGIN 
-		gui.APRIDIV(classe => 'form-row');
-	END aggiungiRigaForm; 
-
-	procedure chiudiRigaForm is
-	BEGIN 
-		gui.CHIUDIDIV; 
-	END chiudiRigaForm; 
-
-	procedure aggiungiBottoneSubmit (nome VARCHAR2, value VARCHAR2 default '') is
-	BEGIN
-		gui.APRIDIV(classe => 'form-submit');   
-						/*Nome è vuoto perchè altrimenti aggiunge 
-						pure il pulsante nell'url*/
-						gui.AGGIUNGIINPUT (nome => '', tipo => 'submit', value => value);
-					gui.CHIUDIDIV;
-	END aggiungiBottoneSubmit; 
-
-	procedure aggiungiGruppoInput is
-	BEGIN
+procedure aggiungiGruppoInput is
+BEGIN
+	gui.APRIDIV(classe => 'form-row');
 		gui.APRIDIV (classe => 'input-group');
-	END aggiungiGruppoInput; 
+END aggiungiGruppoInput; 
 
-	procedure chiudiGruppoInput is
-	BEGIN
-		gui.CHIUDIDIV; 
-	END chiudiGruppoInput; 
+procedure chiudiGruppoInput is
+BEGIN
+	gui.CHIUDIDIV; 
+	gui.CHIUDIDIV; 
+END chiudiGruppoInput; 
 
-	------------------ Aggiunto per fare delle prove per le procedure nel gruppo operazioni
-	procedure aggiungiFormHiddenRigaTabella(azione varchar2 default '') is
-	begin
-		htp.prn('<form action="'||azione||'" > <td>');
-	end aggiungiFormHiddenRigaTabella;
+procedure aggiungiBottoneSubmit (value VARCHAR2 default '') is
+BEGIN
+	gui.APRIDIV(classe => 'form-submit');   
+		/*Nome è vuoto perchè altrimenti aggiunge 
+			pure il pulsante nell'url*/
+		gui.AGGIUNGIINPUT (nome => '', tipo => 'submit', value => value);
+	gui.CHIUDIDIV;
+END aggiungiBottoneSubmit; 
+
+------------------ Aggiunto per fare delle prove per le procedure nel gruppo operazioni
+procedure apriElementoPulsanti is
+begin
+	htp.prn('<td>');
+
+end apriElementoPulsanti;
 
 
-	procedure chiudiFormHiddenRigaTabella is
-	begin
-		htp.prn(' </td> </form>');
-	end chiudiFormHiddenRigaTabella;
+procedure chiudiElementoPulsanti is
+begin
+	htp.prn(' </td>');
+end chiudiElementoPulsanti;
 
 	-----------------
 
@@ -607,8 +631,10 @@ create or replace PACKAGE BODY gui as
 
 	procedure HomePage(p_success varchar2 default ' ', cEmail VARCHAR2 default null, p_password varchar2 default null, tipo_utente varchar2 default null) is
 		idSess int;
+		ruolo varchar(2);
+		n_ruolo int;
 	begin
-		gui.apriPagina('Home');
+		gui.apriPagina('Home', idSessione);
 
 			gui.aggiungiIntestazione('Home Page', 'h1');
 			gui.acapo(2);
@@ -621,6 +647,13 @@ create or replace PACKAGE BODY gui as
 				gui.acapo(2);
 			elsif p_success = 'S' then
 				gui.aggiungiPopup(true, 'Login riuscito, Benvenuto');
+				--gui.acapo(1);
+				htp.prn('<img class="taxi-img" src="https://freesvg.org/img/maninclassictaxi-1920.png"/>');
+			elsif p_success = 'LOF' then
+				gui.aggiungiPopup(false, 'Logout non riuscito, qualcosa è andato storto');
+				gui.acapo(2);
+			elsif p_success = 'LOS' then
+				gui.aggiungiPopup(true, 'Logout riuscito, accedere di nuovo per utilizzare i nostri servizi');
 				gui.acapo(2);
 			end if;
 
@@ -628,70 +661,58 @@ create or replace PACKAGE BODY gui as
                 --gui.ApriFormFiltro('http://131.114.73.203:8080/apex/l_ceccotti.gui.homePage');
                 gui.aggiungiForm(url=> 'http://131.114.73.203:8080/apex/l_ceccotti.gui.homePage');
 					gui.AGGIUNGIINTESTAZIONE('Inserisci email e password', 'h2');
-					gui.aggiungiRigaForm;
-						gui.aggiungiGruppoInput;
-							gui.aggiungiCampoForm('email', 'fa fa-envelope', 'cEmail', 'Email');
-							--gui.AggiungiLabel('','');
-							gui.aggiungiCampoForm('password', 'fa fa-key', 'p_password', 'Password');
-						gui.chiudiGruppoInput;
-					gui.chiudiRigaForm;
-					gui.aggiungiRigaForm;
-						
-						gui.APRIDIV (classe => 'col-half'); 
-                			--gui.aggiungiIntestazione(testo => '', dimensione => 'h4');
-							gui.AGGIUNGIGRUPPOINPUT; 
-								gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'tipo_cliente', tipo => 'radio', value => 'D', selected => true);
-								gui.AGGIUNGILABEL (target => 'tipo_cliente', testo => 'Dipendente');  
-								gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'tipo_dipendente', tipo => 'radio', value => 'C');
-								gui.AGGIUNGILABEL (target => 'tipo_dipendente', testo => 'Cliente'); 
-							gui.CHIUDIGRUPPOINPUT;  
-						gui.CHIUDIDIV;
+					gui.aggiungiGruppoInput;
+						gui.aggiungiCampoForm('email', 'fa fa-envelope', 'cEmail', 'Email');
+						--gui.AggiungiLabel('','');
+						gui.aggiungiCampoForm('password', 'fa fa-key', 'p_password', 'Password');
+					gui.chiudiGruppoInput;
+				
+					
+					gui.APRIDIV (classe => 'col-half'); 
+						gui.AGGIUNGIGRUPPOINPUT; 
+							gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'tipo_cliente', tipo => 'radio', value => 'D', selected => true);
+							gui.AGGIUNGILABEL (target => 'tipo_cliente', testo => 'Dipendente');  
+							gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'tipo_dipendente', tipo => 'radio', value => 'C');
+							gui.AGGIUNGILABEL (target => 'tipo_dipendente', testo => 'Cliente'); 
+						gui.CHIUDIGRUPPOINPUT;  
+					gui.CHIUDIDIV;
 
-					gui.chiudiRigaForm;
-					gui.aggiungiRigaForm;
-						gui.aggiungiGruppoInput;
-								gui.aggiungiBottoneSubmit('', 'Accedi');
-							gui.chiudiGruppoInput;
-					gui.chiudiRigaForm;
-				gui.chiudiForm;
+				
+					gui.aggiungiGruppoInput;
+							gui.aggiungiBottoneSubmit('Accedi');
+						gui.chiudiGruppoInput;
+			gui.chiudiForm;
 				
             elsif p_success <> 'S' then
 
 				if tipo_utente is null then 
-					gui.reindirizza('http://131.114.73.203:8080/apex/l_ceccotti.gui.homePage?p_success=L');
-					--gui.aggiungiIntestazione('Ciao', 'h1');
+					gui.reindirizza(costanti.user_root||'gui.homePage?p_success=L');
 				end if;
 
-				if tipo_utente = 'C' then
-                	--idSess:=LOGINLOGOUT.AGGIUNGISESSIONECLIENTE(cEmail,p_password);
-					idSess:=2;
-				--else 
-					--idSess:=LOGINLOGOUT.AGGIUNGISESSIONE__DIPENDENTI__(cEmail,password);
-				end if;
+				idSess := LOGINLOGOUT.AGGIUNGISESSIONE(cEmail,p_password,tipo_utente);
 
-                if(idSess = -2) then--login riuscito
-                    --Questa è la nostra implementazione di redirect, per testarla rinviamo su un'altra pagina a caso l'utente dopo aver completato il login con successo
-                    gui.reindirizza('http://131.114.73.203:8080/apex/l_ceccotti.gui.homePage?p_success=L');
-				else
-					gui.reindirizza('http://131.114.73.203:8080/apex/l_ceccotti.gui.homePage?p_success=S');
+                if idSess is null then 
+                    gui.reindirizza(costanti.user_root||'gui.homePage?p_success=L');
+				else                   
+					gui.reindirizza(costanti.user_root||'gui.homePage?p_success=S&idSessione='||tipo_utente||idSess||'');
                 end if;
+
             end if;
 
-			if p_success = 'S' then
-				htp.prn('<img src="https://freesvg.org/img/maninclassictaxi-1920.png"/>');
-			end if;
-
 		gui.chiudiPagina();
+
+		EXCEPTION
+			WHEN OTHERS THEN  gui.reindirizza(costanti.user_root||'gui.homePage?p_success=L');  -- errore ancora da risolvere'
 	end HomePage;
 
+	procedure LogOut(idUser int, ruolo varchar2) is
+	begin
+		if loginlogout.terminaSessione(idUser, ruolo) THEN
+			gui.Reindirizza(costanti.user_root||'gui.homePage?p_success=LOS');
+		else
+			gui.Reindirizza(costanti.user_root||'gui.homePage?p_success=LOF');
+		end if;
+	end LogOut;
 
 end gui;
-/*
-	acapo multipli: Fatto
-	readonly input: Fatto
-	popup che reindirizza: Fatto quasi, devo capire quando renderlo visibile
-	riguardare css form(intestazione, bottoni sistemati)
-	riguardare StringArray(Non si estende)
-	modificare il form per far passare un valore diverso da quello visualizzato
-	bottone con link
-*/
+
