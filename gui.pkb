@@ -14,7 +14,9 @@ begin
 	htp.print('
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-	'); 
+	');
+	htp.prn('<link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
+			 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>');
 	htp.print('<style> ' || costanti.stile || '</style>');
 	htp.print('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 '); /*FONTAwesome*/
@@ -211,22 +213,34 @@ begin
 	-- Procedura Tabella senza filtro provvisoria
 	procedure ApriTabella(elementi StringArray default emptyArray) is
 	begin
-		htp.prn('<table class="tab"> ');
-		--htp.prn('<thead>');
+		htp.prn('<table id="table" class="tab"> ');
+		htp.prn('<thead>');
 		htp.prn('<tr>');
 		for i in 1..elementi.count loop
 			htp.prn('<th>
 						'|| elementi(i) || '
 					</th>');
 		end loop;
-		--htp.prn('</thead>');
-		--htp.prn('<tbody>');
+		htp.prn('</thead>');
+		htp.prn('<tbody>');
 	end ApriTabella;
 
 	procedure ChiudiTabella IS
 	BEGIN
 		htp.prn('</tbody>');
 		htp.prn('</table>');
+
+		htp.prn('<script>');
+		htp.prn('const dataTable = new simpleDatatables.DataTable("#table", {
+            responsive: true,
+			sortable:false,
+            searchable: false,
+            searchQuerySeparator: ",",
+            paging: true,
+            locale: "it",
+            fixedHeight: true
+        });');
+		htp.prn('</script>');
 	end ChiudiTabella;
 
 	procedure AggiungiRigaTabella IS
@@ -425,7 +439,7 @@ BEGIN
 		
 		for i in 1..ids.count loop
 			gui.apriDiv(ident => 'option');
-				htp.prn('<input type="checkbox" name="'|| names(i) ||'" id="' ||ids(i)|| '" value="' ||ids(i)||'" onchange="updateHiddenInput('||chr(39)||hiddenParameter||chr(39)||', this)"/>');
+				htp.prn('<input type="checkbox" id="' ||ids(i)|| '" value="' ||ids(i)||'" onchange="updateHiddenInput('||chr(39)||hiddenParameter||chr(39)||', this)"/>');
 				htp.prn('<label for="'|| ids(i) ||'">'|| names(i) ||'</label>');
 			gui.chiudiDiv();
 		end loop;
@@ -488,8 +502,7 @@ procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCH
 BEGIN
 	htp.prn('<input 
 		class="'||classe||'" 
-		type="'||tipo||'"
-		id ="'||ident||'" 
+		type="'||tipo||'" 
 		name="'|| nome ||'" 
 		placeholder="'||placeholder||'" 
 		value="'||value||'"
@@ -498,6 +511,10 @@ BEGIN
 
 	if required then 
 		htp.prn(' required ');
+	end if;
+
+	if ident is not null then
+		htp.prn('id ="'||ident||'"');
 	end if;
 
 	if step IS NOT NULL THEN
@@ -568,9 +585,9 @@ BEGIN
 
 	end aggiungiCampoForm;	
 
-procedure aggiungiGruppoInput is
+procedure aggiungiGruppoInput(classe varchar2 default 'form-row') is   --
 BEGIN
-	gui.APRIDIV(classe => 'form-row');
+	gui.APRIDIV(classe => classe);
 		gui.APRIDIV (classe => 'input-group');
 END aggiungiGruppoInput; 
 
@@ -652,19 +669,26 @@ end chiudiElementoPulsanti;
 					gui.chiudiGruppoInput;
 				
 					
-					gui.APRIDIV (classe => 'col-half'); 
-						gui.AGGIUNGIGRUPPOINPUT; 
-							gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'tipo_cliente', tipo => 'radio', value => 'D', selected => true);
-							gui.AGGIUNGILABEL (target => 'tipo_cliente', testo => 'Dipendente');  
-							gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'tipo_dipendente', tipo => 'radio', value => 'C');
-							gui.AGGIUNGILABEL (target => 'tipo_dipendente', testo => 'Cliente'); 
-						gui.CHIUDIGRUPPOINPUT;  
-					gui.CHIUDIDIV;
+                			--gui.aggiungiIntestazione(testo => '', dimensione => 'h4');
+							gui.apriDiv(classe => 'row');
+							gui.AGGIUNGIGRUPPOINPUT(); 
+								gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'cliente', tipo => 'radio', value => '00');
+								gui.AGGIUNGILABEL (target => 'cliente', testo => 'Cliente');
+								gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'autista', tipo => 'radio', value => '02', selected => true);
+								gui.AGGIUNGILABEL (target => 'autista', testo => 'Autista');
+								gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'operatore', tipo => 'radio', value => 'O1');
+								gui.AGGIUNGILABEL (target => 'operatore', testo => 'Operatore');
+								gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'menager', tipo => 'radio', value => 'O3');
+								gui.AGGIUNGILABEL (target => 'menager', testo => 'Manager');
+								gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'contabile', tipo => 'radio', value => 'O4');
+								gui.AGGIUNGILABEL (target => 'contabile', testo => 'Contabile');
+							gui.CHIUDIGRUPPOINPUT;  
+							gui.chiudiDiv;
 
-				
 					gui.aggiungiGruppoInput;
-							gui.aggiungiBottoneSubmit('Accedi');
-						gui.chiudiGruppoInput;
+						gui.aggiungiBottoneSubmit('Accedi');
+					gui.chiudiGruppoInput;
+
 			gui.chiudiForm;
 				
             elsif p_success <> 'S' then

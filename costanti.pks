@@ -612,14 +612,14 @@ body{
       content: "";
     }
 
-  input[type="checkbox"] + label:after {
-    position: absolute;
-    top: 0.45em;
-    left: 0.2em;
-    font-size: 0.8em;
-    color: #fff;
-    opacity: 0;
-  }
+    input[type="checkbox"] + label:after {
+      position: absolute;
+      top: 0.45em;
+      left: 0.2em;
+      font-size: 0.8em;
+      color: #fff;
+      opacity: 0;
+    }
 
     input[type=submit]{
         height: 100%;
@@ -742,6 +742,15 @@ body{
     margin-right: 10px; /* Aggiungo lo spazio tra i radio button se necessario */
   }
 
+  .row .input-group {
+    display: flex;
+    align-items: center;
+  }
+
+  .row {
+    /**/
+  }
+
   .col-half {
     float: left;  
     width: 50%;
@@ -758,12 +767,15 @@ body{
   .col-third:last-of-type {
     padding-right: 0;
   }
+
   @media only screen and (max-width: 540px) {
     .col-half {
       width: 100%;
       padding-right: 0;
     }
   }
+
+
   /* FOOTER */
   #footer {
     display: flex;
@@ -1138,6 +1150,15 @@ body{
     to {
       transform: translateX(200%);
     }
+  }
+
+  .datatable-table th button{
+    background-color: transparent;
+  }
+
+  .datatable-table > tbody > tr > td{
+    vertical-align: baseline !important;
+    padding: 0px !important;
   }
 
 ';
