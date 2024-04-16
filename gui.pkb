@@ -435,14 +435,6 @@ BEGIN
 				
 	htp.prn('</div>');
 	
-	
-	/*htp.prn('<label for="'||ident||'">'||titolo||'</label><br>');
-	htp.prn('<select id="'||ident||'" name="'||ident||'" multiple>');
-	for elem in elementi.FIRST..elementi.LAST 
-	LOOP
-		htp.prn('<option value="'||elementi(elem)||'">'||elementi(elem)||'</option>');
-	END LOOP;
-	htp.prn('</select>');*/
 END aggiungiSelezioneMultipla;
 
 	-- Procedura per popup di errore/successo
