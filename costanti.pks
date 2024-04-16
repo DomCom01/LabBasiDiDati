@@ -552,6 +552,7 @@ body{
       -o-transition: 0.35s ease-in-out;
       transition: 0.35s ease-in-out;
       transition: all 0.35s ease-in-out;
+      color: #000000;
     }
 
     input[type="radio"] {
@@ -612,14 +613,14 @@ body{
       content: "";
     }
 
-  input[type="checkbox"] + label:after {
-    position: absolute;
-    top: 0.45em;
-    left: 0.2em;
-    font-size: 0.8em;
-    color: #fff;
-    opacity: 0;
-  }
+    input[type="checkbox"] + label:after {
+      position: absolute;
+      top: 0.45em;
+      left: 0.2em;
+      font-size: 0.8em;
+      color: #fff;
+      opacity: 0;
+    }
 
     input[type=submit]{
         height: 100%;
@@ -743,6 +744,15 @@ body{
     margin-right: 10px; /* Aggiungo lo spazio tra i radio button se necessario */
   }
 
+  .row .input-group {
+    display: flex;
+    align-items: center;
+  }
+
+  .row {
+    /**/
+  }
+
   .col-half {
     float: left;  
     width: 50%;
@@ -759,12 +769,15 @@ body{
   .col-third:last-of-type {
     padding-right: 0;
   }
+
   @media only screen and (max-width: 540px) {
     .col-half {
       width: 100%;
       padding-right: 0;
     }
   }
+
+
   /* FOOTER */
   #footer {
     display: flex;
@@ -910,14 +923,16 @@ body{
 
   /* DROPDOWN */
 
+
   .dropdown {
     position: relative;
 
     select {
-      width: 100%;
-      height: 100%;
-      border: none;
-      background-color: transparent;
+      width: 50%;
+      line-height: 1.4;
+      border: 1px solid #e5e5e5;
+      border-radius: 3px;
+      background-color: #f9f9f9;
       padding: 10px;
       margin: 0;
       box-sizing: border-box;
@@ -931,11 +946,12 @@ body{
   }
 
   .dropbtn {
-    width: 101px;
+    width: 50%;
     padding: 10px;
     box-sizing: border-box;
-    background-color: #000000;
-    border: none;
+    background-color: #f9f9f9;
+    border: 1px solid #e5e5e5;
+    border-radius: 3px;
     cursor: pointer;
     color: #FFFFFF;
     font-size: 10px;
@@ -952,12 +968,14 @@ body{
     top: 100%;
     overflow: scroll;
     left: 0;
-    width: 100px;
+    width: 50%;
     z-index: 1;
     display: none;
     background-color: #f1f1f1;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    border: 1px solid #ddd;
+    border: 1px solid;
+    border-radius: 3px;
+    border-color: #bd8200;
 
     
     option {
@@ -1008,7 +1026,7 @@ body{
     height: 0;
     border-left: 6px solid transparent;
     border-right: 6px solid transparent;
-    border-top: 6px solid #fff;
+    border-top: 6px solid #4f4f4f;
     transform: rotate(-90deg);
     transition: transform 0.3s;
   }
@@ -1139,6 +1157,15 @@ body{
     to {
       transform: translateX(200%);
     }
+  }
+
+  .datatable-table th button{
+    background-color: transparent;
+  }
+
+  .datatable-table > tbody > tr > td{
+    vertical-align: baseline !important;
+    padding: 0px !important;
   }
 
 ';

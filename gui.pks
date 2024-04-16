@@ -1,14 +1,13 @@
 
 SET DEFINE OFF;
-create or replace package gui as
-	type stringarray is
-		table of varchar2(30) not null;
-	emptyarray stringarray;
-	procedure apripagina (
-		titolo     varchar2 default 'Senza titolo',
-		idsessione int default -1,
-		scriptjs   varchar2 default ''
-	);
+
+create or replace PACKAGE gui as
+
+type StringArray is table of varchar2(100) not null;
+
+emptyArray StringArray;
+
+procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione VARCHAR default '-1',  scriptJS VARCHAR2 default '');
 
 	procedure reindirizza (
 		indirizzo varchar2
@@ -70,19 +69,16 @@ create or replace package gui as
 
 /*
 Per aggiungere i pulsanti seguire questo pattern qui:
+	ApriElementoPulsanti
+		aggiungiPulsante
+		aggiungiPulsante
+	ChiudiElementoPulsanti
 */
-	procedure aprielementopulsanti;
-	procedure aggiungipulsantecancellazione (
-		proceduraeliminazione varchar2 default ''
-	);
-	procedure aggiungipulsantemodifica (
-		collegamento1 varchar2 default ''
-	);
-	procedure aggiungipulsantegenerale (
-		proceduraeliminazione varchar2 default '',
-		testo                 varchar2
-	);
-	procedure chiudielementopulsanti;
+procedure apriElementoPulsanti;
+procedure AggiungiPulsanteCancellazione(collegamento VARCHAR2 default '');
+procedure AggiungiPulsanteModifica(collegamento VARCHAR2 default '');
+procedure AggiungiPulsanteGenerale(collegamento VARCHAR2 DEFAULT '', testo VARCHAR2);
+procedure chiudiElementoPulsanti;
 
 	procedure chiuditabella;
 
@@ -144,54 +140,19 @@ Per aggiungere i pulsanti seguire questo pattern qui:
 
 --Form
 
-	procedure aggiungiform (
-		classe varchar2 default '',
-		name   varchar2 default '',
-		url    varchar2 default ''
-	);
-	procedure aggiungiinput (
-		tipo        varchar2 default 'text',
-		nome        varchar2,
-		value       varchar2 default '',
-		placeholder varchar2 default '',
-		required    boolean default false,
-		classe      varchar2 default '',
-		ident       varchar2 default '',
-		pattern     varchar2 default '',
-		minimo      varchar2 default '',
-		massimo     varchar2 default '',
-		readonly    boolean default false,
-		selected    boolean default false,
-		step        varchar default null
-	);
-	procedure aggiungilabel (
-		target varchar2,
-		testo  varchar2
-	);
-	procedure aggiungiicona (
-		classe varchar2 default ''
-	);
-	procedure aggiungicampoform (
-		tipo        varchar2 default 'text',
-		classeicona varchar2 default '',
-		nome        varchar2,
-		required    boolean default true,
-		ident       varchar2 default '',
-		placeholder varchar2 default ''
-	);
-	procedure aggiungiselezionesingola (
-		elementi        stringarray,
-		valoreeffettivo stringarray default null,
-		titolo          varchar2 default '',
-		ident           varchar2
-	);
-	procedure aggiungiselezionemultipla (
-		testo           varchar2 default 'testo',
-		placeholder     varchar2 default 'testo',
-		ids             stringarray default emptyarray,
-		names           stringarray default emptyarray,
-		hiddenparameter varchar2 default ''
-	);
+procedure aggiungiForm(classe VARCHAR2 default '', name VARCHAR2 default '', url VARCHAR2 default '');
+procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '', placeholder VARCHAR2 default '', 
+	required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', 
+	massimo VARCHAR2 default '', readonly boolean default False, selected boolean default False, step varchar default null);
+procedure AggiungiLabel(target VARCHAR2, testo VARCHAR2);
+procedure aggiungiIcona (classe VARCHAR2 default ''); 
+
+PROCEDURE aggiungiGruppoInput; --Delimita i campi di input del form
+procedure chiudiGruppoInput; 
+
+procedure aggiungiCampoForm (tipo VARCHAR2 default 'text', classeIcona VARCHAR2 default '', nome VARCHAR2,required BOOLEAN default true, ident VARCHAR2 default '', placeholder VARCHAR2 default '');
+procedure aggiungiSelezioneSingola(elementi StringArray, valoreEffettivo StringArray default null, titolo varchar2 default '', ident varchar2);
+procedure aggiungiSelezioneMultipla(testo VARCHAR2 default 'testo', placeholder VARCHAR2 default 'testo', ids stringArray default emptyArray ,names stringArray default emptyArray, hiddenParameter varchar2 default '');
 
 -------------------
 	procedure aggiungicampoformhidden (
@@ -202,8 +163,7 @@ Per aggiungere i pulsanti seguire questo pattern qui:
 	procedure aggiungibottonesubmit (
 		value varchar2 default ''
 	);
-	procedure aggiungigruppoinput;
-	procedure chiudigruppoinput;
+	
 	procedure chiudiform;
 -------------------
 
