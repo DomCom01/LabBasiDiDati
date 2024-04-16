@@ -98,10 +98,3 @@ procedure HomePage(p_success varchar2 default ' ', cEmail VARCHAR2 default null,
 procedure LogOut(idUser int, ruolo varchar2);
 
 end gui;
-
-/*
-	unire rigaform e gruppo input: lasciato solo gruppo input;
-	modificare stile dropdown e aggiungere drpdwnformfiltro nella selezione multipla
-	rimuovere td da pulsanti tabella per metterli in una sola colonna e metterli in aggiungiFormHiddenRigaTabella e chiudi(apri elemento pulsanti)
-	aggiungere roba lucche: fatto;
-*/
