@@ -1,6 +1,8 @@
 SET DEFINE OFF;
 create or replace PACKAGE costanti as
 
+user_root CONSTANT VARCHAR(100) := 'http://131.114.73.203:8080/apex/l_ceccotti.';
+
 tableSortScript CONSTANT VARCHAR2(32767) := '
 var lastSortedTH;
 var ordTH = true;
@@ -35,8 +37,8 @@ document.querySelectorAll("th").forEach(th => th.addEventListener("click", (() =
 })));';
 
 dropdownScript constant VARCHAR2(32767) := '
- 
- const updateHiddenInput = (inputName, checkbox, symbol = ";") => {
+
+const updateHiddenInput = (inputName, checkbox, symbol = ";") => {
     if (!checkbox) throw new Error("Checkbox non trovata");
     if (!symbol) symbol = ";";
 
@@ -157,26 +159,31 @@ html{
   margin:0px;
 }
 
-.bottone {
-  background: #cfab3a;
-  border-radius: 999px;
-  box-shadow: #f0d685 0 10px 20px -10px;
-  box-sizing: border-box;
-  color: #0c0b07;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 24px;
-  opacity: 1;
-  outline: 0 solid transparent;
-  padding: 8px 18px;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  width: fit-content;
-  word-break: break-word;
-  border: none;
-}
+  .bottone {
+    background: #cfab3a;
+    border-radius: 999px;
+    box-shadow: #f0d685 0 10px 20px -10px;
+    box-sizing: border-box;
+    color: #0c0b07;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 24px;
+    opacity: 1;
+    outline: 0 solid transparent;
+    padding: 8px 18px;
+    margin-right: 5px;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    width: fit-content;
+    word-break: break-word;
+    border: none;
+  }
+
+  .bottone:last-child{
+    margin:0px !important;
+  }
 
 .bottone2 {
   background-color: #cfab3a;
@@ -255,7 +262,7 @@ a{
   font-weight: 500;
   letter-spacing: 0;
   line-height: 1vh;
-  margin: 0px;
+  margin-right: 0px;
   opacity: 1;
   outline: 0;
   padding: 2.5vh 2.2em;
@@ -309,6 +316,7 @@ body{
   font-family: Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
   background-color: #e3e3e3;
   box-sizing: border-box;
+  overflow-x:hidden;
 }
 
 .container{
@@ -609,8 +617,6 @@ h1{
     font-size: 0.8em;
     color: #fff;
     opacity: 0;
-    font-family: FontAwesome;
-    content: "\f00c";
   }
 
   input[type=submit]{
@@ -1080,6 +1086,22 @@ option .tick::before {
 
 .rotate{
   transform: rotate(180deg);
+}
+
+.taxi-img{
+  height:70vh;
+  transform: translateX(-120%);
+  animation: slidein 10s linear 0s infinite;
+}
+
+@keyframes slidein {
+  from {
+    transform: translateX(-120%);
+  }
+
+  to {
+    transform: translateX(200%);
+  }
 }
 ';
 end costanti;
