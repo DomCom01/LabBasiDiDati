@@ -253,31 +253,26 @@ BEGIN
 	htp.prn('</tr>');
 end ChiudiRigaTabella;
 
-procedure AggiungiPulsanteModifica(collegamento1 VARCHAR2 default '') IS
+procedure AggiungiPulsanteModifica(collegamento VARCHAR2 default '') IS
 BEGIN
-	htp.prn('<a href="'||collegamento1||'">
+	htp.prn('<a href="'||collegamento||'">
 		<button>
 		<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" fill-opacity="0" d="M20 7L17 4L15 6L18 9L20 7Z"><animate fill="freeze" attributeName="fill-opacity" begin="1.2s" dur="0.15s" values="0;0.3"/></path><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="20" stroke-dashoffset="20" d="M3 21H21"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="20;0"/></path><path stroke-dasharray="44" stroke-dashoffset="44" d="M7 17V13L17 3L21 7L11 17H7"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.4s" dur="0.6s" values="44;0"/></path><path stroke-dasharray="8" stroke-dashoffset="8" d="M14 6L18 10"><animate fill="freeze" attributeName="stroke-dashoffset" begin="1s" dur="0.2s" values="8;0"/></path></g></svg>
 		</button></a>');
 END AggiungiPulsanteModifica;
 
-procedure AggiungiPulsanteCancellazione(
-    proceduraEliminazione VARCHAR2 DEFAULT ''
-) IS
+procedure AggiungiPulsanteCancellazione(collegamento VARCHAR2 DEFAULT '') IS
 BEGIN
-    htp.prn('<button onclick="mostraConferma(this.parentNode.parentNode, '||proceduraEliminazione||')">
+    htp.prn('<button onclick="mostraConferma(this.parentNode.parentNode, '||collegamento||')">
     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
     <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16l-1.58 14.22A2 2 0 0 1 16.432 22H7.568a2 2 0 0 1-1.988-1.78zm3.345-2.853A2 2 0 0 1 9.154 2h5.692a2 2 0 0 1 1.81 1.147L18 6H6zM2 6h20m-12 5v5m4-5v5"/>
     </svg>
     </button>');
 END AggiungiPulsanteCancellazione;
 
-procedure AggiungiPulsanteGenerale(
-    proceduraEliminazione VARCHAR2 DEFAULT '',
-	testo VARCHAR2
-) IS
+procedure AggiungiPulsanteGenerale(collegamento VARCHAR2 DEFAULT '', testo VARCHAR2) IS
 BEGIN
-    htp.prn('<button onclick="mostraConfermaGenerale(this.parentNode.parentNode, '||proceduraEliminazione||')">
+    htp.prn('<button onclick="mostraConfermaGenerale(this.parentNode.parentNode, '||collegamento||')">
     '||testo||'
     </button>');
 END AggiungiPulsanteGenerale;
@@ -659,7 +654,6 @@ end chiudiElementoPulsanti;
 			end if;
 
 			if((cEmail is null or p_password is null) and  p_success <> 'S') then
-                --gui.ApriFormFiltro('http://131.114.73.203:8080/apex/l_ceccotti.gui.homePage');
                 gui.aggiungiForm(url=> costanti.user_root||'.gui.homePage');
 					gui.AGGIUNGIINTESTAZIONE('Inserisci email e password', 'h2');
 					gui.aggiungiGruppoInput;

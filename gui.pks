@@ -38,10 +38,9 @@ procedure AggiungiElementoTabella(elemento VARCHAR2 default '');
 Per aggiungere i pulsanti seguire questo pattern qui:
 */
 procedure apriElementoPulsanti;
-procedure AggiungiPulsanteCancellazione(proceduraEliminazione VARCHAR2 default '');
-procedure AggiungiPulsanteModifica(collegamento1 VARCHAR2 default '');
-/*Cambiare nome parametro*/
-procedure AggiungiPulsanteGenerale(proceduraEliminazione VARCHAR2 DEFAULT '', testo VARCHAR2);
+procedure AggiungiPulsanteCancellazione(collegamento VARCHAR2 default '');
+procedure AggiungiPulsanteModifica(collegamento VARCHAR2 default '');
+procedure AggiungiPulsanteGenerale(collegamento VARCHAR2 DEFAULT '', testo VARCHAR2);
 procedure chiudiElementoPulsanti;
 
 procedure ChiudiTabella;
