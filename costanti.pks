@@ -247,7 +247,7 @@ a{
 .bottoniDestra {
   display: flex; /* Make the wrapper a flexbox container */
   flex-shrink: 0; /* Prevent wrapper from shrinking */
-  padding-right: 10px;
+  padding-right: 10px;  
 }
 
   /* CSS */
@@ -891,7 +891,7 @@ body{
   }
 
   .topbardropdown-content {
-    overflow: hidden;
+   /* overflow: hidden;*/
     display: none;
     position: absolute;
     background-color: #f9f9f9;
@@ -902,8 +902,14 @@ body{
     border: 1px solid #ddd;
     z-index: 1;
     cursor: pointer;
+    transition: opacity 0.5 ease, transform 0.5s ease;
+    opacity: 0;
+    transform: translateY(-10px); 
+    transition: opacity 0.5s ease, transform 0.5s ease; 
 
     span{
+      background-color: black; 
+      color : white; 
       width: auto;
       float: none;
       padding: 12px 16px;
@@ -913,13 +919,15 @@ body{
 
     span:hover{
       background-color: #f0d5856b;
+      color: black; 
     }
   }
 
   .topbar-dropdown:hover .topbardropdown-content{
     display:block;
-  }
-
+    opacity: 1;
+    transform: translateY(0);
+    }
 
   /* DROPDOWN */
 
