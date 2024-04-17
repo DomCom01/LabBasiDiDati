@@ -245,7 +245,7 @@ begin
 		htp.prn('</table>');
 
 		htp.prn('<script>');
-		htp.prn('const dataTable = new simpleDatatables.DataTable("#table'||ident||'", {
+		htp.prn('const dataTable'||ident||' = new simpleDatatables.DataTable("#table'||ident||'", {
             responsive: true,
 			sortable:false,
             searchable: false,
