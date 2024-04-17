@@ -243,18 +243,6 @@ begin
 	BEGIN
 		htp.prn('</tbody>');
 		htp.prn('</table>');
-
-		htp.prn('<script>');
-		htp.prn('const dataTable'||ident||' = new simpleDatatables.DataTable("#table'||ident||'", {
-            responsive: true,
-			sortable:false,
-            searchable: false,
-            searchQuerySeparator: ",",
-            paging: true,
-            locale: "it",
-            fixedHeight: true
-        });');
-		htp.prn('</script>');
 	end ChiudiTabella;
 
 	procedure AggiungiRigaTabella IS
@@ -735,5 +723,5 @@ end chiudiElementoPulsanti;
 	end LogOut;
 
 end gui;
-
 --tipo VARCHAR2 default 'text', classeIcona VARCHAR2 default '', nome VARCHAR2, required BOOLEAN default true, ident VARCHAR2 default '', placeholder VARCHAR2 default '',tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '', placeholder VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '', readonly boolean default False, selected boolean default false, step varchar default null
+

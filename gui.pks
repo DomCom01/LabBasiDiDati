@@ -1,4 +1,3 @@
-
 SET DEFINE OFF;
 
 create or replace PACKAGE gui as
