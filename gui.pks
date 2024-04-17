@@ -9,6 +9,9 @@ emptyArray StringArray;
 
 procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione VARCHAR default '-1',  scriptJS VARCHAR2 default '');
 
+	procedure indirizzo(indirizzo VARCHAR2 default '');
+	procedure chiudiIndirizzo;
+
 	procedure reindirizza (
 		indirizzo varchar2
 	);

@@ -332,7 +332,8 @@ END AggiungiPulsanteGenerale;
 	begin
 		htp.prn('<td> <div class="formField">
 					<label id="'||nome||'">'||placeholder||'</label>
-					<select name="'|| nome ||'"> ');
+					<select name="'|| nome ||'">
+					<option value=""></option>');
 	end ApriSelectFormFiltro;
 
 	procedure AggiungiOpzioneSelect(value VARCHAR2, selected BOOLEAN, testo VARCHAR2 default '') as
@@ -416,6 +417,7 @@ END AggiungiPulsanteGenerale;
 	BEGIN
 		htp.prn('<label for="'||ident||'">'||titolo||'</label><br>');
 		htp.prn('<select id="'||ident||'" name="'||ident||'">');
+		htp.prn('<option value=""></option>');
 		if valoreEffettivo is null THEN
 			for elem in elementi.FIRST..elementi.LAST
 			LOOP
