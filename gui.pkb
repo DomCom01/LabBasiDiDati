@@ -6,7 +6,7 @@ create or replace PACKAGE BODY gui as
 		htp.prn('<head><meta http-equiv="refresh" content="0;url=' || indirizzo || '"></head>');
 	end Reindirizza;
 
-procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione int default -1,  scriptJS VARCHAR2 default '') is
+procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione VARCHAR default '-1',  scriptJS VARCHAR2 default '') is
 begin
 	htp.htmlOpen;
 	htp.headOpen;
@@ -14,7 +14,9 @@ begin
 	htp.print('
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-	'); 
+	');
+	htp.prn('<link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
+			 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>');
 	htp.print('<style> ' || costanti.stile || '</style>');
 	htp.print('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 '); /*FONTAwesome*/
@@ -153,16 +155,8 @@ begin
 				gui.chiudiDiv();
 			gui.chiudiDiv();
 
-			gui.apriDiv(classe => 'topbar-dropdown');
-				gui.BottoneTopBar(testo => 'Gruppo 3');
-				gui.apriDiv(ident => 'topbardropdown-content', classe => 'topbardropdown-content');
-					for i in 1..3 loop
-						gui.indirizzo('Link1');
-							htp.prn('<span>Link1</span>');
-						gui.chiudiIndirizzo;
-					end loop;
-				gui.chiudiDiv();
-			gui.chiudiDiv();
+			gui.dropdowntopbar(titolo => 'gruppo 3', names => gui.StringArray('Registrazione', 'Visualizza Profilo', 'Associa convenzione'),
+			proceduresNames => gui.StringArray ('operazioniClienti.registrazioneCliente', 'operazioniClienti.visualizzaProfilo', '#')); 
 
 			gui.apriDiv(classe => 'topbar-dropdown');
 				gui.BottoneTopBar(testo => 'Gruppo 4');
@@ -208,29 +202,59 @@ begin
 		gui.ChiudiDiv();
 	end TopBar;
 
+	procedure dropdowntopbar (
+		titolo varchar2 default 'esempio', 
+		names stringarray default emptyarray,
+		proceduresNames stringarray default emptyarray
+	)IS
+	BEGIN
+		if names.count = proceduresNames.count then 
+			gui.apriDiv(classe => 'topbar-dropdown');
+				gui.BottoneTopBar(testo => titolo);
+				gui.apriDiv(ident => 'topbardropdown-content', classe => 'topbardropdown-content');
+					for i in 1..names.count  loop
+						gui.indirizzo(''||costanti.user_root || proceduresNames(i)||''); --da rivedere
+							htp.prn('<span>'||names(i)||'</span>');
+						gui.chiudiIndirizzo;
+					end loop;
+				gui.chiudiDiv();
+			gui.chiudiDiv();
+		end if; 
+		
+
+		END dropdowntopbar;
+
 	-- Procedura Tabella senza filtro provvisoria
-	procedure ApriTabella(elementi StringArray default emptyArray) is
+	procedure ApriTabella(elementi StringArray default emptyArray, ident varchar2 default null) is
 	begin
-		gui.APRIDIV;
-		htp.prn('<table class="tab"> ');
-		--htp.prn('<thead>');
+		htp.prn('<table id="table'||ident||'" class="tab"> ');
+		htp.prn('<thead>');
 		htp.prn('<tr>');
 		for i in 1..elementi.count loop
 			htp.prn('<th>
 						'|| elementi(i) || '
 					</th>');
 		end loop;
-		--htp.prn('</thead>');
-		--htp.prn('<tbody>');
+		htp.prn('</thead>');
+		htp.prn('<tbody>');
 	end ApriTabella;
 
-	procedure ChiudiTabella IS
+	procedure ChiudiTabella(ident varchar2 default null) IS
 	BEGIN
 		htp.prn('</tbody>');
 		htp.prn('</table>');
-		gui.AGGIUNGIFRECCETABELLA;
-		gui.CHIUDIDIV;
 
+		htp.prn('<script>');
+		htp.prn('const dataTable = new simpleDatatables.DataTable("#table'||ident||'", {
+            responsive: true,
+			sortable:false,
+            searchable: false,
+            searchQuerySeparator: ",",
+            paging: true,
+            locale: "it",
+            fixedHeight: true
+        });');
+		htp.prn('</script>');
 	end ChiudiTabella;
 
 	procedure AggiungiRigaTabella IS
@@ -243,31 +267,26 @@ BEGIN
 	htp.prn('</tr>');
 end ChiudiRigaTabella;
 
-procedure AggiungiPulsanteModifica(collegamento1 VARCHAR2 default '') IS
+procedure AggiungiPulsanteModifica(collegamento VARCHAR2 default '') IS
 BEGIN
-	htp.prn('<a href="'||collegamento1||'">
+	htp.prn('<a href="'||collegamento||'">
 		<button>
 		<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" fill-opacity="0" d="M20 7L17 4L15 6L18 9L20 7Z"><animate fill="freeze" attributeName="fill-opacity" begin="1.2s" dur="0.15s" values="0;0.3"/></path><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="20" stroke-dashoffset="20" d="M3 21H21"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="20;0"/></path><path stroke-dasharray="44" stroke-dashoffset="44" d="M7 17V13L17 3L21 7L11 17H7"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.4s" dur="0.6s" values="44;0"/></path><path stroke-dasharray="8" stroke-dashoffset="8" d="M14 6L18 10"><animate fill="freeze" attributeName="stroke-dashoffset" begin="1s" dur="0.2s" values="8;0"/></path></g></svg>
 		</button></a>');
 END AggiungiPulsanteModifica;
 
-procedure AggiungiPulsanteCancellazione(
-    proceduraEliminazione VARCHAR2 DEFAULT ''
-) IS
+procedure AggiungiPulsanteCancellazione(collegamento VARCHAR2 DEFAULT '') IS
 BEGIN
-    htp.prn('<button onclick="mostraConferma(this.parentNode.parentNode, '||proceduraEliminazione||')">
+    htp.prn('<button onclick="mostraConferma(this.parentNode.parentNode, '||collegamento||')">
     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
     <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16l-1.58 14.22A2 2 0 0 1 16.432 22H7.568a2 2 0 0 1-1.988-1.78zm3.345-2.853A2 2 0 0 1 9.154 2h5.692a2 2 0 0 1 1.81 1.147L18 6H6zM2 6h20m-12 5v5m4-5v5"/>
     </svg>
     </button>');
 END AggiungiPulsanteCancellazione;
 
-procedure AggiungiPulsanteGenerale(
-    proceduraEliminazione VARCHAR2 DEFAULT '',
-	testo VARCHAR2
-) IS
+procedure AggiungiPulsanteGenerale(collegamento VARCHAR2 DEFAULT '', testo VARCHAR2) IS
 BEGIN
-    htp.prn('<button onclick="mostraConfermaGenerale(this.parentNode.parentNode, '||proceduraEliminazione||')">
+    htp.prn('<button onclick="mostraConfermaGenerale(this.parentNode.parentNode, '||collegamento||')">
     '||testo||'
     </button>');
 END AggiungiPulsanteGenerale;
@@ -354,7 +373,7 @@ END AggiungiPulsanteGenerale;
 				
 				for i in 1..ids.count loop
 					gui.apriDiv(ident => 'option');
-						htp.prn('<input type="checkbox" name="'|| names(i) ||'id="' ||ids(i)|| '" value="' ||ids(i)||'" onchange="updateHiddenInput('||chr(39)||hiddenParameter||chr(39)||', this)"/>');
+						htp.prn('<input type="checkbox" name="'|| names(i) ||'"id="' ||ids(i)|| '" value="' ||ids(i)||'" onchange="updateHiddenInput('||chr(39)||hiddenParameter||chr(39)||', this)"/>');
 						htp.prn('<label for="'||ids(i)||'">'|| names(i) ||'</label>');
 					gui.chiudiDiv();
 				end loop;
@@ -429,7 +448,7 @@ BEGIN
 		
 		for i in 1..ids.count loop
 			gui.apriDiv(ident => 'option');
-				htp.prn('<input type="checkbox" name="'|| names(i) ||'" id="' ||ids(i)|| '" value="' ||ids(i)||'" onchange="updateHiddenInput('||chr(39)||hiddenParameter||chr(39)||', this)"/>');
+				htp.prn('<input type="checkbox" id="' ||ids(i)|| '" value="' ||ids(i)||'" onchange="updateHiddenInput('||chr(39)||hiddenParameter||chr(39)||', this)"/>');
 				htp.prn('<label for="'|| ids(i) ||'">'|| names(i) ||'</label>');
 			gui.chiudiDiv();
 		end loop;
@@ -482,7 +501,7 @@ END aggiungiSelezioneMultipla;
 
 	procedure chiudiForm IS
 	BEGIN
-		gui.CHIUDIDIV;
+		gui.CHIUDIDIV; --form-container
 		htp.prn ('</form>'); 
 	END chiudiForm; 
 
@@ -492,8 +511,7 @@ procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCH
 BEGIN
 	htp.prn('<input 
 		class="'||classe||'" 
-		type="'||tipo||'"
-		id ="'||ident||'" 
+		type="'||tipo||'" 
 		name="'|| nome ||'" 
 		placeholder="'||placeholder||'" 
 		value="'||value||'"
@@ -502,6 +520,10 @@ BEGIN
 
 	if required then 
 		htp.prn(' required ');
+	end if;
+
+	if ident is not null then
+		htp.prn('id ="'||ident||'"');
 	end if;
 
 	if step IS NOT NULL THEN
@@ -546,29 +568,31 @@ BEGIN
 		htp.prn ('<i class="'||classe||'"></i>'); 
 	end aggiungiIcona; 
 
-	procedure aggiungiCampoForm (tipo VARCHAR2 default 'text', classeIcona VARCHAR2 default '', nome VARCHAR2, placeholder VARCHAR2 default '') IS
+	procedure aggiungiCampoForm (tipo VARCHAR2 default 'text', classeIcona VARCHAR2 default '',
+	nome VARCHAR2, required BOOLEAN default true, ident VARCHAR2 default '', placeholder VARCHAR2 default '',
+	value VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '', readonly boolean default False, selected boolean default false, step varchar default null) IS
 	begin
 
-		if tipo = 'text'
-		then
-			gui.APRIDIV (classe => 'input-group input-group-icon');    
+	if tipo = 'text'
+	then
+		gui.APRIDIV (classe => 'input-group input-group-icon');    
 
-					gui.aggiungiInput (nome => nome, placeholder => placeholder, required => true, classe => '');
-					gui.apriDiv (classe => 'input-icon'); 
-						gui.aggiungiIcona(classe => classeIcona); 
-					gui.chiudiDiv; 
+                gui.aggiungiInput(nome => nome, placeholder => placeholder, required => required, ident => ident, classe => '', value => value, pattern => pattern, minimo => minimo, massimo => massimo, readonly => readonly, selected => selected, step => step);
+                gui.apriDiv (classe => 'input-icon'); 
+                    gui.aggiungiIcona(classe => classeIcona); 
+                gui.chiudiDiv; 
 
 		gui.chiudiDiv; 
 		else
 			gui.APRIDIV (classe => 'input-group input-group-icon');     
 
-					gui.aggiungiInput (tipo => tipo, nome => nome, placeholder => placeholder, required => true, classe => '');
-					gui.apriDiv (classe => 'input-icon'); 
-						gui.aggiungiIcona(classe => classeIcona); 
-					gui.chiudiDiv; 
+                gui.aggiungiInput (tipo => tipo, nome => nome, placeholder => placeholder, required => required, ident => ident, classe => '');
+                gui.apriDiv (classe => 'input-icon'); 
+                    gui.aggiungiIcona(classe => classeIcona); 
+                gui.chiudiDiv; 
 
-		gui.chiudiDiv; 
-		end if;  
+ 	gui.chiudiDiv; 
+	end if;  
 
 	end aggiungiCampoForm;	
 
@@ -616,20 +640,8 @@ end chiudiElementoPulsanti;
 		END LOOP;
 	end aCapo;
 
-	procedure aggiungiFrecceTabella is
-	begin
-		apridiv(classe=>'arrows-container');
-			apriDiv(classe=>'table-arrow rotate', onclick => 'updatePagination(-5, this.parentNode.parentNode)');--||CHR(39)||'back'||CHR(39)||
-				htp.prn('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M7.293 4.707 14.586 12l-7.293 7.293 1.414 1.414L17.414 12 8.707 3.293 7.293 4.707z"/></svg>');
-			chiudiDiv;
-			apriDiv(classe=>'table-arrow', onclick => 'updatePagination(5, this.parentNode.parentNode)');
-				htp.prn('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M7.293 4.707 14.586 12l-7.293 7.293 1.414 1.414L17.414 12 8.707 3.293 7.293 4.707z"/></svg>');
-			chiudiDiv;
-		chiudiDiv;
-	end aggiungiFrecceTabella;
 
-
-	procedure HomePage(p_success varchar2 default ' ', cEmail VARCHAR2 default null, p_password varchar2 default null, tipo_utente varchar2 default null) is
+	procedure HomePage(p_success varchar2 default ' ', cEmail VARCHAR2 default null, p_password varchar2 default null, tipo_utente varchar2 default null, idSessione varchar default '-1') is
 		idSess int;
 		ruolo varchar(2);
 		n_ruolo int;
@@ -658,34 +670,40 @@ end chiudiElementoPulsanti;
 			end if;
 
 			if((cEmail is null or p_password is null) and  p_success <> 'S') then
-                --gui.ApriFormFiltro('http://131.114.73.203:8080/apex/l_ceccotti.gui.homePage');
-                gui.aggiungiForm(url=> 'http://131.114.73.203:8080/apex/l_ceccotti.gui.homePage');
+                gui.aggiungiForm(url=> costanti.user_root||'.gui.homePage');
 					gui.AGGIUNGIINTESTAZIONE('Inserisci email e password', 'h2');
 					gui.aggiungiGruppoInput;
-						gui.aggiungiCampoForm('email', 'fa fa-envelope', 'cEmail', 'Email');
+						gui.aggiungiCampoForm('email', 'fa fa-envelope', 'cEmail', true, '', 'Email');
 						--gui.AggiungiLabel('','');
-						gui.aggiungiCampoForm('password', 'fa fa-key', 'p_password', 'Password');
+						gui.aggiungiCampoForm('password', 'fa fa-key', 'p_password',true, '', 'Password');
 					gui.chiudiGruppoInput;
 				
 					
-					gui.APRIDIV (classe => 'col-half'); 
-						gui.AGGIUNGIGRUPPOINPUT; 
-							gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'tipo_cliente', tipo => 'radio', value => 'D', selected => true);
-							gui.AGGIUNGILABEL (target => 'tipo_cliente', testo => 'Dipendente');  
-							gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'tipo_dipendente', tipo => 'radio', value => 'C');
-							gui.AGGIUNGILABEL (target => 'tipo_dipendente', testo => 'Cliente'); 
-						gui.CHIUDIGRUPPOINPUT;  
-					gui.CHIUDIDIV;
+                			--gui.aggiungiIntestazione(testo => '', dimensione => 'h4');
+							gui.apriDiv(classe => 'row');
+							gui.AGGIUNGIGRUPPOINPUT; 
+								gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'cliente', tipo => 'radio', value => '00');
+								gui.AGGIUNGILABEL (target => 'cliente', testo => 'Cliente');
+								gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'autista', tipo => 'radio', value => '02', selected => true);
+								gui.AGGIUNGILABEL (target => 'autista', testo => 'Autista');
+								gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'operatore', tipo => 'radio', value => 'O1');
+								gui.AGGIUNGILABEL (target => 'operatore', testo => 'Operatore');
+								gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'menager', tipo => 'radio', value => 'O3');
+								gui.AGGIUNGILABEL (target => 'menager', testo => 'Manager');
+								gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'contabile', tipo => 'radio', value => 'O4');
+								gui.AGGIUNGILABEL (target => 'contabile', testo => 'Contabile');
+							gui.CHIUDIGRUPPOINPUT;  
+							gui.chiudiDiv;
 
-				
 					gui.aggiungiGruppoInput;
-							gui.aggiungiBottoneSubmit('Accedi');
-						gui.chiudiGruppoInput;
+						gui.aggiungiBottoneSubmit('Accedi');
+					gui.chiudiGruppoInput;
+
 			gui.chiudiForm;
 				
             elsif p_success <> 'S' then
 
-				if tipo_utente is null then 
+				if tipo_utente is null then -- in caso non venga scelto nessun ruolo per l'autenticazione 
 					gui.reindirizza(costanti.user_root||'gui.homePage?p_success=L');
 				end if;
 
@@ -716,3 +734,4 @@ end chiudiElementoPulsanti;
 
 end gui;
 
+--tipo VARCHAR2 default 'text', classeIcona VARCHAR2 default '', nome VARCHAR2, required BOOLEAN default true, ident VARCHAR2 default '', placeholder VARCHAR2 default '',tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '', placeholder VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '', readonly boolean default False, selected boolean default false, step varchar default null

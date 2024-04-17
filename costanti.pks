@@ -1,7 +1,7 @@
 SET DEFINE OFF;
 create or replace PACKAGE costanti as
 
-user_root CONSTANT VARCHAR(100) := 'http://131.114.73.203:8080/apex/l_ceccotti.';
+  user_root CONSTANT VARCHAR(100) := 'http://131.114.73.203:8080/apex/g_giannessi.';
 
   tableSortScript CONSTANT VARCHAR2(32767) := '
   var lastSortedTH;
@@ -35,62 +35,6 @@ user_root CONSTANT VARCHAR(100) := 'http://131.114.73.203:8080/apex/l_ceccotti.'
       .sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
       .forEach(tr => table.appendChild(tr) );
   })));
-  Array.from(table.querySelectorAll("tr:nth-child(n+2)"))
-    .sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
-    .forEach(tr => table.appendChild(tr) );
-})));
-
-document.querySelectorAll(".tab").forEach(tab => {
-  
-  let tabRows = tab.querySelectorAll("tr");
-
-  for(let i= 14; i < tabRows.length; i++){
-    tabRows[i].style.display = "none";
-  }
-
-});
-
-
-function updatePagination(direction, tableContainer){
-
-  let tab = tableContainer.querySelector(".tab");
-
-  let tabRows = tab.querySelectorAll("tr");
-
-  //Trovo inizio 0 0 0 0 0 0
-  //            pos   (pos+4)
-  let pos = 6;
-  for(let i=1; i<tabRows.length; i++) 
-    if(tabRows[i].style.display == ""){
-      pos = i;
-      break;
-    }
-  console.log(pos);
-
-  if(direction > 0){
-    if(pos + direction*2 > tabRows.length){
-      direction = tabRows.length - (pos + direction);
-    }else if (pos + direction == tabRows.length) direction = 0 ;
-
-    for(let i=pos; i < pos+direction && i < tabRows.length ; i++) {
-      tabRows[direction+i-1].style.display = "";
-      tabRows[i].style.display = "none";
-    }
-  
-  }else{
-
-    if(pos + direction < 1) return;
-
-    for(let i=pos; i < pos-direction; i++) {
-      tabRows[pos+direction+(i-pos)].style.display = "";
-      tabRows[i].style.display = "none";
-    }
-
-  }
-
-
-}
-
 
 ';
 
@@ -303,7 +247,7 @@ a{
 .bottoniDestra {
   display: flex; /* Make the wrapper a flexbox container */
   flex-shrink: 0; /* Prevent wrapper from shrinking */
-  padding-right: 10px;
+  padding-right: 10px;  
 }
 
   /* CSS */
@@ -608,6 +552,7 @@ body{
       -o-transition: 0.35s ease-in-out;
       transition: 0.35s ease-in-out;
       transition: all 0.35s ease-in-out;
+      color: #000000;
     }
 
     input[type="radio"] {
@@ -668,33 +613,34 @@ body{
       content: "";
     }
 
-  input[type="checkbox"] + label:after {
-    position: absolute;
-    top: 0.45em;
-    left: 0.2em;
-    font-size: 0.8em;
-    color: #fff;
-    opacity: 0;
-  }
+    input[type="checkbox"] + label:after {
+      position: absolute;
+      top: 0.45em;
+      left: 0.2em;
+      font-size: 0.8em;
+      color: #fff;
+      opacity: 0;
+    }
 
     input[type=submit]{
         height: 100%;
         width: 30%;
         margin: 0px;
-        border-radius: 0px 5px 5px 0px;
+        border-radius: 5px 5px 5px 5px;
         background-color: #f0d685;
         font-size : large; 
         font-weight: bold;  
       }
 
-      input[type=submit]:hover {
-        height: 100%;
-        width: 30%;
-        margin: 0px;
-        border-radius: 0px 5px 5px 0px;
-        background-color: #cfab3a;
-        font-size: large;
-      } 
+  input[type=submit]:hover {
+    height: 100%;
+    width: 30%;
+    margin: 0px;
+    border-radius: 5px 5px 5px 5px;
+    background-color: #cfab3a;
+    font-size: large;
+  }
+} 
 
     input:checked + label:after {
       opacity: 1;
@@ -798,6 +744,15 @@ body{
     margin-right: 10px; /* Aggiungo lo spazio tra i radio button se necessario */
   }
 
+  .row .input-group {
+    display: flex;
+    align-items: center;
+  }
+
+  .row {
+    /**/
+  }
+
   .col-half {
     float: left;  
     width: 50%;
@@ -814,12 +769,15 @@ body{
   .col-third:last-of-type {
     padding-right: 0;
   }
+
   @media only screen and (max-width: 540px) {
     .col-half {
       width: 100%;
       padding-right: 0;
     }
   }
+
+
   /* FOOTER */
   #footer {
     display: flex;
@@ -933,7 +891,7 @@ body{
   }
 
   .topbardropdown-content {
-    overflow: hidden;
+   /* overflow: hidden;*/
     display: none;
     position: absolute;
     background-color: #f9f9f9;
@@ -944,8 +902,14 @@ body{
     border: 1px solid #ddd;
     z-index: 1;
     cursor: pointer;
+    transition: opacity 0.5 ease, transform 0.5s ease;
+    opacity: 0;
+    transform: translateY(-10px); 
+    transition: opacity 0.5s ease, transform 0.5s ease; 
 
     span{
+      background-color: black; 
+      color : white; 
       width: auto;
       float: none;
       padding: 12px 16px;
@@ -955,24 +919,28 @@ body{
 
     span:hover{
       background-color: #f0d5856b;
+      color: black; 
     }
   }
 
   .topbar-dropdown:hover .topbardropdown-content{
     display:block;
-  }
-
+    opacity: 1;
+    transform: translateY(0);
+    }
 
   /* DROPDOWN */
+
 
   .dropdown {
     position: relative;
 
     select {
-      width: 100%;
-      height: 100%;
-      border: none;
-      background-color: transparent;
+      width: 50%;
+      line-height: 1.4;
+      border: 1px solid #e5e5e5;
+      border-radius: 3px;
+      background-color: #f9f9f9;
       padding: 10px;
       margin: 0;
       box-sizing: border-box;
@@ -986,11 +954,12 @@ body{
   }
 
   .dropbtn {
-    width: 101px;
+    width: 50%;
     padding: 10px;
     box-sizing: border-box;
-    background-color: #000000;
-    border: none;
+    background-color: #f9f9f9;
+    border: 1px solid #e5e5e5;
+    border-radius: 3px;
     cursor: pointer;
     color: #FFFFFF;
     font-size: 10px;
@@ -1007,12 +976,14 @@ body{
     top: 100%;
     overflow: scroll;
     left: 0;
-    width: 100px;
+    width: 50%;
     z-index: 1;
     display: none;
     background-color: #f1f1f1;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    border: 1px solid #ddd;
+    border: 1px solid;
+    border-radius: 3px;
+    border-color: #bd8200;
 
     
     option {
@@ -1063,7 +1034,7 @@ body{
     height: 0;
     border-left: 6px solid transparent;
     border-right: 6px solid transparent;
-    border-top: 6px solid #fff;
+    border-top: 6px solid #4f4f4f;
     transform: rotate(-90deg);
     transition: transform 0.3s;
   }
@@ -1194,6 +1165,22 @@ body{
     to {
       transform: translateX(200%);
     }
+  }
+
+  .datatable-table th button{
+    background-color: transparent;
+  }
+
+  .datatable-table > tbody > tr > td{
+    vertical-align: baseline !important;
+    padding: 0px !important;
+  }
+
+  .datatable-table > thead > tr > th{
+    vertical-align: middle !important;
+    padding: 0px !important;
+    border-bottom: inherit;
+    text-align:center;
   }
 
 ';
