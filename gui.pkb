@@ -225,9 +225,9 @@ begin
 		END dropdowntopbar;
 
 	-- Procedura Tabella senza filtro provvisoria
-	procedure ApriTabella(elementi StringArray default emptyArray) is
+	procedure ApriTabella(elementi StringArray default emptyArray, ident varchar2 default null) is
 	begin
-		htp.prn('<table id="table" class="tab"> ');
+		htp.prn('<table id="table'||ident||'" class="tab"> ');
 		htp.prn('<thead>');
 		htp.prn('<tr>');
 		for i in 1..elementi.count loop
@@ -239,13 +239,13 @@ begin
 		htp.prn('<tbody>');
 	end ApriTabella;
 
-	procedure ChiudiTabella IS
+	procedure ChiudiTabella(ident varchar2 default null) IS
 	BEGIN
 		htp.prn('</tbody>');
 		htp.prn('</table>');
 
 		htp.prn('<script>');
-		htp.prn('const dataTable = new simpleDatatables.DataTable("#table", {
+		htp.prn('const dataTable = new simpleDatatables.DataTable("#table'||ident||'", {
             responsive: true,
 			sortable:false,
             searchable: false,
@@ -568,14 +568,16 @@ BEGIN
 		htp.prn ('<i class="'||classe||'"></i>'); 
 	end aggiungiIcona; 
 
-	procedure aggiungiCampoForm (tipo VARCHAR2 default 'text', classeIcona VARCHAR2 default '', nome VARCHAR2, required BOOLEAN default true, ident VARCHAR2 default '', placeholder VARCHAR2 default '') IS
+	procedure aggiungiCampoForm (tipo VARCHAR2 default 'text', classeIcona VARCHAR2 default '',
+	nome VARCHAR2, required BOOLEAN default true, ident VARCHAR2 default '', placeholder VARCHAR2 default '',
+	value VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '', readonly boolean default False, selected boolean default false, step varchar default null) IS
 	begin
 
 	if tipo = 'text'
 	then
 		gui.APRIDIV (classe => 'input-group input-group-icon');    
 
-                gui.aggiungiInput (nome => nome, placeholder => placeholder, required => required, ident => ident, classe => '');
+                gui.aggiungiInput(nome => nome, placeholder => placeholder, required => required, ident => ident, classe => '', value => value, pattern => pattern, minimo => minimo, massimo => massimo, readonly => readonly, selected => selected, step => step);
                 gui.apriDiv (classe => 'input-icon'); 
                     gui.aggiungiIcona(classe => classeIcona); 
                 gui.chiudiDiv; 
@@ -731,4 +733,6 @@ end chiudiElementoPulsanti;
 	end LogOut;
 
 end gui;
+
+--tipo VARCHAR2 default 'text', classeIcona VARCHAR2 default '', nome VARCHAR2, required BOOLEAN default true, ident VARCHAR2 default '', placeholder VARCHAR2 default '',tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '', placeholder VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '', readonly boolean default False, selected boolean default false, step varchar default null
 

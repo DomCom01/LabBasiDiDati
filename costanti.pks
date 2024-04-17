@@ -1176,5 +1176,12 @@ body{
     padding: 0px !important;
   }
 
+  .datatable-table > thead > tr > th{
+    vertical-align: middle !important;
+    padding: 0px !important;
+    border-bottom: inherit;
+    text-align:center;
+  }
+
 ';
 end costanti;
