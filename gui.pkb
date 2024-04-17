@@ -155,16 +155,8 @@ begin
 				gui.chiudiDiv();
 			gui.chiudiDiv();
 
-			gui.apriDiv(classe => 'topbar-dropdown');
-				gui.BottoneTopBar(testo => 'Gruppo 3');
-				gui.apriDiv(ident => 'topbardropdown-content', classe => 'topbardropdown-content');
-					for i in 1..3 loop
-						gui.indirizzo('Link1');
-							htp.prn('<span>Link1</span>');
-						gui.chiudiIndirizzo;
-					end loop;
-				gui.chiudiDiv();
-			gui.chiudiDiv();
+			gui.dropdowntopbar(titolo => 'gruppo 3', names => gui.StringArray('Registrazione', 'Visualizza Profilo', 'Associa convenzione'),
+			proceduresNames => gui.StringArray ('operazioniClienti.registrazioneCliente', 'operazioniClienti.visualizzaProfilo', '#')); 
 
 			gui.apriDiv(classe => 'topbar-dropdown');
 				gui.BottoneTopBar(testo => 'Gruppo 4');
@@ -210,10 +202,32 @@ begin
 		gui.ChiudiDiv();
 	end TopBar;
 
+	procedure dropdowntopbar (
+		titolo varchar2 default 'esempio', 
+		names stringarray default emptyarray,
+		proceduresNames stringarray default emptyarray
+	)IS
+	BEGIN
+		if names.count = proceduresNames.count then 
+			gui.apriDiv(classe => 'topbar-dropdown');
+				gui.BottoneTopBar(testo => titolo);
+				gui.apriDiv(ident => 'topbardropdown-content', classe => 'topbardropdown-content');
+					for i in 1..names.count  loop
+						gui.indirizzo(''||costanti.user_root || proceduresNames(i)||''); --da rivedere
+							htp.prn('<span>'||names(i)||'</span>');
+						gui.chiudiIndirizzo;
+					end loop;
+				gui.chiudiDiv();
+			gui.chiudiDiv();
+		end if; 
+		
+
+		END dropdowntopbar;
+
 	-- Procedura Tabella senza filtro provvisoria
-	procedure ApriTabella(elementi StringArray default emptyArray) is
+	procedure ApriTabella(elementi StringArray default emptyArray, ident varchar2 default null) is
 	begin
-		htp.prn('<table id="table" class="tab"> ');
+		htp.prn('<table id="table'||ident||'" class="tab"> ');
 		htp.prn('<thead>');
 		htp.prn('<tr>');
 		for i in 1..elementi.count loop
@@ -225,13 +239,13 @@ begin
 		htp.prn('<tbody>');
 	end ApriTabella;
 
-	procedure ChiudiTabella IS
+	procedure ChiudiTabella(ident varchar2 default null) IS
 	BEGIN
 		htp.prn('</tbody>');
 		htp.prn('</table>');
 
 		htp.prn('<script>');
-		htp.prn('const dataTable = new simpleDatatables.DataTable("#table", {
+		htp.prn('const dataTable'||ident||' = new simpleDatatables.DataTable("#table'||ident||'", {
             responsive: true,
 			sortable:false,
             searchable: false,
@@ -241,6 +255,7 @@ begin
             fixedHeight: true
         });');
 		htp.prn('</script>');
+
 	end ChiudiTabella;
 
 	procedure AggiungiRigaTabella IS
@@ -318,7 +333,8 @@ END AggiungiPulsanteGenerale;
 	begin
 		htp.prn('<td> <div class="formField">
 					<label id="'||nome||'">'||placeholder||'</label>
-					<select name="'|| nome ||'"> ');
+					<select name="'|| nome ||'">
+					<option value=""></option>');
 	end ApriSelectFormFiltro;
 
 	procedure AggiungiOpzioneSelect(value VARCHAR2, selected BOOLEAN, testo VARCHAR2 default '') as
@@ -359,7 +375,7 @@ END AggiungiPulsanteGenerale;
 				
 				for i in 1..ids.count loop
 					gui.apriDiv(ident => 'option');
-						htp.prn('<input type="checkbox" name="'|| names(i) ||'id="' ||ids(i)|| '" value="' ||ids(i)||'" onchange="updateHiddenInput('||chr(39)||hiddenParameter||chr(39)||', this)"/>');
+						htp.prn('<input type="checkbox" name="'|| names(i) ||'"id="' ||ids(i)|| '" value="' ||ids(i)||'" onchange="updateHiddenInput('||chr(39)||hiddenParameter||chr(39)||', this)"/>');
 						htp.prn('<label for="'||ids(i)||'">'|| names(i) ||'</label>');
 					gui.chiudiDiv();
 				end loop;
@@ -402,6 +418,7 @@ END AggiungiPulsanteGenerale;
 	BEGIN
 		htp.prn('<label for="'||ident||'">'||titolo||'</label><br>');
 		htp.prn('<select id="'||ident||'" name="'||ident||'">');
+		htp.prn('<option value=""></option>');
 		if valoreEffettivo is null THEN
 			for elem in elementi.FIRST..elementi.LAST
 			LOOP
@@ -487,7 +504,7 @@ END aggiungiSelezioneMultipla;
 
 	procedure chiudiForm IS
 	BEGIN
-		gui.CHIUDIDIV;
+		gui.CHIUDIDIV; --form-container
 		htp.prn ('</form>'); 
 	END chiudiForm; 
 
@@ -554,29 +571,31 @@ BEGIN
 		htp.prn ('<i class="'||classe||'"></i>'); 
 	end aggiungiIcona; 
 
-	procedure aggiungiCampoForm (tipo VARCHAR2 default 'text', classeIcona VARCHAR2 default '', nome VARCHAR2, placeholder VARCHAR2 default '') IS
+	procedure aggiungiCampoForm (tipo VARCHAR2 default 'text', classeIcona VARCHAR2 default '',
+	nome VARCHAR2, required BOOLEAN default true, ident VARCHAR2 default '', placeholder VARCHAR2 default '',
+	value VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '', readonly boolean default False, selected boolean default false, step varchar default null) IS
 	begin
 
-		if tipo = 'text'
-		then
-			gui.APRIDIV (classe => 'input-group input-group-icon');    
+	if tipo = 'text'
+	then
+		gui.APRIDIV (classe => 'input-group input-group-icon');    
 
-					gui.aggiungiInput (nome => nome, placeholder => placeholder, required => true, classe => '');
-					gui.apriDiv (classe => 'input-icon'); 
-						gui.aggiungiIcona(classe => classeIcona); 
-					gui.chiudiDiv; 
+                gui.aggiungiInput(nome => nome, placeholder => placeholder, required => required, ident => ident, classe => '', value => value, pattern => pattern, minimo => minimo, massimo => massimo, readonly => readonly, selected => selected, step => step);
+                gui.apriDiv (classe => 'input-icon'); 
+                    gui.aggiungiIcona(classe => classeIcona); 
+                gui.chiudiDiv; 
 
 		gui.chiudiDiv; 
 		else
 			gui.APRIDIV (classe => 'input-group input-group-icon');     
 
-					gui.aggiungiInput (tipo => tipo, nome => nome, placeholder => placeholder, required => true, classe => '');
-					gui.apriDiv (classe => 'input-icon'); 
-						gui.aggiungiIcona(classe => classeIcona); 
-					gui.chiudiDiv; 
+                gui.aggiungiInput (tipo => tipo, nome => nome, placeholder => placeholder, required => required, ident => ident, classe => '');
+                gui.apriDiv (classe => 'input-icon'); 
+                    gui.aggiungiIcona(classe => classeIcona); 
+                gui.chiudiDiv; 
 
-		gui.chiudiDiv; 
-		end if;  
+ 	gui.chiudiDiv; 
+	end if;  
 
 	end aggiungiCampoForm;	
 
@@ -657,9 +676,9 @@ end chiudiElementoPulsanti;
                 gui.aggiungiForm(url=> costanti.user_root||'gui.homePage');
 					gui.AGGIUNGIINTESTAZIONE('Inserisci email e password', 'h2');
 					gui.aggiungiGruppoInput;
-						gui.aggiungiCampoForm('email', 'fa fa-envelope', 'cEmail', 'Email');
+						gui.aggiungiCampoForm('email', 'fa fa-envelope', 'cEmail', true, '', 'Email');
 						--gui.AggiungiLabel('','');
-						gui.aggiungiCampoForm('password', 'fa fa-key', 'p_password', 'Password');
+						gui.aggiungiCampoForm('password', 'fa fa-key', 'p_password',true, '', 'Password');
 					gui.chiudiGruppoInput;
 				
 					
@@ -687,7 +706,7 @@ end chiudiElementoPulsanti;
 				
             elsif p_success <> 'S' then
 
-				if tipo_utente is null then 
+				if tipo_utente is null then -- in caso non venga scelto nessun ruolo per l'autenticazione 
 					gui.reindirizza(costanti.user_root||'gui.homePage?p_success=L');
 				end if;
 
@@ -717,4 +736,5 @@ end chiudiElementoPulsanti;
 	end LogOut;
 
 end gui;
+--tipo VARCHAR2 default 'text', classeIcona VARCHAR2 default '', nome VARCHAR2, required BOOLEAN default true, ident VARCHAR2 default '', placeholder VARCHAR2 default '',tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '', placeholder VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '', readonly boolean default False, selected boolean default false, step varchar default null
 
