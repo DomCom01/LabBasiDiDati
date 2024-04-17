@@ -243,6 +243,19 @@ begin
 	BEGIN
 		htp.prn('</tbody>');
 		htp.prn('</table>');
+
+		htp.prn('<script>');
+		htp.prn('const dataTable'||ident||' = new simpleDatatables.DataTable("#table'||ident||'", {
+            responsive: true,
+			sortable:false,
+            searchable: false,
+            searchQuerySeparator: ",",
+            paging: true,
+            locale: "it",
+            fixedHeight: true
+        });');
+		htp.prn('</script>');
+
 	end ChiudiTabella;
 
 	procedure AggiungiRigaTabella IS
