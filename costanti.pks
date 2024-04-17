@@ -1,7 +1,7 @@
 SET DEFINE OFF;
 create or replace PACKAGE costanti as
 
-user_root CONSTANT VARCHAR(100) := 'http://131.114.73.203:8080/apex/l_ceccotti.';
+user_root CONSTANT VARCHAR(100) := 'http://131.114.73.203:8080/apex/d_commiso.';
 
   tableSortScript CONSTANT VARCHAR2(32767) := '
   var lastSortedTH;
@@ -125,7 +125,7 @@ function mostraConferma(riga, url) {
         var nuovaCella = nuovaRiga.insertCell(0);
         nuovaCella.colSpan = riga.cells.length; //Non funziona
         
-        nuovaCella.innerHTML = "Sicuro di voler cancellare? " + 
+        nuovaCella.innerHTML = "Confermi? " + 
                                 "<button onclick=\"apriURL('" + url + "')\">Sì</button> " + 
                                 "<button onclick=\"annullaEliminazione(this.parentNode.parentNode)\">No</button>";
         
@@ -626,7 +626,7 @@ body{
         height: 100%;
         width: 30%;
         margin: 0px;
-        border-radius: 0px 5px 5px 0px;
+        border-radius: 5px 5px 5px 5px;
         background-color: #f0d685;
         font-size : large; 
         font-weight: bold;  

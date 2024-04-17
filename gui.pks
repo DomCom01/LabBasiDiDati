@@ -42,9 +42,9 @@ Per aggiungere i pulsanti seguire questo pattern qui:
 	ChiudiElementoPulsanti
 */
 procedure apriElementoPulsanti;
-procedure AggiungiPulsanteCancellazione(collegamento VARCHAR2 default '');
+procedure AggiungiPulsanteCancellazione(collegamento VARCHAR2 default '');/*  '''collegamento'''  */
 procedure AggiungiPulsanteModifica(collegamento VARCHAR2 default '');
-procedure AggiungiPulsanteGenerale(collegamento VARCHAR2 DEFAULT '', testo VARCHAR2);
+procedure AggiungiPulsanteGenerale(collegamento VARCHAR2 DEFAULT '', testo VARCHAR2);/*  '''collegamento'''  */
 procedure chiudiElementoPulsanti;
 
 procedure ChiudiTabella;

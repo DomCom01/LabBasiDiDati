@@ -19,7 +19,7 @@ begin
 			 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>');
 	htp.print('<style> ' || costanti.stile || '</style>');
 	htp.print('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-'); /*FONTAwesome*/
+		'); /*FONTAwesome*/
 	htp.print('<script type="text/javascript">' || costanti.scriptjs || CHR(10) || scriptJS || CHR(10)|| costanti.dropdownScript || '</script>'); -- Aggiunto script di base
 	htp.headClose; 
 	gui.ApriBody(idSessione);
@@ -272,7 +272,7 @@ END AggiungiPulsanteCancellazione;
 
 procedure AggiungiPulsanteGenerale(collegamento VARCHAR2 DEFAULT '', testo VARCHAR2) IS
 BEGIN
-    htp.prn('<button onclick="mostraConfermaGenerale(this.parentNode.parentNode, '||collegamento||')">
+    htp.prn('<button onclick="mostraConferma(this.parentNode.parentNode, '||collegamento||')">
     '||testo||'
     </button>');
 END AggiungiPulsanteGenerale;
@@ -654,7 +654,7 @@ end chiudiElementoPulsanti;
 			end if;
 
 			if((cEmail is null or p_password is null) and  p_success <> 'S') then
-                gui.aggiungiForm(url=> costanti.user_root||'.gui.homePage');
+                gui.aggiungiForm(url=> costanti.user_root||'gui.homePage');
 					gui.AGGIUNGIINTESTAZIONE('Inserisci email e password', 'h2');
 					gui.aggiungiGruppoInput;
 						gui.aggiungiCampoForm('email', 'fa fa-envelope', 'cEmail', 'Email');
