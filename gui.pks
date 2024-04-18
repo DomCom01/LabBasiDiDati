@@ -1,4 +1,3 @@
-
 SET DEFINE OFF;
 
 create or replace PACKAGE gui as
@@ -8,6 +7,9 @@ type StringArray is table of varchar2(100) not null;
 emptyArray StringArray;
 
 procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione VARCHAR default '-1',  scriptJS VARCHAR2 default '');
+
+	procedure indirizzo(indirizzo VARCHAR2 default '');
+	procedure chiudiIndirizzo;
 
 	procedure reindirizza (
 		indirizzo varchar2
@@ -65,7 +67,8 @@ procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione VARCHAR 
 -- Procedure per Tabella
 /*ApriTabella ora contiene apri header, aggiungi header, chiudi header e apri body*/
 	procedure apritabella (
-		elementi stringarray default emptyarray
+		elementi stringarray default emptyarray,
+		ident varchar2 default null
 	);
 	procedure aggiungirigatabella;
 	procedure chiudirigatabella;
@@ -81,12 +84,14 @@ Per aggiungere i pulsanti seguire questo pattern qui:
 	ChiudiElementoPulsanti
 */
 procedure apriElementoPulsanti;
-procedure AggiungiPulsanteCancellazione(collegamento VARCHAR2 default '');
+procedure AggiungiPulsanteCancellazione(collegamento VARCHAR2 default '');/*  '''collegamento'''  */
 procedure AggiungiPulsanteModifica(collegamento VARCHAR2 default '');
-procedure AggiungiPulsanteGenerale(collegamento VARCHAR2 DEFAULT '', testo VARCHAR2);
+procedure AggiungiPulsanteGenerale(collegamento VARCHAR2 DEFAULT '', testo VARCHAR2);/*  '''collegamento'''  */
 procedure chiudiElementoPulsanti;
 
-	procedure chiuditabella;
+	procedure ChiudiTabella(
+		ident varchar2 default null
+	);
 
 
 --procedure per Filtro Tabella
@@ -156,7 +161,9 @@ procedure aggiungiIcona (classe VARCHAR2 default '');
 PROCEDURE aggiungiGruppoInput; --Delimita i campi di input del form
 procedure chiudiGruppoInput; 
 
-procedure aggiungiCampoForm (tipo VARCHAR2 default 'text', classeIcona VARCHAR2 default '', nome VARCHAR2,required BOOLEAN default true, ident VARCHAR2 default '', placeholder VARCHAR2 default '');
+procedure aggiungiCampoForm (tipo VARCHAR2 default 'text', classeIcona VARCHAR2 default '',
+	nome VARCHAR2, required BOOLEAN default true, ident VARCHAR2 default '', placeholder VARCHAR2 default '',
+	value VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '', readonly boolean default False, selected boolean default false, step varchar default null);
 procedure aggiungiSelezioneSingola(elementi StringArray, valoreEffettivo StringArray default null, titolo varchar2 default '', ident varchar2);
 procedure aggiungiSelezioneMultipla(testo VARCHAR2 default 'testo', placeholder VARCHAR2 default 'testo', ids stringArray default emptyArray ,names stringArray default emptyArray, hiddenParameter varchar2 default '');
 

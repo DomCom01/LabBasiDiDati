@@ -19,7 +19,7 @@ begin
 			 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>');
 	htp.print('<style> ' || costanti.stile || '</style>');
 	htp.print('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-'); /*FONTAwesome*/
+		'); /*FONTAwesome*/
 	htp.print('<script type="text/javascript">' || costanti.scriptjs || CHR(10) || scriptJS || CHR(10)|| costanti.dropdownScript || '</script>'); -- Aggiunto script di base
 	htp.headClose; 
 	gui.ApriBody(idSessione);
@@ -225,9 +225,9 @@ begin
 		END dropdowntopbar;
 
 	-- Procedura Tabella senza filtro provvisoria
-	procedure ApriTabella(elementi StringArray default emptyArray) is
+	procedure ApriTabella(elementi StringArray default emptyArray, ident varchar2 default null) is
 	begin
-		htp.prn('<table id="table" class="tab"> ');
+		htp.prn('<table id="table'||ident||'" class="tab"> ');
 		htp.prn('<thead>');
 		htp.prn('<tr>');
 		for i in 1..elementi.count loop
@@ -239,13 +239,13 @@ begin
 		htp.prn('<tbody>');
 	end ApriTabella;
 
-	procedure ChiudiTabella IS
+	procedure ChiudiTabella(ident varchar2 default null) IS
 	BEGIN
 		htp.prn('</tbody>');
 		htp.prn('</table>');
 
 		htp.prn('<script>');
-		htp.prn('const dataTable = new simpleDatatables.DataTable("#table", {
+		htp.prn('const dataTable'||ident||' = new simpleDatatables.DataTable("#table'||ident||'", {
             responsive: true,
 			sortable:false,
             searchable: false,
@@ -255,6 +255,7 @@ begin
             fixedHeight: true
         });');
 		htp.prn('</script>');
+
 	end ChiudiTabella;
 
 	procedure AggiungiRigaTabella IS
@@ -286,7 +287,7 @@ END AggiungiPulsanteCancellazione;
 
 procedure AggiungiPulsanteGenerale(collegamento VARCHAR2 DEFAULT '', testo VARCHAR2) IS
 BEGIN
-    htp.prn('<button onclick="mostraConfermaGenerale(this.parentNode.parentNode, '||collegamento||')">
+    htp.prn('<button onclick="mostraConferma(this.parentNode.parentNode, '||collegamento||')">
     '||testo||'
     </button>');
 END AggiungiPulsanteGenerale;
@@ -332,7 +333,8 @@ END AggiungiPulsanteGenerale;
 	begin
 		htp.prn('<td> <div class="formField">
 					<label id="'||nome||'">'||placeholder||'</label>
-					<select name="'|| nome ||'"> ');
+					<select name="'|| nome ||'">
+					<option value=""></option>');
 	end ApriSelectFormFiltro;
 
 	procedure AggiungiOpzioneSelect(value VARCHAR2, selected BOOLEAN, testo VARCHAR2 default '') as
@@ -416,6 +418,7 @@ END AggiungiPulsanteGenerale;
 	BEGIN
 		htp.prn('<label for="'||ident||'">'||titolo||'</label><br>');
 		htp.prn('<select id="'||ident||'" name="'||ident||'">');
+		htp.prn('<option value=""></option>');
 		if valoreEffettivo is null THEN
 			for elem in elementi.FIRST..elementi.LAST
 			LOOP
@@ -568,14 +571,16 @@ BEGIN
 		htp.prn ('<i class="'||classe||'"></i>'); 
 	end aggiungiIcona; 
 
-	procedure aggiungiCampoForm (tipo VARCHAR2 default 'text', classeIcona VARCHAR2 default '', nome VARCHAR2, required BOOLEAN default true, ident VARCHAR2 default '', placeholder VARCHAR2 default '') IS
+	procedure aggiungiCampoForm (tipo VARCHAR2 default 'text', classeIcona VARCHAR2 default '',
+	nome VARCHAR2, required BOOLEAN default true, ident VARCHAR2 default '', placeholder VARCHAR2 default '',
+	value VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '', readonly boolean default False, selected boolean default false, step varchar default null) IS
 	begin
 
 	if tipo = 'text'
 	then
 		gui.APRIDIV (classe => 'input-group input-group-icon');    
 
-                gui.aggiungiInput (nome => nome, placeholder => placeholder, required => required, ident => ident, classe => '');
+                gui.aggiungiInput(nome => nome, placeholder => placeholder, required => required, ident => ident, classe => '', value => value, pattern => pattern, minimo => minimo, massimo => massimo, readonly => readonly, selected => selected, step => step);
                 gui.apriDiv (classe => 'input-icon'); 
                     gui.aggiungiIcona(classe => classeIcona); 
                 gui.chiudiDiv; 
@@ -668,7 +673,7 @@ end chiudiElementoPulsanti;
 			end if;
 
 			if((cEmail is null or p_password is null) and  p_success <> 'S') then
-                gui.aggiungiForm(url=> costanti.user_root||'.gui.homePage');
+                gui.aggiungiForm(url=> costanti.user_root||'gui.homePage');
 					gui.AGGIUNGIINTESTAZIONE('Inserisci email e password', 'h2');
 					gui.aggiungiGruppoInput;
 						gui.aggiungiCampoForm('email', 'fa fa-envelope', 'cEmail', true, '', 'Email');
@@ -731,4 +736,5 @@ end chiudiElementoPulsanti;
 	end LogOut;
 
 end gui;
+--tipo VARCHAR2 default 'text', classeIcona VARCHAR2 default '', nome VARCHAR2, required BOOLEAN default true, ident VARCHAR2 default '', placeholder VARCHAR2 default '',tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '', placeholder VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '', readonly boolean default False, selected boolean default false, step varchar default null
 
