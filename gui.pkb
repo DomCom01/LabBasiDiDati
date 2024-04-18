@@ -373,8 +373,8 @@ END AggiungiPulsanteGenerale;
 				
 				for i in 1..ids.count loop
 					gui.apriDiv(ident => 'option');
-						htp.prn('<input type="checkbox" name="'|| names(i) ||'"id="' ||ids(i)|| '" value="' ||ids(i)||'" onchange="updateHiddenInput('||chr(39)||hiddenParameter||chr(39)||', this)"/>');
 						htp.prn('<label for="'||ids(i)||'">'|| names(i) ||'</label>');
+						htp.prn('<input type="checkbox" id="' ||ids(i)|| '" value="' ||ids(i)||'" onchange="updateHiddenInput('||chr(39)||hiddenParameter||chr(39)||', this)"/>');
 					gui.chiudiDiv();
 				end loop;
 				
@@ -386,7 +386,7 @@ END AggiungiPulsanteGenerale;
 
 	procedure aggiungiIntestazione(testo VARCHAR2 default 'Intestazione', dimensione VARCHAR2 default 'h1', class VARCHAR2 default '') is
 	begin
-		htp.prn('<'||dimensione||' class='||class||' >'||testo||'</'||dimensione||'>');
+		htp.prn('<'||dimensione||' class="'||class||'">'||testo||'</'||dimensione||'>');
 	end aggiungiIntestazione;
 
 	procedure aggiungiParagrafo(testo VARCHAR2 default 'testo', class VARCHAR2 default '') is
