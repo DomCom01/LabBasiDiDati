@@ -520,6 +520,37 @@ body{
     text-align:center;
   }
 
+  
+//prova per profilo 
+  .flex-container {
+    display: flex;
+}
+
+.left {
+    width : 50%; 
+    height : 70px;
+    flex: 1;  
+    float : left; 
+    justify-content: start; 
+}
+
+.right {
+    width : 50%;
+    height : 70px; 
+    flex: 1; 
+    float : right; 
+    text-align: right; /* Allinea il testo a destra */
+
+    h2{
+      color : black; 
+    }
+  }
+
+.left h2,
+.right h2 {
+  margin:0; 
+}
+
   /*Roba per form
       URL : https://codepen.io/arefeh_htmi/pen/mdPYZKJ */
 
