@@ -45,7 +45,7 @@ begin
 			return;
 		end if;
 		
-		gui.TopBar(SessionHandler.getIdUser(idSessione), SessionHandler.getUsername(idSessione), SessionHandler.getRuolo(idSessione));
+		gui.TopBar(SessionHandler.getIdUser(idSessione), SessionHandler.getUsername(idSessione), SessionHandler.getRuolo(idSessione), idSessione);
 		gui.ApriDiv('', 'container');
 			gui.ApriDiv('', 'contentContainer');
 
@@ -125,7 +125,7 @@ begin
 
 	end ChiudiDiv;
 
-	procedure TopBar(id_user int, username VARCHAR2, ruolo VARCHAR2) is
+	procedure TopBar(id_user int, username VARCHAR2, ruolo VARCHAR2, idSessione varchar2 default null) is
 		saldo_ CLIENTI.SALDO%TYPE;
 	BEGIN
 		saldo_ := null;
@@ -156,9 +156,12 @@ begin
 			gui.chiudiDiv();
 
 			gui.dropdowntopbar(titolo => 'gruppo 3', names => gui.StringArray('Registrazione', 'Visualizza Profilo', 'Associa convenzione'),
-			proceduresNames => gui.StringArray ('operazioniClienti.registrazioneCliente', 'operazioniClienti.visualizzaProfilo', '#')); 
+			proceduresNames => gui.StringArray ('operazioniClienti.registrazioneCliente?idSessione='||idSessione||'', 'operazioniClienti.visualizzaProfilo?idSessione='||idSessione||'', '#')); 
 
-			gui.apriDiv(classe => 'topbar-dropdown');
+			gui.dropdowntopbar(titolo => 'gruppo 4', names => gui.StringArray('Inserimento Revisione', 'Visualizza Revisioni'),
+			proceduresNames => gui.StringArray ('Gruppo4.inserimentoRevisione?idSessione='||idSessione||'', 'Gruppo4.visualizzaRevisioni?idSessione='||idSessione||'')); 
+
+			/*gui.apriDiv(classe => 'topbar-dropdown');
 				gui.BottoneTopBar(testo => 'Gruppo 4');
 				gui.apriDiv(ident => 'topbardropdown-content', classe => 'topbardropdown-content');
 					for i in 1..3 loop
@@ -167,7 +170,7 @@ begin
 						gui.chiudiIndirizzo;
 					end loop;
 				gui.chiudiDiv();
-			gui.chiudiDiv();
+			gui.chiudiDiv();*/
 
 		gui.CHIUDIDIV;
 		
