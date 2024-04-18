@@ -56,7 +56,7 @@ begin
 			htp.prn('</div>'); /*container*/
 			htp.prn('</div>'); /*content-container*/
 			gui.Footer;
-			htp.prn('<script>'||costanti.tableSortScript|| CHR(10) || scriptJS ||'</script>');
+			htp.prn('<script>'|| scriptJS ||'</script>');
 			htp.print('</body>');
 
 		end ChiudiPagina;
@@ -231,9 +231,14 @@ begin
 		htp.prn('<thead>');
 		htp.prn('<tr>');
 		for i in 1..elementi.count loop
-			htp.prn('<th>
-						'|| elementi(i) || '
-					</th>');
+			htp.prn('<th');
+			
+				if elementi(i) = ' ' then
+					htp.prn(' data-sortable="false" ');
+				end if;
+				htp.prn('>
+					'|| elementi(i) || '
+				</th>');
 		end loop;
 		htp.prn('</thead>');
 		htp.prn('<tbody>');
@@ -247,8 +252,9 @@ begin
 		htp.prn('<script>');
 		htp.prn('const dataTable'||ident||' = new simpleDatatables.DataTable("#table'||ident||'", {
             responsive: true,
-			sortable:false,
+			sortable:true,
             searchable: false,
+			perPageSelect: false,
             searchQuerySeparator: ",",
             paging: true,
             locale: "it",
