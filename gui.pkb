@@ -231,9 +231,14 @@ begin
 		htp.prn('<thead>');
 		htp.prn('<tr>');
 		for i in 1..elementi.count loop
-			htp.prn('<th>
-						'|| elementi(i) || '
-					</th>');
+			htp.prn('<th');
+			
+				if elementi(i) = ' ' then
+					htp.prn(' data-sortable="false" ');
+				end if;
+				htp.prn('>
+					'|| elementi(i) || '
+				</th>');
 		end loop;
 		htp.prn('</thead>');
 		htp.prn('<tbody>');
@@ -249,6 +254,7 @@ begin
             responsive: true,
 			sortable:true,
             searchable: false,
+			perPageSelect: false,
             searchQuerySeparator: ",",
             paging: true,
             locale: "it",

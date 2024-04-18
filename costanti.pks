@@ -1183,5 +1183,20 @@ body{
     text-align:center;
   }
 
+  .datatable-sorter::before {
+    border-bottom: 4px solid #000;
+    border-top: 0px solid transparent;
+    transform: rotate(180deg);
+    bottom: 15px;
+    right: -5px;
+  }
+
+  .datatable-sorter::after {
+    /*border-bottom: 4px solid #000;*/
+    border-top: 4px solid transparent;
+    top: 12px;
+    right: -5px;
+  }
+
 ';
 end costanti;
