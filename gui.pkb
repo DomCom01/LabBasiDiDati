@@ -293,7 +293,7 @@ END AggiungiPulsanteCancellazione;
 
 procedure AggiungiPulsanteGenerale(collegamento VARCHAR2 DEFAULT '', testo VARCHAR2) IS
 BEGIN
-    htp.prn('<button onclick="mostraConfermaGenerale(this.parentNode.parentNode, '||collegamento||')">
+    htp.prn('<button onclick="mostraConferma(this.parentNode.parentNode, '||collegamento||')" >
     '||testo||'
     </button>');
 END AggiungiPulsanteGenerale;
