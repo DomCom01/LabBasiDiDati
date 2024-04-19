@@ -82,7 +82,7 @@ const updateHiddenInput = (inputName, checkbox, symbol = ";") => {
     var freccia = multiselect.querySelector(".multiSelectBtn .arrow");
     var opzioni = contenutoMenu.querySelectorAll("#option");
 
-    if (contenutoMenu.style.display === "none") {
+    if (contenutoMenu.style.display === "none"|| contenutoMenu.style.display === "") {
       contenutoMenu.style.display = "block";
       freccia.style.transform = "rotate(0deg)";
       opzioni.forEach(function(opzione) {
