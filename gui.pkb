@@ -41,7 +41,7 @@ begin
 		end if;
 
 		if not SessionHandler.checkSession(idSessione) then 
-			gui.Reindirizza(costanti.user_root||'gui.homePage?p_success=T');
+			gui.Reindirizza(costanti.URL||'gui.homePage?p_success=T');
 			return;
 		end if;
 		
@@ -193,9 +193,9 @@ begin
 
 			gui.indirizzo('Link to logica logout');
 				if(ruolo = 'Cliente') then
-					gui.indirizzo(costanti.user_root||'gui.LogOut?idUser='||id_user||'&ruolo=00');
+					gui.indirizzo(costanti.URL||'gui.LogOut?idUser='||id_user||'&ruolo=00');
 				else
-					gui.indirizzo(costanti.user_root||'gui.LogOut?idUser='||id_user||'&ruolo=01');
+					gui.indirizzo(costanti.URL||'gui.LogOut?idUser='||id_user||'&ruolo=01');
 				end if;
 					gui.BottonePrimario(testo => 'Logout'); 
 				gui.chiudiIndirizzo;
@@ -216,7 +216,7 @@ begin
 				gui.BottoneTopBar(testo => titolo);
 				gui.apriDiv(ident => 'topbardropdown-content', classe => 'topbardropdown-content');
 					for i in 1..names.count  loop
-						gui.indirizzo(''||costanti.user_root || proceduresNames(i)||''); --da rivedere
+						gui.indirizzo(''||costanti.URL || proceduresNames(i)||''); --da rivedere
 							htp.prn('<span>'||names(i)||'</span>');
 						gui.chiudiIndirizzo;
 					end loop;
@@ -688,7 +688,7 @@ end chiudiElementoPulsanti;
 			end if;
 
 			if((cEmail is null or p_password is null) and  p_success <> 'S') then
-                gui.aggiungiForm(url=> costanti.user_root||'gui.homePage');
+                gui.aggiungiForm(url=> costanti.URL||'gui.homePage');
 					gui.AGGIUNGIINTESTAZIONE('Inserisci email e password', 'h2');
 					gui.aggiungiGruppoInput;
 						gui.aggiungiCampoForm('email', 'fa fa-envelope', 'cEmail', true, '', 'Email');
@@ -704,11 +704,11 @@ end chiudiElementoPulsanti;
 							gui.AGGIUNGILABEL (target => 'cliente', testo => 'Cliente');
 							gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'autista', tipo => 'radio', value => '02', selected => true);
 							gui.AGGIUNGILABEL (target => 'autista', testo => 'Autista');
-							gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'operatore', tipo => 'radio', value => 'O1');
+							gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'operatore', tipo => 'radio', value => '01');
 							gui.AGGIUNGILABEL (target => 'operatore', testo => 'Operatore');
-							gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'menager', tipo => 'radio', value => 'O3');
-							gui.AGGIUNGILABEL (target => 'menager', testo => 'Manager');
-							gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'contabile', tipo => 'radio', value => 'O4');
+							gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'manager', tipo => 'radio', value => '03');
+							gui.AGGIUNGILABEL (target => 'manager', testo => 'Manager');
+							gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'contabile', tipo => 'radio', value => '04');
 							gui.AGGIUNGILABEL (target => 'contabile', testo => 'Contabile');
 						gui.CHIUDIGRUPPOINPUT;  
 						gui.chiudiDiv;
@@ -724,15 +724,15 @@ end chiudiElementoPulsanti;
             elsif p_success <> 'S' then
 
 				if tipo_utente is null then -- in caso non venga scelto nessun ruolo per l'autenticazione 
-					gui.reindirizza(costanti.user_root||'gui.homePage?p_success=L');
+					gui.reindirizza(costanti.URL||'gui.homePage?p_success=L');
 				end if;
 
 				idSess := LOGINLOGOUT.AGGIUNGISESSIONE(cEmail,p_password,tipo_utente);
 
                 if idSess is null then 
-                    gui.reindirizza(costanti.user_root||'gui.homePage?p_success=L');
+                    gui.reindirizza(costanti.URL||'gui.homePage?p_success=L');
 				else                   
-					gui.reindirizza(costanti.user_root||'gui.homePage?p_success=S&idSessione='||tipo_utente||idSess||'');
+					gui.reindirizza(costanti.URL||'gui.homePage?p_success=S&idSessione='||tipo_utente||idSess||'');
                 end if;
 
             end if;
@@ -740,15 +740,15 @@ end chiudiElementoPulsanti;
 		gui.chiudiPagina();
 
 		EXCEPTION
-			WHEN OTHERS THEN  gui.reindirizza(costanti.user_root||'gui.homePage?p_success=L');  -- errore ancora da risolvere'
+			WHEN OTHERS THEN  gui.reindirizza(costanti.URL||'gui.homePage?p_success=L');  -- errore ancora da risolvere'
 	end HomePage;
 
 	procedure LogOut(idUser int, ruolo varchar2) is
 	begin
 		if loginlogout.terminaSessione(idUser, ruolo) THEN
-			gui.Reindirizza(costanti.user_root||'gui.homePage?p_success=LOS');
+			gui.Reindirizza(costanti.URL||'gui.homePage?p_success=LOS');
 		else
-			gui.Reindirizza(costanti.user_root||'gui.homePage?p_success=LOF');
+			gui.Reindirizza(costanti.URL||'gui.homePage?p_success=LOF');
 		end if;
 	end LogOut;
 
