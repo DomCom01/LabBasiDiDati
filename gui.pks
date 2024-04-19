@@ -49,7 +49,8 @@ procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione VARCHAR 
 	procedure topbar (
 		id_user  int,
 		username varchar2,
-		ruolo    varchar2
+		ruolo    varchar2,
+		idSessione varchar2 default null
 	);
 
 	procedure dropdowntopbar (
@@ -84,9 +85,9 @@ Per aggiungere i pulsanti seguire questo pattern qui:
 	ChiudiElementoPulsanti
 */
 procedure apriElementoPulsanti;
-procedure AggiungiPulsanteCancellazione(collegamento VARCHAR2 default '');
+procedure AggiungiPulsanteCancellazione(collegamento VARCHAR2 default '');/*  '''collegamento'''  */
 procedure AggiungiPulsanteModifica(collegamento VARCHAR2 default '');
-procedure AggiungiPulsanteGenerale(collegamento VARCHAR2 DEFAULT '', testo VARCHAR2);
+procedure AggiungiPulsanteGenerale(collegamento VARCHAR2 DEFAULT '', testo VARCHAR2);/*  '''collegamento'''  */
 procedure chiudiElementoPulsanti;
 
 	procedure ChiudiTabella(
@@ -200,6 +201,7 @@ procedure aggiungiSelezioneMultipla(testo VARCHAR2 default 'testo', placeholder 
 		cemail      varchar2 default null,
 		p_password  varchar2 default null,
 		tipo_utente varchar2 default null,
+		p_registrazione boolean default false, 
 		idsessione  varchar default '-1'
 	);
 	procedure logout (

@@ -1,7 +1,7 @@
 SET DEFINE OFF;
 create or replace PACKAGE costanti as
 
-user_root CONSTANT VARCHAR(100) := 'http://131.114.73.203:8080/apex/l_ceccotti.';
+  URL CONSTANT VARCHAR(100) := 'http://131.114.73.203:8080/apex/d_commiso.';
 
   tableSortScript CONSTANT VARCHAR2(32767) := '
   var lastSortedTH;
@@ -125,7 +125,7 @@ function mostraConferma(riga, url) {
         var nuovaCella = nuovaRiga.insertCell(0);
         nuovaCella.colSpan = riga.cells.length; //Non funziona
         
-        nuovaCella.innerHTML = "Sicuro di voler cancellare? " + 
+        nuovaCella.innerHTML = "Confermi? " + 
                                 "<button onclick=\"apriURL('" + url + "')\">Sì</button> " + 
                                 "<button onclick=\"annullaEliminazione(this.parentNode.parentNode)\">No</button>";
         
@@ -519,6 +519,37 @@ body{
     margin:0px;
     text-align:center;
   }
+
+  
+//prova per profilo 
+  .flex-container {
+    display: flex;
+}
+
+.left {
+    width : 50%; 
+    height : 70px;
+    flex: 1;  
+    float : left; 
+    justify-content: start; 
+}
+
+.right {
+    width : 50%;
+    height : 70px; 
+    flex: 1; 
+    float : right; 
+    text-align: right; /* Allinea il testo a destra */
+
+    h2{
+      color : black; 
+    }
+  }
+
+.left h2,
+.right h2 {
+  margin:0; 
+}
 
   /*Roba per form
       URL : https://codepen.io/arefeh_htmi/pen/mdPYZKJ */
@@ -1196,6 +1227,10 @@ body{
     border-top: 4px solid transparent;
     top: 12px;
     right: 2px;
+  }
+
+  .datatable-top, .datatable-bottom {
+    padding: 2px 5px;
   }
 
 ';

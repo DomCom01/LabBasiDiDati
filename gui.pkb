@@ -19,7 +19,7 @@ begin
 			 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>');
 	htp.print('<style> ' || costanti.stile || '</style>');
 	htp.print('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-'); /*FONTAwesome*/
+		'); /*FONTAwesome*/
 	htp.print('<script type="text/javascript">' || costanti.scriptjs || CHR(10) || scriptJS || CHR(10)|| costanti.dropdownScript || '</script>'); -- Aggiunto script di base
 	htp.headClose; 
 	gui.ApriBody(idSessione);
@@ -41,11 +41,11 @@ begin
 		end if;
 
 		if not SessionHandler.checkSession(idSessione) then 
-			gui.Reindirizza(costanti.user_root||'gui.homePage?p_success=T');
+			gui.Reindirizza(costanti.URL||'gui.homePage?p_success=T');
 			return;
 		end if;
 		
-		gui.TopBar(SessionHandler.getIdUser(idSessione), SessionHandler.getUsername(idSessione), SessionHandler.getRuolo(idSessione));
+		gui.TopBar(SessionHandler.getIdUser(idSessione), SessionHandler.getUsername(idSessione), SessionHandler.getRuolo(idSessione), idSessione);
 		gui.ApriDiv('', 'container');
 			gui.ApriDiv('', 'contentContainer');
 
@@ -125,7 +125,7 @@ begin
 
 	end ChiudiDiv;
 
-	procedure TopBar(id_user int, username VARCHAR2, ruolo VARCHAR2) is
+	procedure TopBar(id_user int, username VARCHAR2, ruolo VARCHAR2, idSessione varchar2 default null) is
 		saldo_ CLIENTI.SALDO%TYPE;
 	BEGIN
 		saldo_ := null;
@@ -156,9 +156,12 @@ begin
 			gui.chiudiDiv();
 
 			gui.dropdowntopbar(titolo => 'gruppo 3', names => gui.StringArray('Registrazione', 'Visualizza Profilo', 'Associa convenzione'),
-			proceduresNames => gui.StringArray ('operazioniClienti.registrazioneCliente', 'operazioniClienti.visualizzaProfilo', '#')); 
+			proceduresNames => gui.StringArray ('operazioniClienti.registrazioneCliente?idSessione='||idSessione||'', 'operazioniClienti.visualizzaProfilo?idSessione='||idSessione||'', '#')); 
 
-			gui.apriDiv(classe => 'topbar-dropdown');
+			gui.dropdowntopbar(titolo => 'gruppo 4', names => gui.StringArray('Inserimento Revisione', 'Visualizza Revisioni'),
+			proceduresNames => gui.StringArray ('Gruppo4.inserimentoRevisione?idSessione='||idSessione||'', 'Gruppo4.visualizzaRevisioni?idSessione='||idSessione||'')); 
+
+			/*gui.apriDiv(classe => 'topbar-dropdown');
 				gui.BottoneTopBar(testo => 'Gruppo 4');
 				gui.apriDiv(ident => 'topbardropdown-content', classe => 'topbardropdown-content');
 					for i in 1..3 loop
@@ -167,7 +170,7 @@ begin
 						gui.chiudiIndirizzo;
 					end loop;
 				gui.chiudiDiv();
-			gui.chiudiDiv();
+			gui.chiudiDiv();*/
 
 		gui.CHIUDIDIV;
 		
@@ -190,9 +193,9 @@ begin
 
 			gui.indirizzo('Link to logica logout');
 				if(ruolo = 'Cliente') then
-					gui.indirizzo(costanti.user_root||'gui.LogOut?idUser='||id_user||'&ruolo=00');
+					gui.indirizzo(costanti.URL||'gui.LogOut?idUser='||id_user||'&ruolo=00');
 				else
-					gui.indirizzo(costanti.user_root||'gui.LogOut?idUser='||id_user||'&ruolo=01');
+					gui.indirizzo(costanti.URL||'gui.LogOut?idUser='||id_user||'&ruolo=01');
 				end if;
 					gui.BottonePrimario(testo => 'Logout'); 
 				gui.chiudiIndirizzo;
@@ -213,7 +216,7 @@ begin
 				gui.BottoneTopBar(testo => titolo);
 				gui.apriDiv(ident => 'topbardropdown-content', classe => 'topbardropdown-content');
 					for i in 1..names.count  loop
-						gui.indirizzo(''||costanti.user_root || proceduresNames(i)||''); --da rivedere
+						gui.indirizzo(''||costanti.URL || proceduresNames(i)||''); --da rivedere
 							htp.prn('<span>'||names(i)||'</span>');
 						gui.chiudiIndirizzo;
 					end loop;
@@ -293,7 +296,7 @@ END AggiungiPulsanteCancellazione;
 
 procedure AggiungiPulsanteGenerale(collegamento VARCHAR2 DEFAULT '', testo VARCHAR2) IS
 BEGIN
-    htp.prn('<button onclick="mostraConferma(this.parentNode.parentNode, '||collegamento||')" >
+    htp.prn('<button onclick="mostraConferma(this.parentNode.parentNode, '||collegamento||')">
     '||testo||'
     </button>');
 END AggiungiPulsanteGenerale;
@@ -381,8 +384,8 @@ END AggiungiPulsanteGenerale;
 				
 				for i in 1..ids.count loop
 					gui.apriDiv(ident => 'option');
-						htp.prn('<input type="checkbox" name="'|| names(i) ||'"id="' ||ids(i)|| '" value="' ||ids(i)||'" onchange="updateHiddenInput('||chr(39)||hiddenParameter||chr(39)||', this)"/>');
 						htp.prn('<label for="'||ids(i)||'">'|| names(i) ||'</label>');
+						htp.prn('<input type="checkbox" id="' ||ids(i)|| '" value="' ||ids(i)||'" onchange="updateHiddenInput('||chr(39)||hiddenParameter||chr(39)||', this)"/>');
 					gui.chiudiDiv();
 				end loop;
 				
@@ -394,7 +397,7 @@ END AggiungiPulsanteGenerale;
 
 	procedure aggiungiIntestazione(testo VARCHAR2 default 'Intestazione', dimensione VARCHAR2 default 'h1', class VARCHAR2 default '') is
 	begin
-		htp.prn('<'||dimensione||' class='||class||' >'||testo||'</'||dimensione||'>');
+		htp.prn('<'||dimensione||' class="'||class||'">'||testo||'</'||dimensione||'>');
 	end aggiungiIntestazione;
 
 	procedure aggiungiParagrafo(testo VARCHAR2 default 'testo', class VARCHAR2 default '') is
@@ -422,6 +425,7 @@ END AggiungiPulsanteGenerale;
 
 	procedure aggiungiSelezioneSingola(elementi StringArray, valoreEffettivo StringArray default null, titolo varchar2 default '', ident varchar2) IS
 	BEGIN
+		gui.aggiungiGruppoInput();
 		htp.prn('<label for="'||ident||'">'||titolo||'</label><br>');
 		htp.prn('<select id="'||ident||'" name="'||ident||'">');
 		htp.prn('<option value=""></option>');
@@ -437,11 +441,12 @@ END AggiungiPulsanteGenerale;
 			END LOOP;
 		end if;
 		htp.prn('</select>');
+		gui.chiudiGruppoInput;
 	END aggiungiSelezioneSingola;
 
 procedure aggiungiSelezioneMultipla(testo VARCHAR2 default 'testo', placeholder VARCHAR2 default 'testo', ids stringArray default emptyArray ,names stringArray default emptyArray, hiddenParameter varchar2 default '') IS
 BEGIN
-
+	gui.aggiungiGruppoInput();
 	htp.prn('<div class="formField">');
 	if placeholder is not null then
 		htp.prn('<label >'||placeholder||'</label>');
@@ -464,7 +469,7 @@ BEGIN
 		
 		gui.chiudiDiv();
 	gui.chiudiDiv();
-				
+	gui.chiudiGruppoInput;
 	htp.prn('</div>');
 	
 END aggiungiSelezioneMultipla;
@@ -595,7 +600,7 @@ BEGIN
 		else
 			gui.APRIDIV (classe => 'input-group input-group-icon');     
 
-                gui.aggiungiInput (tipo => tipo, nome => nome, placeholder => placeholder, required => required, ident => ident, classe => '');
+                gui.aggiungiInput (tipo => tipo, nome => nome, placeholder => placeholder, required => required, ident => ident, classe => '', value => value, pattern => pattern, minimo => minimo, massimo => massimo, readonly => readonly, selected => selected, step => step);
                 gui.apriDiv (classe => 'input-icon'); 
                     gui.aggiungiIcona(classe => classeIcona); 
                 gui.chiudiDiv; 
@@ -650,12 +655,16 @@ end chiudiElementoPulsanti;
 	end aCapo;
 
 
-	procedure HomePage(p_success varchar2 default ' ', cEmail VARCHAR2 default null, p_password varchar2 default null, tipo_utente varchar2 default null, idSessione varchar default '-1') is
+	procedure HomePage(p_success varchar2 default ' ', cEmail VARCHAR2 default null, p_password varchar2 default null, tipo_utente varchar2 default null, p_registrazione boolean default false, idSessione varchar default '-1') is
 		idSess int;
 		ruolo varchar(2);
 		n_ruolo int;
 	begin
 		gui.apriPagina('Home', idSessione);
+			if p_registrazione then --se la registrazione è andta a buon fine visualizzo il popup
+				gui.aggiungiPopup (True, 'Registrazione avvenuta!'); 
+				gui.acapo;
+			end if; 
 
 			gui.aggiungiIntestazione('Home Page', 'h1');
 			gui.acapo(2);
@@ -679,7 +688,7 @@ end chiudiElementoPulsanti;
 			end if;
 
 			if((cEmail is null or p_password is null) and  p_success <> 'S') then
-                gui.aggiungiForm(url=> costanti.user_root||'.gui.homePage');
+                gui.aggiungiForm(url=> costanti.URL||'gui.homePage');
 					gui.AGGIUNGIINTESTAZIONE('Inserisci email e password', 'h2');
 					gui.aggiungiGruppoInput;
 						gui.aggiungiCampoForm('email', 'fa fa-envelope', 'cEmail', true, '', 'Email');
@@ -688,40 +697,42 @@ end chiudiElementoPulsanti;
 					gui.chiudiGruppoInput;
 				
 					
-                			--gui.aggiungiIntestazione(testo => '', dimensione => 'h4');
-							gui.apriDiv(classe => 'row');
-							gui.AGGIUNGIGRUPPOINPUT; 
-								gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'cliente', tipo => 'radio', value => '00');
-								gui.AGGIUNGILABEL (target => 'cliente', testo => 'Cliente');
-								gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'autista', tipo => 'radio', value => '02', selected => true);
-								gui.AGGIUNGILABEL (target => 'autista', testo => 'Autista');
-								gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'operatore', tipo => 'radio', value => 'O1');
-								gui.AGGIUNGILABEL (target => 'operatore', testo => 'Operatore');
-								gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'menager', tipo => 'radio', value => 'O3');
-								gui.AGGIUNGILABEL (target => 'menager', testo => 'Manager');
-								gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'contabile', tipo => 'radio', value => 'O4');
-								gui.AGGIUNGILABEL (target => 'contabile', testo => 'Contabile');
-							gui.CHIUDIGRUPPOINPUT;  
-							gui.chiudiDiv;
+						gui.aggiungiIntestazione(testo => '', dimensione => 'h4');
+						gui.apriDiv(classe => 'row');
+						gui.AGGIUNGIGRUPPOINPUT; 
+							gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'cliente', tipo => 'radio', value => '00');
+							gui.AGGIUNGILABEL (target => 'cliente', testo => 'Cliente');
+							gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'autista', tipo => 'radio', value => '02', selected => true);
+							gui.AGGIUNGILABEL (target => 'autista', testo => 'Autista');
+							gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'operatore', tipo => 'radio', value => '01');
+							gui.AGGIUNGILABEL (target => 'operatore', testo => 'Operatore');
+							gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'manager', tipo => 'radio', value => '03');
+							gui.AGGIUNGILABEL (target => 'manager', testo => 'Manager');
+							gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'contabile', tipo => 'radio', value => '04');
+							gui.AGGIUNGILABEL (target => 'contabile', testo => 'Contabile');
+						gui.CHIUDIGRUPPOINPUT;  
+						gui.chiudiDiv;
 
+					gui.aggiungiIntestazione(testo => '', dimensione => 'h4');
 					gui.aggiungiGruppoInput;
 						gui.aggiungiBottoneSubmit('Accedi');
 					gui.chiudiGruppoInput;
 
 			gui.chiudiForm;
+			gui.acapo;
 				
             elsif p_success <> 'S' then
 
 				if tipo_utente is null then -- in caso non venga scelto nessun ruolo per l'autenticazione 
-					gui.reindirizza(costanti.user_root||'gui.homePage?p_success=L');
+					gui.reindirizza(costanti.URL||'gui.homePage?p_success=L');
 				end if;
 
 				idSess := LOGINLOGOUT.AGGIUNGISESSIONE(cEmail,p_password,tipo_utente);
 
                 if idSess is null then 
-                    gui.reindirizza(costanti.user_root||'gui.homePage?p_success=L');
+                    gui.reindirizza(costanti.URL||'gui.homePage?p_success=L');
 				else                   
-					gui.reindirizza(costanti.user_root||'gui.homePage?p_success=S&idSessione='||tipo_utente||idSess||'');
+					gui.reindirizza(costanti.URL||'gui.homePage?p_success=S&idSessione='||tipo_utente||idSess||'');
                 end if;
 
             end if;
@@ -729,15 +740,15 @@ end chiudiElementoPulsanti;
 		gui.chiudiPagina();
 
 		EXCEPTION
-			WHEN OTHERS THEN  gui.reindirizza(costanti.user_root||'gui.homePage?p_success=L');  -- errore ancora da risolvere'
+			WHEN OTHERS THEN  gui.reindirizza(costanti.URL||'gui.homePage?p_success=L');  -- errore ancora da risolvere'
 	end HomePage;
 
 	procedure LogOut(idUser int, ruolo varchar2) is
 	begin
 		if loginlogout.terminaSessione(idUser, ruolo) THEN
-			gui.Reindirizza(costanti.user_root||'gui.homePage?p_success=LOS');
+			gui.Reindirizza(costanti.URL||'gui.homePage?p_success=LOS');
 		else
-			gui.Reindirizza(costanti.user_root||'gui.homePage?p_success=LOF');
+			gui.Reindirizza(costanti.URL||'gui.homePage?p_success=LOF');
 		end if;
 	end LogOut;
 
