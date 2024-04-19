@@ -650,12 +650,16 @@ end chiudiElementoPulsanti;
 	end aCapo;
 
 
-	procedure HomePage(p_success varchar2 default ' ', cEmail VARCHAR2 default null, p_password varchar2 default null, tipo_utente varchar2 default null, idSessione varchar default '-1') is
+	procedure HomePage(p_success varchar2 default ' ', cEmail VARCHAR2 default null, p_password varchar2 default null, tipo_utente varchar2 default null, p_registrazione boolean default false, idSessione varchar default '-1') is
 		idSess int;
 		ruolo varchar(2);
 		n_ruolo int;
 	begin
 		gui.apriPagina('Home', idSessione);
+			if p_registrazione then --se la registrazione è andta a buon fine visualizzo il popup
+				gui.aggiungiPopup (True, 'Registrazione avvenuta!'); 
+				gui.acapo;
+			end if; 
 
 			gui.aggiungiIntestazione('Home Page', 'h1');
 			gui.acapo(2);

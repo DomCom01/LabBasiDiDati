@@ -200,6 +200,7 @@ procedure aggiungiSelezioneMultipla(testo VARCHAR2 default 'testo', placeholder 
 		cemail      varchar2 default null,
 		p_password  varchar2 default null,
 		tipo_utente varchar2 default null,
+		p_registrazione boolean default false, 
 		idsessione  varchar default '-1'
 	);
 	procedure logout (
