@@ -338,12 +338,14 @@ END AggiungiPulsanteGenerale;
 		htp.prn('<input hidden type="'||tipo||'" name="'|| nome ||'" value="'||value||'">');
 	end AggiungiCampoFormHidden;
 
-	procedure ApriSelectFormFiltro(nome varchar2, placeholder VARCHAR2) IS
+	procedure ApriSelectFormFiltro(nome varchar2, placeholder VARCHAR2, firstNull boolean default True) IS
 	begin
 		htp.prn('<td> <div class="formField">
 					<label id="'||nome||'">'||placeholder||'</label>
-					<select name="'|| nome ||'">
-					<option value=""></option>');
+					<select name="'|| nome ||'">');
+		if firstNull then
+			htp.prn('<option value=""></option>');
+		end if;
 	end ApriSelectFormFiltro;
 
 	procedure AggiungiOpzioneSelect(value VARCHAR2, selected BOOLEAN, testo VARCHAR2 default '') as
@@ -423,12 +425,14 @@ END AggiungiPulsanteGenerale;
 		gui.chiudiDiv();
 	END aggiungiDropdown;
 
-	procedure aggiungiSelezioneSingola(elementi StringArray, valoreEffettivo StringArray default null, titolo varchar2 default '', ident varchar2) IS
+	procedure aggiungiSelezioneSingola(elementi StringArray, valoreEffettivo StringArray default null, titolo varchar2 default '', ident varchar2, firstNull boolean default True) IS
 	BEGIN
 		gui.aggiungiGruppoInput();
 		htp.prn('<label for="'||ident||'">'||titolo||'</label><br>');
 		htp.prn('<select id="'||ident||'" name="'||ident||'">');
-		htp.prn('<option value=""></option>');
+		if firstNull then
+			htp.prn('<option value=""></option>');
+		end if;
 		if valoreEffettivo is null THEN
 			for elem in elementi.FIRST..elementi.LAST
 			LOOP
