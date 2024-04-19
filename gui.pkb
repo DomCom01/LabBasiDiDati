@@ -45,7 +45,7 @@ begin
 			return;
 		end if;
 		
-		gui.TopBar(SessionHandler.getIdUser(idSessione), SessionHandler.getUsername(idSessione), SessionHandler.getRuolo(idSessione));
+		gui.TopBar(SessionHandler.getIdUser(idSessione), SessionHandler.getUsername(idSessione), SessionHandler.getRuolo(idSessione), idSessione);
 		gui.ApriDiv('', 'container');
 			gui.ApriDiv('', 'contentContainer');
 
@@ -125,7 +125,7 @@ begin
 
 	end ChiudiDiv;
 
-	procedure TopBar(id_user int, username VARCHAR2, ruolo VARCHAR2) is
+	procedure TopBar(id_user int, username VARCHAR2, ruolo VARCHAR2, idSessione varchar2 default null) is
 		saldo_ CLIENTI.SALDO%TYPE;
 	BEGIN
 		saldo_ := null;
@@ -156,9 +156,12 @@ begin
 			gui.chiudiDiv();
 
 			gui.dropdowntopbar(titolo => 'gruppo 3', names => gui.StringArray('Registrazione', 'Visualizza Profilo', 'Associa convenzione'),
-			proceduresNames => gui.StringArray ('operazioniClienti.registrazioneCliente', 'operazioniClienti.visualizzaProfilo', '#')); 
+			proceduresNames => gui.StringArray ('operazioniClienti.registrazioneCliente?idSessione='||idSessione||'', 'operazioniClienti.visualizzaProfilo?idSessione='||idSessione||'', '#')); 
 
-			gui.apriDiv(classe => 'topbar-dropdown');
+			gui.dropdowntopbar(titolo => 'gruppo 4', names => gui.StringArray('Inserimento Revisione', 'Visualizza Revisioni'),
+			proceduresNames => gui.StringArray ('Gruppo4.inserimentoRevisione?idSessione='||idSessione||'', 'Gruppo4.visualizzaRevisioni?idSessione='||idSessione||'')); 
+
+			/*gui.apriDiv(classe => 'topbar-dropdown');
 				gui.BottoneTopBar(testo => 'Gruppo 4');
 				gui.apriDiv(ident => 'topbardropdown-content', classe => 'topbardropdown-content');
 					for i in 1..3 loop
@@ -167,7 +170,7 @@ begin
 						gui.chiudiIndirizzo;
 					end loop;
 				gui.chiudiDiv();
-			gui.chiudiDiv();
+			gui.chiudiDiv();*/
 
 		gui.CHIUDIDIV;
 		
@@ -422,6 +425,7 @@ END AggiungiPulsanteGenerale;
 
 	procedure aggiungiSelezioneSingola(elementi StringArray, valoreEffettivo StringArray default null, titolo varchar2 default '', ident varchar2) IS
 	BEGIN
+		gui.aggiungiGruppoInput();
 		htp.prn('<label for="'||ident||'">'||titolo||'</label><br>');
 		htp.prn('<select id="'||ident||'" name="'||ident||'">');
 		htp.prn('<option value=""></option>');
@@ -437,11 +441,12 @@ END AggiungiPulsanteGenerale;
 			END LOOP;
 		end if;
 		htp.prn('</select>');
+		gui.chiudiGruppoInput;
 	END aggiungiSelezioneSingola;
 
 procedure aggiungiSelezioneMultipla(testo VARCHAR2 default 'testo', placeholder VARCHAR2 default 'testo', ids stringArray default emptyArray ,names stringArray default emptyArray, hiddenParameter varchar2 default '') IS
 BEGIN
-
+	gui.aggiungiGruppoInput();
 	htp.prn('<div class="formField">');
 	if placeholder is not null then
 		htp.prn('<label >'||placeholder||'</label>');
@@ -464,7 +469,7 @@ BEGIN
 		
 		gui.chiudiDiv();
 	gui.chiudiDiv();
-				
+	gui.chiudiGruppoInput;
 	htp.prn('</div>');
 	
 END aggiungiSelezioneMultipla;
@@ -595,7 +600,7 @@ BEGIN
 		else
 			gui.APRIDIV (classe => 'input-group input-group-icon');     
 
-                gui.aggiungiInput (tipo => tipo, nome => nome, placeholder => placeholder, required => required, ident => ident, classe => '');
+                gui.aggiungiInput (tipo => tipo, nome => nome, placeholder => placeholder, required => required, ident => ident, classe => '', value => value, pattern => pattern, minimo => minimo, massimo => massimo, readonly => readonly, selected => selected, step => step);
                 gui.apriDiv (classe => 'input-icon'); 
                     gui.aggiungiIcona(classe => classeIcona); 
                 gui.chiudiDiv; 
@@ -692,27 +697,29 @@ end chiudiElementoPulsanti;
 					gui.chiudiGruppoInput;
 				
 					
-                			--gui.aggiungiIntestazione(testo => '', dimensione => 'h4');
-							gui.apriDiv(classe => 'row');
-							gui.AGGIUNGIGRUPPOINPUT; 
-								gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'cliente', tipo => 'radio', value => '00');
-								gui.AGGIUNGILABEL (target => 'cliente', testo => 'Cliente');
-								gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'autista', tipo => 'radio', value => '02', selected => true);
-								gui.AGGIUNGILABEL (target => 'autista', testo => 'Autista');
-								gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'operatore', tipo => 'radio', value => 'O1');
-								gui.AGGIUNGILABEL (target => 'operatore', testo => 'Operatore');
-								gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'menager', tipo => 'radio', value => 'O3');
-								gui.AGGIUNGILABEL (target => 'menager', testo => 'Manager');
-								gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'contabile', tipo => 'radio', value => 'O4');
-								gui.AGGIUNGILABEL (target => 'contabile', testo => 'Contabile');
-							gui.CHIUDIGRUPPOINPUT;  
-							gui.chiudiDiv;
+						gui.aggiungiIntestazione(testo => '', dimensione => 'h4');
+						gui.apriDiv(classe => 'row');
+						gui.AGGIUNGIGRUPPOINPUT; 
+							gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'cliente', tipo => 'radio', value => '00');
+							gui.AGGIUNGILABEL (target => 'cliente', testo => 'Cliente');
+							gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'autista', tipo => 'radio', value => '02', selected => true);
+							gui.AGGIUNGILABEL (target => 'autista', testo => 'Autista');
+							gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'operatore', tipo => 'radio', value => 'O1');
+							gui.AGGIUNGILABEL (target => 'operatore', testo => 'Operatore');
+							gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'menager', tipo => 'radio', value => 'O3');
+							gui.AGGIUNGILABEL (target => 'menager', testo => 'Manager');
+							gui.AGGIUNGIINPUT (nome => 'tipo_utente', ident => 'contabile', tipo => 'radio', value => 'O4');
+							gui.AGGIUNGILABEL (target => 'contabile', testo => 'Contabile');
+						gui.CHIUDIGRUPPOINPUT;  
+						gui.chiudiDiv;
 
+					gui.aggiungiIntestazione(testo => '', dimensione => 'h4');
 					gui.aggiungiGruppoInput;
 						gui.aggiungiBottoneSubmit('Accedi');
 					gui.chiudiGruppoInput;
 
 			gui.chiudiForm;
+			gui.acapo;
 				
             elsif p_success <> 'S' then
 

@@ -49,7 +49,8 @@ procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione VARCHAR 
 	procedure topbar (
 		id_user  int,
 		username varchar2,
-		ruolo    varchar2
+		ruolo    varchar2,
+		idSessione varchar2 default null
 	);
 
 	procedure dropdowntopbar (

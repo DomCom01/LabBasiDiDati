@@ -1229,5 +1229,9 @@ body{
     right: 2px;
   }
 
+  .datatable-top, .datatable-bottom {
+    padding: 2px 5px;
+  }
+
 ';
 end costanti;
