@@ -158,8 +158,9 @@ begin
 			gui.dropdowntopbar(titolo => 'gruppo 3', names => gui.StringArray('Registrazione', 'Visualizza Profilo', 'Associa convenzione'),
 			proceduresNames => gui.StringArray ('operazioniClienti.registrazioneCliente?idSessione='||idSessione||'', 'operazioniClienti.visualizzaProfilo?idSessione='||idSessione||'', '#')); 
 
-			gui.dropdowntopbar(titolo => 'gruppo 4', names => gui.StringArray('Inserimento Revisione', 'Visualizza Revisioni'),
-			proceduresNames => gui.StringArray ('Gruppo4.inserimentoRevisione?idSessione='||idSessione||'', 'Gruppo4.visualizzaRevisioni?idSessione='||idSessione||'')); 
+			gui.dropdowntopbar(titolo => 'gruppo 4', names => gui.StringArray('Inserimento Revisione', 'Visualizzazione Revisioni', 'Statistiche revisioni'),
+			proceduresNames => gui.StringArray ('Gruppo4.inserimentoRevisione?idSessione='||idSessione||'', 'Gruppo4.visualizzazioneRevisione?idSessione='||idSessione||'', 
+			'Gruppo4.statisticheRev?idSessione='||idSessione||'')); 
 
 			/*gui.apriDiv(classe => 'topbar-dropdown');
 				gui.BottoneTopBar(testo => 'Gruppo 4');
