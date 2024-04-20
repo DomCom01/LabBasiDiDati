@@ -180,8 +180,9 @@ begin
 		);
 
 
-			gui.dropdowntopbar(titolo => 'gruppo 4', names => gui.StringArray('Inserimento Revisione', 'Visualizza Revisioni'),
-			proceduresNames => gui.StringArray ('Gruppo4.inserimentoRevisione?idSessione='||idSessione||'', 'Gruppo4.visualizzaRevisioni?idSessione='||idSessione||'')); 
+			gui.dropdowntopbar(titolo => 'gruppo 4', names => gui.StringArray('Inserimento Revisione', 'Visualizzazione Revisioni', 'Statistiche revisioni'),
+			proceduresNames => gui.StringArray ('Gruppo4.inserimentoRevisione?idSessione='||idSessione||'', 'Gruppo4.visualizzazioneRevisione?idSessione='||idSessione||'', 
+			'Gruppo4.statisticheRev?idSessione='||idSessione||'')); 
 
 			/*gui.apriDiv(classe => 'topbar-dropdown');
 				gui.BottoneTopBar(testo => 'Gruppo 4');
@@ -447,27 +448,35 @@ END AggiungiPulsanteGenerale;
 		gui.chiudiDiv();
 	END aggiungiDropdown;
 
-	procedure aggiungiSelezioneSingola(elementi StringArray, valoreEffettivo StringArray default null, titolo varchar2 default '', ident varchar2, firstNull boolean default True) IS
-	BEGIN
-		gui.aggiungiGruppoInput();
-		htp.prn('<label for="'||ident||'">'||titolo||'</label><br>');
-		htp.prn('<select id="'||ident||'" name="'||ident||'">');
-		if firstNull then
-			htp.prn('<option value=""></option>');
-		end if;
-		if valoreEffettivo is null THEN
-			for elem in elementi.FIRST..elementi.LAST
-			LOOP
-				htp.prn('<option value="'||elementi(elem)||'">'||elementi(elem)||'</option>');
-			END LOOP;
-		else
-			for elem in elementi.FIRST..elementi.LAST
-			LOOP
-				htp.prn('<option value="'||valoreEffettivo(elem)||'">'||elementi(elem)||'</option>');
-			END LOOP;
-		end if;
-		htp.prn('</select>');
-		gui.chiudiGruppoInput;
+	procedure aggiungiSelezioneSingola(elementi StringArray, valoreEffettivo StringArray default null, titolo varchar2 default '', ident varchar2, optionSelected varchar2 default null, firstNull boolean default true) IS
+		BEGIN
+			gui.aggiungiGruppoInput();
+			htp.prn('<label for="'||ident||'">'||titolo||'</label><br>');
+			htp.prn('<select id="'||ident||'" name="'||ident||'">');
+			if firstNull then
+				htp.prn('<option value=""></option>');
+			end if;
+			if valoreEffettivo is null THEN
+				for elem in elementi.FIRST..elementi.LAST
+				LOOP
+					IF optionSelected IS NOT NULL AND elementi(elem) = optionSelected THEN
+						htp.prn('<option value="'||elementi(elem)||'" selected="selected">'||elementi(elem)||'</option>');
+					ELSE
+						htp.prn('<option value="'||elementi(elem)||'">'||elementi(elem)||'</option>');
+					end if;
+				END LOOP;
+			else
+				for elem in elementi.FIRST..elementi.LAST
+				LOOP
+					IF optionSelected IS NOT NULL AND valoreEffettivo(elem) = optionSelected THEN
+						htp.prn('<option value="'||valoreEffettivo(elem)||'"  selected="selected">'||elementi(elem)||'</option>');
+					ELSE
+						htp.prn('<option value="'||valoreEffettivo(elem)||'">'||elementi(elem)||'</option>');
+					end if;
+				END LOOP;
+			end if;
+			htp.prn('</select>');
+			gui.chiudiGruppoInput;
 	END aggiungiSelezioneSingola;
 
 procedure aggiungiSelezioneMultipla(testo VARCHAR2 default 'testo', placeholder VARCHAR2 default 'testo', ids stringArray default emptyArray ,names stringArray default emptyArray, hiddenParameter varchar2 default '') IS
