@@ -155,8 +155,30 @@ begin
 				gui.chiudiDiv();
 			gui.chiudiDiv();
 
-			gui.dropdowntopbar(titolo => 'gruppo 3', names => gui.StringArray('Registrazione', 'Visualizza Profilo', 'Associa convenzione'),
-			proceduresNames => gui.StringArray ('operazioniClienti.registrazioneCliente?idSessione='||idSessione||'', 'operazioniClienti.visualizzaProfilo?idSessione='||idSessione||'', '#')); 
+			gui.dropdowntopbar(
+			titolo => 'gruppo 3', 
+			names => gui.StringArray(
+				'Registrazione', 
+				'Visualizza clienti',
+				'Modifica cliente',
+				'Visualizza Profilo', 
+				'Visualizza convenzioni',
+				'Associa convenzione', 
+				'Inserisci convenzione', 
+				'Statistiche convenzioni'
+			),
+			proceduresNames => gui.StringArray (
+				'gruppo3.registrazioneCliente',
+				'gruppo3.visualizzaClienti?idSess=' || idSessione || '',
+				'gruppo3.modificaCliente?idSess=' || idSessione || '&cl_id=' || SESSIONHANDLER.getIDUser(idSessione) ||'', 
+				'gruppo3.visualizzaProfilo?idSess=' || idSessione || '&id=' || SESSIONHANDLER.getIDUser(idSessione) || '',
+				'gruppo3.visualizzaConvenzioni?idSess=' || idSessione || '', 
+				'gruppo3.associaConvenzione?idSess=' || idSessione || '',
+				'gruppo3.inserisciConvenzione?' || idSessione || '',
+				'gruppo3.dettagliConvenzioni?idSess=' || idSessione || ''
+			)
+		);
+
 
 			gui.dropdowntopbar(titolo => 'gruppo 4', names => gui.StringArray('Inserimento Revisione', 'Visualizza Revisioni'),
 			proceduresNames => gui.StringArray ('Gruppo4.inserimentoRevisione?idSessione='||idSessione||'', 'Gruppo4.visualizzaRevisioni?idSessione='||idSessione||'')); 
