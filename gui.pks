@@ -91,7 +91,8 @@ procedure AggiungiPulsanteGenerale(collegamento VARCHAR2 DEFAULT '', testo VARCH
 procedure chiudiElementoPulsanti;
 
 	procedure ChiudiTabella(
-		ident varchar2 default null
+		ident varchar2 default null,
+		SQLpagination boolean default false
 	);
 
 

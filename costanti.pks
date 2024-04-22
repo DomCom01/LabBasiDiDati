@@ -1,74 +1,39 @@
 SET DEFINE OFF;
 create or replace PACKAGE costanti as
 
-  URL CONSTANT VARCHAR(100) := 'http://131.114.73.203:8080/apex/d_commiso.';
+  URL CONSTANT VARCHAR(100) := 'http://131.114.73.203:8080/apex/l_ceccotti.';
 
-  tableSortScript CONSTANT VARCHAR2(32767) := '
-  var lastSortedTH;
-  var ordTH = true;
-      
-  const getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent;
+  -- Funzione Arcangelo;
+  dropdownScript constant VARCHAR2(32767) := '
 
-  const comparer = (idx, asc) => (a, b) => ((v1, v2) => 
-    v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
-    )(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx));
+  const updateHiddenInput = (inputName, checkbox, symbol = ";") => {
+      if (!checkbox) throw new Error("Checkbox non trovata");
+      if (!symbol) symbol = ";";
 
-  document.querySelectorAll("th").forEach(th => th.addEventListener("click", (() => {
-    const table = th.closest("table");
-    const l = th.innerText.length;
-    
-    if(lastSortedTH == th) {
-      ordTH ?
-        th.innerText = th.innerText.substring(0, l-1) + "▴"
-        : th.innerText = th.innerText.substring(0, l-1) + "▾";
-    }else {
+      const input = document.getElementsByName(inputName)[0];
 
-      if (lastSortedTH)  lastSortedTH.innerText = lastSortedTH.innerText.substring( 0, lastSortedTH.innerText.length-1);
-      ordTH ? th.innerText += " ▴"
-          : th.innerText += " ▾";
-      lastSortedTH = th;
-    }
+      if (!input) throw new Error("Elemento " + inputName + " non trovato");
 
-    ordTH = !ordTH;
+      const values = input.getAttribute("value");
+      const value = checkbox.getAttribute("value");
 
-    Array.from(table.querySelectorAll("tr:nth-child(n+2)"))
-      .sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
-      .forEach(tr => table.appendChild(tr) );
-  })));
+      const newValues = values ? values.split(symbol) : [];
+      if (checkbox.checked) {
+          // aggiungi value a values
+          newValues.push(value);
+          newValues.sort();
+          input.setAttribute("value", newValues.join(symbol));
+      } else {
+          // elimina value da values
+          const index = newValues.indexOf(value);
 
-';
+          if (index == -1)
+              return;
 
--- Funzione Arcangelo;
-dropdownScript constant VARCHAR2(32767) := '
-
-const updateHiddenInput = (inputName, checkbox, symbol = ";") => {
-    if (!checkbox) throw new Error("Checkbox non trovata");
-    if (!symbol) symbol = ";";
-
-    const input = document.getElementsByName(inputName)[0];
-
-    if (!input) throw new Error("Elemento " + inputName + " non trovato");
-
-    const values = input.getAttribute("value");
-    const value = checkbox.getAttribute("value");
-
-    const newValues = values ? values.split(symbol) : [];
-    if (checkbox.checked) {
-        // aggiungi value a values
-        newValues.push(value);
-        newValues.sort();
-        input.setAttribute("value", newValues.join(symbol));
-    } else {
-        // elimina value da values
-        const index = newValues.indexOf(value);
-
-        if (index == -1)
-            return;
-
-        newValues.splice(index, 1);
-        input.setAttribute("value", newValues.join(symbol));
-    }
-  }';
+          newValues.splice(index, 1);
+          input.setAttribute("value", newValues.join(symbol));
+      }
+    }';
 
 /* 32767 è la dimensione massima di varchar2 */
   scriptjs constant varchar2(32767) := q'[
