@@ -374,7 +374,7 @@ END AggiungiPulsanteGenerale;
 					<table class="inputTAB">');
 	end ApriFormFiltro;
 
-	procedure AggiungiCampoFormFiltro(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '') IS
+	procedure AggiungiCampoFormFiltro(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '', readonly boolean default false) IS
 	begin
 		if(tipo = 'submit') then
 		
@@ -388,7 +388,7 @@ END AggiungiPulsanteGenerale;
 			htp.prn('<td>
 				<div class="formField">
 					<label  id="'||ident||'">'||placeholder||'</label>');
-					gui.aggiungiInput(tipo, nome, value ,'', required, 'filterInput', ident, pattern, minimo, massimo);
+					gui.aggiungiInput(tipo, nome, value ,'', required, 'filterInput', ident, pattern, minimo, massimo, readonly);
 				htp.prn('</div>
 			</td>');
 		end if;

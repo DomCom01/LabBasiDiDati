@@ -110,7 +110,8 @@ procedure chiudiElementoPulsanti;
 		ident       varchar2 default '',
 		pattern     varchar2 default '',
 		minimo      varchar2 default '',
-		massimo     varchar2 default ''
+		massimo     varchar2 default '',
+		readonly    BOOLEAN  default false
 	);
 /* Per aggiungere una nuova riga al form basta chiamare AggiungiRigaTabella */
 	procedure chiudiformfiltro;
