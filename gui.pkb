@@ -519,10 +519,19 @@ END aggiungiSelezioneMultipla;
 				htp.prn('<button class="bottone-popup" onclick="nascondiPopup()">Chiudi</button>');
 			htp.prn('</div>');
 		else 
-			htp.prn('<div id="popup-message" class="message-box error">');
+			if indirizzo IS NOT NULL then 
+				htp.prn('<div id="popup-message" class="message-box error">');
+				htp.prn('<p>'|| testo ||'</p>');
+				htp.prn('<button class="bottone-popup">
+				<a href="'||indirizzo||'">Torna indietro</a></button>');
+			htp.prn('</div>');
+			else 
+				htp.prn('<div id="popup-message" class="message-box error">');
 				htp.prn('<p>'|| testo ||'</p>');
 				htp.prn('<button class="bottone-popup" onclick="nascondiPopup()">Chiudi</button>');
 			htp.prn('</div>');
+			end if; 
+			
 		end if;
 	end AggiungiPopup;
 
@@ -695,13 +704,17 @@ end chiudiElementoPulsanti;
 		ruolo varchar(2);
 		n_ruolo int;
 	begin
+
 		gui.apriPagina('Home', idSessione);
 			if p_registrazione then --se la registrazione è andta a buon fine visualizzo il popup
 				gui.aggiungiPopup (True, 'Registrazione avvenuta!'); 
 				gui.acapo;
 			end if; 
 
+			
 			gui.aggiungiIntestazione('Home Page', 'h1');
+ 
+			
 			gui.acapo(2);
 
 			if p_success = 'T' then
