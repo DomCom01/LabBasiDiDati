@@ -311,7 +311,7 @@ body{
 
       tr, td{
       border: 1px solid rgba(0, 0, 0, 0.565);
-      height: 35px;
+      height: 40px;
       font-size: small;
       text-align: center;
       }
@@ -1168,7 +1168,7 @@ body{
   }
 
   .datatable-table > tbody > tr > td{
-    vertical-align: baseline !important;
+    vertical-align: middle !important;
     padding: 0px !important;
   }
 
@@ -1196,6 +1196,10 @@ body{
 
   .datatable-top, .datatable-bottom {
     padding: 2px 5px;
+  }
+
+  .datatable-wrapper.no-footer .datatable-container {
+    border-bottom: 0px solid !important;
   }
 
 ';
