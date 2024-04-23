@@ -6,25 +6,31 @@ create or replace PACKAGE BODY gui as
 		htp.prn('<head><meta http-equiv="refresh" content="0;url=' || indirizzo || '"></head>');
 	end Reindirizza;
 
-procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione VARCHAR default '-1',  scriptJS VARCHAR2 default '') is
-begin
-	htp.htmlOpen;
-	htp.headOpen;
-	htp.title(titolo);
-	htp.print('
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-	');
-	htp.prn('<link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
-			 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>');
-	htp.print('<style> ' || costanti.stile || '</style>');
-	htp.print('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-		'); /*FONTAwesome*/
-	htp.print('<script type="text/javascript">' || costanti.scriptjs || CHR(10) || scriptJS || CHR(10)|| costanti.dropdownScript || '</script>'); -- Aggiunto script di base
-	htp.headClose; 
-	gui.ApriBody(idSessione);
-
-	end ApriPagina;
+	procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione VARCHAR default '-1',  scriptJS VARCHAR2 default '') is
+	begin
+		htp.htmlOpen;
+		htp.headOpen;
+		htp.title(titolo);
+		htp.print('
+			<meta charset="utf-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1">
+		');
+		htp.prn('<link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
+				<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>');
+		htp.print('<style> ' || costanti.stile || '</style>');
+		htp.print('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+			'); /*FONTAwesome*/
+		htp.print('<script type="text/javascript">' || costanti.scriptjs || CHR(10) || scriptJS || CHR(10)|| costanti.dropdownScript ||  CHR(10) || '  
+		
+					//Variabili per paginazione
+					const Http = new XMLHttpRequest(); // Richieste http
+					var currentTableRequest = null;    // Tabella che richiese nuovi elementi
+					var dataTables = {};			   // lista di oggetti DataTables
+		
+					</script>'); -- Aggiunto script di base
+		htp.headClose; 
+		gui.ApriBody(idSessione);
+	end Apripagina;
 
 	procedure ApriBody(idSessione varchar2) is
 		username VARCHAR2(20);
@@ -51,15 +57,47 @@ begin
 
 	end ApriBody;
 
-		procedure ChiudiPagina(scriptJS VARCHAR2 default '') is
-		begin
-			htp.prn('</div>'); /*container*/
-			htp.prn('</div>'); /*content-container*/
-			gui.Footer;
-			htp.prn('<script>'|| scriptJS ||'</script>');
-			htp.print('</body>');
+	procedure ChiudiPagina(scriptJS VARCHAR2 default '') is
+	begin
+		htp.prn('</div>'); /*container*/
+		htp.prn('</div>'); /*content-container*/
+		gui.Footer;
+		htp.prn('<script>'|| scriptJS ||'
 
-		end ChiudiPagina;
+		function sendRequest(p_offset){
+			Http.open("GET", window.location.href+"&p_offset="+(p_offset).toString());
+			Http.send();
+		}
+
+		Http.onreadystatechange = function() {
+			if(this.readyState==4 && this.status==200){
+				const newTRs = new DOMParser().parseFromString(Http.responseText, "text/html").querySelector("#"+currentTableRequest.table.dom.id).querySelectorAll("tr");
+
+				let newData = { data : [] };
+
+				for(let i = 1; i < newTRs.length; i++){
+					
+					var rowData = [];
+
+					newTRs[i].childNodes.forEach(td => {
+						rowData.push(td.innerHTML);
+					})
+
+
+					newData.data.push(rowData);
+				}
+
+				if (newTRs.length < 31) currentTableRequest.fetchedAll = true;
+				
+				currentTableRequest.table.insert(newData);
+
+			}
+		}
+
+		</script>');
+		htp.print('</body>');
+
+	end ChiudiPagina;
 
 	procedure indirizzo(indirizzo VARCHAR2 default '') is
 	begin
@@ -253,7 +291,7 @@ begin
 	-- Procedura Tabella senza filtro provvisoria
 	procedure ApriTabella(elementi StringArray default emptyArray, ident varchar2 default null) is
 	begin
-		htp.prn('<table id="table'||ident||'" class="tab"> ');
+		htp.prn('<table id="tableN'||ident||'" class="tab"> ');
 		htp.prn('<thead>');
 		htp.prn('<tr>');
 		for i in 1..elementi.count loop
@@ -270,24 +308,47 @@ begin
 		htp.prn('<tbody>');
 	end ApriTabella;
 
-	procedure ChiudiTabella(ident varchar2 default null) IS
+		procedure ChiudiTabella(ident varchar2 default null, SQLpagination boolean default false) IS
 	BEGIN
 		htp.prn('</tbody>');
 		htp.prn('</table>');
 
 		htp.prn('<script>');
-		htp.prn('const dataTable'||ident||' = new simpleDatatables.DataTable("#table'||ident||'", {
-            responsive: true,
-			sortable:true,
-            searchable: false,
-			perPageSelect: false,
-            searchQuerySeparator: ",",
-            paging: true,
-            locale: "it",
-            fixedHeight: true
-        });');
-		htp.prn('</script>');
 
+		-- Creazione degli elementi grafici e della struttura interna della tabella
+		htp.prn('const dataTableN'||ident||' = new simpleDatatables.DataTable("#tableN'||ident||'", {
+					responsive: true,
+					sortable:true,
+					searchable: false,
+					perPageSelect: false,
+					searchQuerySeparator: ",",
+					paging: true,
+					locale: "it",
+					fixedHeight: true
+        		});
+		');
+
+		if SQLpagination then
+			htp.prn('
+					// Inserisco la nuova tabella nella lista delle tabelle.
+					dataTables.N'||ident||' = { table : dataTableN'||ident||', offset : 0, fetchedAll : false };
+
+					// Funzione che controlla chiede i nuovi dati se sono all`ultima pagina e se non ho già ricevuto tutti gli elementi
+
+					dataTableN'||ident||'.on("datatable.page", function(page) {
+						if(dataTableN'||ident||'.onLastPage && !dataTables.N'||ident||'.fetchedAll ){
+
+							dataTables.N'||ident||'.offset += 30;
+							currentTableRequest = dataTables.N'||ident||';
+
+							sendRequest(dataTables.N'||ident||'.offset);
+
+						}
+					});
+			');
+		end if;
+
+		htp.prn('</script>');
 	end ChiudiTabella;
 
 	procedure AggiungiRigaTabella IS
@@ -336,7 +397,7 @@ END AggiungiPulsanteGenerale;
 					<table class="inputTAB">');
 	end ApriFormFiltro;
 
-	procedure AggiungiCampoFormFiltro(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '') IS
+	procedure AggiungiCampoFormFiltro(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '',  placeholder VARCHAR2 default '', required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '', readonly boolean default false) IS
 	begin
 		if(tipo = 'submit') then
 		
@@ -350,7 +411,7 @@ END AggiungiPulsanteGenerale;
 			htp.prn('<td>
 				<div class="formField">
 					<label  id="'||ident||'">'||placeholder||'</label>');
-					gui.aggiungiInput(tipo, nome, value ,'', required, 'filterInput', ident, pattern, minimo, massimo);
+					gui.aggiungiInput(tipo, nome, value ,'', required, 'filterInput', ident, pattern, minimo, massimo, readonly);
 				htp.prn('</div>
 			</td>');
 		end if;
@@ -497,7 +558,7 @@ BEGIN
 		
 		for i in 1..ids.count loop
 			gui.apriDiv(ident => 'option');
-				htp.prn('<input type="checkbox" id="' ||ids(i)|| '" value="' ||ids(i)||'" onchange="updateHiddenInput('||chr(39)||hiddenParameter||chr(39)||', this)"/>');
+				htp.prn('<input type="checkbox" id="'||ids(i)||'" value="'||ids(i)||'" onchange="updateHiddenInput('||chr(39)||hiddenParameter||chr(39)||', this)"/>');
 				htp.prn('<label for="'|| ids(i) ||'">'|| names(i) ||'</label>');
 			gui.chiudiDiv();
 		end loop;
