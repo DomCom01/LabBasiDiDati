@@ -24,7 +24,7 @@ create or replace PACKAGE BODY gui as
 		
 					//Variabili per paginazione
 					const Http = new XMLHttpRequest(); // Richieste http
-					var currentTableRequest = null;    // Richiesta nuovi elementi tabella corrente
+					var currentTableRequest = null;    // Tabella che richiese nuovi elementi
 					var dataTables = {};			   // lista di oggetti DataTables
 		
 					</script>'); -- Aggiunto script di base
