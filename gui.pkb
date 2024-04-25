@@ -334,9 +334,9 @@ END AggiungiPulsanteGenerale;
 		end if;
 	end AggiungiCampoFormFiltro;
 
-	procedure AggiungiCampoFormHidden(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '') is
+	procedure AggiungiCampoFormHidden(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '', ident varchar2 default '') is
 	BEGIN
-		htp.prn('<input hidden type="'||tipo||'" name="'|| nome ||'" value="'||value||'">');
+		htp.prn('<input hidden type="'||tipo||'" name="'|| nome ||'" value="'||value||'" ident="'||ident||'">');
 	end AggiungiCampoFormHidden;
 
 	procedure ApriSelectFormFiltro(nome varchar2, placeholder VARCHAR2, firstNull boolean default True) IS
@@ -457,34 +457,83 @@ END AggiungiPulsanteGenerale;
 			gui.chiudiGruppoInput;
 	END aggiungiSelezioneSingola;
 
-procedure aggiungiSelezioneMultipla(testo VARCHAR2 default 'testo', placeholder VARCHAR2 default 'testo', ids stringArray default emptyArray ,names stringArray default emptyArray, hiddenParameter varchar2 default '') IS
-BEGIN
-	gui.aggiungiGruppoInput();
-	htp.prn('<div class="formField">');
-	if placeholder is not null then
-		htp.prn('<label >'||placeholder||'</label>');
-	else htp.prn('<label class="hidden" >_</label>');
-	end if;
+PROCEDURE aggiungiSelezioneMultipla(
+    testo VARCHAR2 DEFAULT 'testo',
+    placeholder VARCHAR2 DEFAULT 'testo',
+    ids stringArray DEFAULT emptyArray,
+    names stringArray DEFAULT emptyArray,
+    hiddenParameter VARCHAR2 DEFAULT '',
+    hiddenParameterSelected VARCHAR2 DEFAULT ''
+) IS
+    TYPE stringArray IS TABLE OF VARCHAR2(100);
+    isSelected BOOLEAN;
 
-	gui.apriDiv(classe => 'dropdown');
-		gui.apriDiv(classe => 'dropbtn', onclick => 'apriMenu(this.parentNode)');
-			htp.prn('<span class="text">'|| testo ||'</span>');
-			htp.prn('<span class="arrow"></span>');
-		htp.prn('</div>');
-		gui.apriDiv(ident => 'dropdown-content', classe => 'dropdown-content');
+    FUNCTION splitString(
+        str IN VARCHAR2,
+        delimiter IN VARCHAR2
+    ) RETURN stringArray IS
+        result stringArray := stringArray();
+        startPos PLS_INTEGER := 1;
+        endPos PLS_INTEGER;
+    BEGIN
+        LOOP
+            endPos := INSTR(str, delimiter, startPos);
+            IF endPos = 0 THEN
+                result.extend;
+                result(result.count) := SUBSTR(str, startPos);
+                EXIT;
+            END IF;
+            result.extend;
+            result(result.count) := SUBSTR(str, startPos, endPos - startPos);
+            startPos := endPos + LENGTH(delimiter);
+        END LOOP;
+        RETURN result;
+    END splitString;
+
+	BEGIN
 		
-		for i in 1..ids.count loop
-			gui.apriDiv(ident => 'option');
-				htp.prn('<input type="checkbox" id="' ||ids(i)|| '" value="' ||ids(i)||'" onchange="updateHiddenInput('||chr(39)||hiddenParameter||chr(39)||', this)"/>');
-				htp.prn('<label for="'|| ids(i) ||'">'|| names(i) ||'</label>');
-			gui.chiudiDiv();
-		end loop;
-		
-		gui.chiudiDiv();
-	gui.chiudiDiv();
-	gui.chiudiGruppoInput;
-	htp.prn('</div>');
-	
+    DECLARE
+        idList stringArray := splitString(hiddenParameterSelected, ';');
+    BEGIN
+        gui.aggiungiGruppoInput();
+        htp.prn('<div class="formField">');
+        IF placeholder IS NOT NULL THEN
+            htp.prn('<label>' || placeholder || '</label>');
+        ELSE
+            htp.prn('<label class="hidden">_</label>');
+        END IF;
+
+        gui.apriDiv(classe => 'dropdown');
+        gui.apriDiv(classe => 'dropbtn', onclick => 'apriMenu(this.parentNode)');
+        htp.prn('<span class="text">' || testo || '</span>');
+        htp.prn('<span class="arrow"></span>');
+        htp.prn('</div>');
+        gui.apriDiv(ident => 'dropdown-content', classe => 'dropdown-content');
+
+        FOR i IN 1..ids.count LOOP
+            isSelected := FALSE;
+            FOR j IN 1..idList.count LOOP
+                IF ids(i) = idList(j) THEN
+                    isSelected := TRUE;
+                    EXIT;
+                END IF;
+            END LOOP;
+
+            gui.apriDiv(ident => 'option');
+            htp.prn('<input type="checkbox" id="' || ids(i) || '" value="' || ids(i) || '"');
+            IF isSelected THEN
+                htp.prn(' checked');
+            END IF;
+            htp.prn(' onchange="updateHiddenInput(' || chr(39) || hiddenParameter || chr(39) || ', this)"/>');
+            htp.prn('<label for="' || ids(i) || '">' || names(i) || '</label>');
+            gui.chiudiDiv();
+        END LOOP;
+
+        gui.chiudiDiv();
+        gui.chiudiDiv();
+        gui.chiudiGruppoInput;
+        htp.prn('</div>');
+    END;
 END aggiungiSelezioneMultipla;
 
 	-- Procedura per popup di errore/successo

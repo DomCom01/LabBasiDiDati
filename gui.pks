@@ -167,14 +167,22 @@ procedure aggiungiCampoForm (tipo VARCHAR2 default 'text', classeIcona VARCHAR2 
 	nome VARCHAR2, required BOOLEAN default true, ident VARCHAR2 default '', placeholder VARCHAR2 default '',
 	value VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '', readonly boolean default False, selected boolean default false, step varchar default null);
 procedure aggiungiSelezioneSingola(elementi StringArray, valoreEffettivo StringArray default null, titolo varchar2 default '', ident varchar2, optionSelected varchar2 default null, firstNull boolean default true);
-procedure aggiungiSelezioneMultipla(testo VARCHAR2 default 'testo', placeholder VARCHAR2 default 'testo', ids stringArray default emptyArray ,names stringArray default emptyArray, hiddenParameter varchar2 default '');
 
+PROCEDURE aggiungiSelezioneMultipla(
+    testo VARCHAR2 DEFAULT 'testo',
+    placeholder VARCHAR2 DEFAULT 'testo',
+    ids stringArray DEFAULT emptyArray,
+    names stringArray DEFAULT emptyArray,
+    hiddenParameter VARCHAR2 DEFAULT '',
+    hiddenParameterSelected VARCHAR2 DEFAULT ''
+);
 -------------------
-	procedure aggiungicampoformhidden (
-		tipo  varchar2 default 'text',
-		nome  varchar2,
-		value varchar2 default ''
+	procedure AggiungiCampoFormHidden(tipo VARCHAR2 default 'text', 
+	nome VARCHAR2, 
+	value VARCHAR2 default '', 
+	ident varchar2 default ''
 	);
+	
 	procedure aggiungibottonesubmit (
 		value varchar2 default ''
 	);
