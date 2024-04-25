@@ -16,7 +16,8 @@ create or replace PACKAGE BODY gui as
 			<meta name="viewport" content="width=device-width, initial-scale=1">
 		');
 		htp.prn('<link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
-				<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>');
+				<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
+				<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>');
 		htp.print('<style> ' || costanti.stile || '</style>');
 		htp.print('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 			'); /*FONTAwesome*/
