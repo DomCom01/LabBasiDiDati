@@ -29,7 +29,7 @@ create or replace PACKAGE BODY gui as
 					var dataTables = {};			   // lista di oggetti DataTables
 		
 					</script>'); -- Aggiunto script di base
-		htp.headClose; 
+		htp.headClose;
 		gui.ApriBody(idSessione);
 	end Apripagina;
 
