@@ -82,21 +82,29 @@ create or replace PACKAGE costanti as
     }
   }
 
-function mostraConferma(riga, url) {
-    // Controlla se la riga di conferma è già presente altrimenti la crea
-    if (!riga.nextElementSibling || !riga.nextElementSibling.classList.contains('rigaConferma')) {
-        var nuovaRiga = document.createElement("tr");
-        nuovaRiga.classList.add('rigaConferma'); 
-        var nuovaCella = nuovaRiga.insertCell(0);
-        nuovaCella.colSpan = riga.cells.length; //Non funziona
-        
-        nuovaCella.innerHTML = "Confermi? " + 
-                                "<button onclick=\"apriURL('" + url + "')\">Sì</button> " + 
+function mostraConferma(url) {
+
+   var modal = document.getElementById("modal");
+
+   modal.querySelector("#modal-button").innerHTML = "<button onclick=\"apriURL('" + url + "')\">Sì</button> " + 
                                 "<button onclick=\"annullaEliminazione(this.parentNode.parentNode)\">No</button>";
-        
-        // Inserisci la nuova riga dopo la riga corrente
-        riga.parentNode.insertBefore(nuovaRiga, riga.nextSibling);
-    }
+   modal.style.display = "block"; 
+
+
+    // Controlla se la riga di conferma è già presente altrimenti la crea
+    //if (!riga.nextElementSibling || !riga.nextElementSibling.classList.contains('rigaConferma')) {
+    //    var nuovaRiga = document.createElement("tr");
+    //    nuovaRiga.classList.add('rigaConferma'); 
+    //    var nuovaCella = nuovaRiga.insertCell(0);
+    //    nuovaCella.colSpan = riga.cells.length; //Non funziona
+    //    
+    //    nuovaCella.innerHTML = "Confermi? " + 
+    //                            "<button onclick=\"apriURL('" + url + "')\">Sì</button> " + 
+    //                            "<button onclick=\"annullaEliminazione(this.parentNode.parentNode)\">No</button>";
+    //    
+    //    // Inserisci la nuova riga dopo la riga corrente
+    //    riga.parentNode.insertBefore(nuovaRiga, riga.nextSibling);
+    //}
   }
 
     function apriURL(url) {
@@ -105,23 +113,30 @@ function mostraConferma(riga, url) {
 
 function annullaEliminazione(rigaConferma) {
     // Rimuove la riga di conferma se viene cliccato no
-    rigaConferma.parentNode.removeChild(rigaConferma);
+    rigaConferma.style.display = "none";
 }
-
-  function mostraPopup() {
-      var popup = document.getElementById("popup-message");
-      popup.style.display = "block";
-  }
-
-// Funzione per nascondere il popup
-function nascondiPopup() {
-    var popup = document.getElementById("popup-message");
-    popup.style.display = "none";
-}
-
   ]';
 
   stile constant varchar(32767) := '
+   
+  #modal {
+    position : fixed; 
+    width : 30vw; 
+    height : 20vh; 
+    display : none; 
+    background-color : white; 
+    color : black; 
+    top: 50%; 
+    left : 50%; 
+    transform: translate(-50%, -50%);
+    border-radius: 4px;
+    padding : 1.5em; 
+  }
+
+
+  #modal-button{
+
+  }
 
   html{
     margin:0px;
@@ -1202,6 +1217,5 @@ body{
   .datatable-wrapper.no-footer .datatable-container {
     border-bottom: 0px solid !important;
   }
-
 ';
 end costanti;

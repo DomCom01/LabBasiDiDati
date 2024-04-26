@@ -38,9 +38,10 @@ create or replace PACKAGE BODY gui as
 	begin
 
 		htp.print('<body>');
+		gui.modalPopup; 
 
 		if idSessione = '-1' then --Sessione ospite
-			gui.topbar(-1, '', '');
+			gui.topbar(-1, '', '');	
 
 			gui.ApriDiv('', 'container');
 				gui.ApriDiv('', 'contentContainer');
@@ -53,6 +54,9 @@ create or replace PACKAGE BODY gui as
 		end if;
 		
 		gui.TopBar(SessionHandler.getIdUser(idSessione), SessionHandler.getUsername(idSessione), SessionHandler.getRuolo(idSessione), idSessione);
+
+		-- modal popup (nascosto)
+
 		gui.ApriDiv('', 'container');
 			gui.ApriDiv('', 'contentContainer');
 
@@ -109,6 +113,21 @@ create or replace PACKAGE BODY gui as
 	begin
 		htp.prn('</a>');
 	end chiudiIndirizzo;
+
+	procedure modalPopup (
+		testo varchar2 default 'Esempio'
+	)is
+	BEGIN 
+
+		gui.apriDiv (ident => 'modal'); 
+			gui.aggiungiIntestazione (testo => 'Sei sicuro? ', dimensione => 'h3');
+			gui.aCapo(); 
+				gui.apriDiv (ident => 'modal-button');  
+				gui.chiudiDiv; 
+
+		gui.chiudiDiv; 
+		END modalPopup; 
+	
 
 	procedure BottoneTopBar(testo varchar2 default '', nome varchar2 default '', valore varchar2 default '') is
 	begin
@@ -378,7 +397,7 @@ END AggiungiPulsanteModifica;
 
 procedure AggiungiPulsanteCancellazione(collegamento VARCHAR2 DEFAULT '') IS
 BEGIN
-    htp.prn('<button onclick="mostraConferma(this.parentNode.parentNode, '||collegamento||')">
+    htp.prn('<button onclick="mostraConferma('||collegamento||')">
     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
     <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16l-1.58 14.22A2 2 0 0 1 16.432 22H7.568a2 2 0 0 1-1.988-1.78zm3.345-2.853A2 2 0 0 1 9.154 2h5.692a2 2 0 0 1 1.81 1.147L18 6H6zM2 6h20m-12 5v5m4-5v5"/>
     </svg>
@@ -387,7 +406,7 @@ END AggiungiPulsanteCancellazione;
 
 procedure AggiungiPulsanteGenerale(collegamento VARCHAR2 DEFAULT '', testo VARCHAR2) IS
 BEGIN
-    htp.prn('<button onclick="mostraConferma(this.parentNode.parentNode, '||collegamento||')">
+    htp.prn('<button onclick="mostraConferma('||collegamento||')">
     '||testo||'
     </button>');
 END AggiungiPulsanteGenerale;
