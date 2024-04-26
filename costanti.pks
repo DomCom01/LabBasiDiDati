@@ -171,10 +171,6 @@ function annullaEliminazione(rigaConferma) {
     border: none;
   }
 
-  .bottone:last-child{
-    margin:0px !important;
-  }
-
 .bottone2 {
   background-color: #cfab3a;
   border-radius: 12px;
