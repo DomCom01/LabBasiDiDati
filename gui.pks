@@ -151,6 +151,7 @@ procedure chiudiElementoPulsanti;
 		hiddenparameter varchar2 default ''
 	);
 --Footer
+
 	procedure footer;
 
 --Form

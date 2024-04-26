@@ -212,7 +212,7 @@ a{
 .bottoniDestra {
   display: flex; /* Make the wrapper a flexbox container */
   flex-shrink: 0; /* Prevent wrapper from shrinking */
-  padding-right: 10px;  
+  padding-right: 10px;   
 }
 
   /* CSS */
@@ -887,7 +887,8 @@ body{
   }
 
   .topbardropdown-content {
-   /* overflow: hidden;*/
+    overflow-y: scroll;
+    max-height: 400px;
     display: none;
     position: absolute;
     background-color: #f9f9f9;

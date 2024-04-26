@@ -213,7 +213,7 @@ create or replace PACKAGE BODY gui as
 				'gruppo3.visualizzaProfilo?idSess=' || idSessione || '&id=' || SESSIONHANDLER.getIDUser(idSessione) || '',
 				'gruppo3.visualizzaConvenzioni?idSess=' || idSessione || '', 
 				'gruppo3.associaConvenzione?idSess=' || idSessione || '',
-				'gruppo3.inserisciConvenzione?' || idSessione || '',
+				'gruppo3.inserisciConvenzione?idSess=' || idSessione || '',
 				'gruppo3.dettagliConvenzioni?idSess=' || idSessione || ''
 			)
 		);
@@ -253,7 +253,7 @@ create or replace PACKAGE BODY gui as
 
 			gui.bottonePrimario(testo => username ||' | '||ruolo);
 
-			gui.indirizzo('Link to logica logout');
+			--gui.indirizzo('Link to logica logout');
 				if(ruolo = 'Cliente') then
 					gui.indirizzo(costanti.URL||'gui.LogOut?idUser='||id_user||'&ruolo=00');
 				else
@@ -261,7 +261,13 @@ create or replace PACKAGE BODY gui as
 				end if;
 					gui.BottonePrimario(testo => 'Logout'); 
 				gui.chiudiIndirizzo;
-			gui.chiudiIndirizzo;
+
+				--bottone homepage
+			gui.indirizzo (costanti.URL || 'gui.homePage?p_success=S&idSessione='||idSessione||'');
+			gui.bottonePrimario(testo => 'Home');
+			gui.chiudiIndirizzo; 
+			
+			--gui.chiudiIndirizzo;
 		gui.CHIUDIDIV;
 
 		gui.ChiudiDiv();
