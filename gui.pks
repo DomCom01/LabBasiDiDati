@@ -66,7 +66,7 @@ procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione VARCHAR 
 	);
 
 	procedure modalPopup (
-		testo varchar2 default 'Esempio'
+		testo varchar2 default ''
 	); 
 -- Procedure per Tabella
 /*ApriTabella ora contiene apri header, aggiungi header, chiudi header e apri body*/

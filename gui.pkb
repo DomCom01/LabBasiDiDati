@@ -115,17 +115,17 @@ create or replace PACKAGE BODY gui as
 	end chiudiIndirizzo;
 
 	procedure modalPopup (
-		testo varchar2 default 'Esempio'
+		testo varchar2 default ''
 	)is
 	BEGIN 
 
-		gui.apriDiv (ident => 'modal'); 
-			gui.aggiungiIntestazione (testo => 'Sei sicuro? ', dimensione => 'h3');
+		gui.apriDiv (ident => 'modal');  
+			gui.aggiungiIntestazione (testo => 'Sei sicuro?');
 			gui.aCapo(); 
 				gui.apriDiv (ident => 'modal-button');  
 				gui.chiudiDiv; 
-
-		gui.chiudiDiv; 
+			gui.chiudiDiv; 
+		
 		END modalPopup; 
 	
 

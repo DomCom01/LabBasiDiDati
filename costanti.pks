@@ -89,22 +89,6 @@ function mostraConferma(url) {
    modal.querySelector("#modal-button").innerHTML = "<button onclick=\"apriURL('" + url + "')\">Sì</button> " + 
                                 "<button onclick=\"annullaEliminazione(this.parentNode.parentNode)\">No</button>";
    modal.style.display = "block"; 
-
-
-    // Controlla se la riga di conferma è già presente altrimenti la crea
-    //if (!riga.nextElementSibling || !riga.nextElementSibling.classList.contains('rigaConferma')) {
-    //    var nuovaRiga = document.createElement("tr");
-    //    nuovaRiga.classList.add('rigaConferma'); 
-    //    var nuovaCella = nuovaRiga.insertCell(0);
-    //    nuovaCella.colSpan = riga.cells.length; //Non funziona
-    //    
-    //    nuovaCella.innerHTML = "Confermi? " + 
-    //                            "<button onclick=\"apriURL('" + url + "')\">Sì</button> " + 
-    //                            "<button onclick=\"annullaEliminazione(this.parentNode.parentNode)\">No</button>";
-    //    
-    //    // Inserisci la nuova riga dopo la riga corrente
-    //    riga.parentNode.insertBefore(nuovaRiga, riga.nextSibling);
-    //}
   }
 
     function apriURL(url) {
@@ -129,14 +113,35 @@ function annullaEliminazione(rigaConferma) {
     top: 50%; 
     left : 50%; 
     transform: translate(-50%, -50%);
-    border-radius: 4px;
+    border-radius: 30px;
     padding : 1.5em; 
+    background-color: rgba(black, .8);
+    backdrop-filter: blur(10px); 
+    transition: all .3s;
   }
 
+  #modal h1{
+    text-align : center; 
+  }
 
   #modal-button{
-
+    display: block; 
+    height : 4em;
+    padding : 1.1em; 
   }
+
+  #modal-button button{
+      width : 20%; 
+      height: 50%; 
+      background-color : black; 
+      color : white; 
+      text-decoration : none; 
+      border-radius : 10px; 
+    }
+
+  #modal-button button:last-child{ 
+      float:right;
+    }
 
   html{
     margin:0px;
