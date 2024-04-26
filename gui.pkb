@@ -242,16 +242,6 @@ create or replace PACKAGE BODY gui as
 			proceduresNames => gui.StringArray ('Gruppo4.inserimentoRevisione?idSessione='||idSessione||'', 'Gruppo4.visualizzazioneRevisione?idSessione='||idSessione||'', 
 			'Gruppo4.statisticheRev?idSessione='||idSessione||'')); 
 
-			/*gui.apriDiv(classe => 'topbar-dropdown');
-				gui.BottoneTopBar(testo => 'Gruppo 4');
-				gui.apriDiv(ident => 'topbardropdown-content', classe => 'topbardropdown-content');
-					for i in 1..3 loop
-						gui.indirizzo('Link1');
-							htp.prn('<span>Link1</span>');
-						gui.chiudiIndirizzo;
-					end loop;
-				gui.chiudiDiv();
-			gui.chiudiDiv();*/
 
 		gui.CHIUDIDIV;
 		
@@ -566,45 +556,16 @@ END AggiungiPulsanteGenerale;
 			gui.chiudiGruppoInput;
 	END aggiungiSelezioneSingola;
 
-PROCEDURE aggiungiSelezioneMultipla(
-    testo VARCHAR2 DEFAULT 'testo',
-    placeholder VARCHAR2 DEFAULT 'testo',
-    ids stringArray DEFAULT emptyArray,
-    names stringArray DEFAULT emptyArray,
-    hiddenParameter VARCHAR2 DEFAULT '',
-    hiddenParameterSelected VARCHAR2 DEFAULT ''
-) IS
-    TYPE stringArray IS TABLE OF VARCHAR2(100);
-    isSelected BOOLEAN;
-
-    FUNCTION splitString(
-        str IN VARCHAR2,
-        delimiter IN VARCHAR2
-    ) RETURN stringArray IS
-        result stringArray := stringArray();
-        startPos PLS_INTEGER := 1;
-        endPos PLS_INTEGER;
+	PROCEDURE aggiungiSelezioneMultipla(
+		testo VARCHAR2 DEFAULT 'testo',
+		placeholder VARCHAR2 DEFAULT 'testo',
+		ids stringArray DEFAULT emptyArray,
+		names stringArray DEFAULT emptyArray,
+		hiddenParameter VARCHAR2 DEFAULT '',
+		hiddenParameterSelected StringArray default gui.StringArray()
+	) IS
+		isSelected BOOLEAN;
     BEGIN
-        LOOP
-            endPos := INSTR(str, delimiter, startPos);
-            IF endPos = 0 THEN
-                result.extend;
-                result(result.count) := SUBSTR(str, startPos);
-                EXIT;
-            END IF;
-            result.extend;
-            result(result.count) := SUBSTR(str, startPos, endPos - startPos);
-            startPos := endPos + LENGTH(delimiter);
-        END LOOP;
-        RETURN result;
-    END splitString;
-
-	BEGIN
-		
-    DECLARE
-        idList stringArray := splitString(hiddenParameterSelected, ';');
-    BEGIN
-        gui.aggiungiGruppoInput();
         htp.prn('<div class="formField">');
         IF placeholder IS NOT NULL THEN
             htp.prn('<label>' || placeholder || '</label>');
@@ -613,37 +574,39 @@ PROCEDURE aggiungiSelezioneMultipla(
         END IF;
 
         gui.apriDiv(classe => 'dropdown');
-        gui.apriDiv(classe => 'dropbtn', onclick => 'apriMenu(this.parentNode)');
-        htp.prn('<span class="text">' || testo || '</span>');
-        htp.prn('<span class="arrow"></span>');
-        htp.prn('</div>');
-        gui.apriDiv(ident => 'dropdown-content', classe => 'dropdown-content');
+			gui.apriDiv(classe => 'dropbtn', onclick => 'apriMenu(this.parentNode)');
+				htp.prn('<span class="text">' || testo || '</span>');
+				htp.prn('<span class="arrow"></span>');
+			gui.chiudiDiv;
+			gui.apriDiv(ident => 'dropdown-content', classe => 'dropdown-content');
 
-        FOR i IN 1..ids.count LOOP
-            isSelected := FALSE;
-            FOR j IN 1..idList.count LOOP
-                IF ids(i) = idList(j) THEN
-                    isSelected := TRUE;
-                    EXIT;
-                END IF;
-            END LOOP;
+				FOR i IN 1..ids.count LOOP
+					isSelected := FALSE;
+					FOR j IN 1..hiddenParameterSelected.count LOOP
+						IF ids(i) = hiddenParameterSelected(j) THEN
+							isSelected := TRUE;
+							EXIT;
+						END IF;
+					END LOOP;
 
-            gui.apriDiv(ident => 'option');
-            htp.prn('<input type="checkbox" id="' || ids(i) || '" value="' || ids(i) || '"');
-            IF isSelected THEN
-                htp.prn(' checked');
-            END IF;
-            htp.prn(' onchange="updateHiddenInput(' || chr(39) || hiddenParameter || chr(39) || ', this)"/>');
-            htp.prn('<label for="' || ids(i) || '">' || names(i) || '</label>');
-            gui.chiudiDiv();
-        END LOOP;
+					gui.apriDiv(ident => 'option');
+						htp.prn('<input type="checkbox" id="' || ids(i) || '" value="' || ids(i) || '"');
+						IF isSelected THEN
+							htp.prn(' checked');
+						END IF;
+						htp.prn(' onchange="updateHiddenInput(' || chr(39) || hiddenParameter || chr(39) || ', this)"/>');
+						htp.prn('<label for="' || ids(i) || '">' || names(i) || '</label>');
+						IF isSelected THEN
+						
+							htp.prn('<script>updateHiddenInput(' || chr(39) || hiddenParameter || chr(39) || ', document.getElementById(' || chr(39) || ids(i) || chr(39) || '));</script>');
+						END IF;
+					gui.chiudiDiv();
+				END LOOP;
 
-        gui.chiudiDiv();
-        gui.chiudiDiv();
-        gui.chiudiGruppoInput;
-        htp.prn('</div>');
-    END;
-END aggiungiSelezioneMultipla;
+        		gui.chiudiDiv();
+    		gui.chiudiDiv();
+		gui.chiudiDiv;
+	END aggiungiSelezioneMultipla;
 
 	-- Procedura per popup di errore/successo
 	procedure AggiungiPopup(successo boolean, testo VARCHAR2 default 'Errore!', indirizzo varchar2 default '') IS
@@ -841,6 +804,9 @@ end chiudiElementoPulsanti;
 		n_ruolo int;
         utentiPermission gui.STRINGARRAY;
         counterRowTest int;
+		oraAttuale varchar2(10);
+		nome varchar2(15);
+		ora int;
 	begin
 		gui.apriPagina('Home', idSessione);
 			if p_registrazione then --se la registrazione è andata a buon fine visualizzo il popup
@@ -848,8 +814,10 @@ end chiudiElementoPulsanti;
 				gui.acapo;
 			end if;
 
-			gui.aggiungiIntestazione('Home Page', 'h1');
-			gui.acapo(2);
+			if p_success is null then
+				gui.aggiungiIntestazione('Login', 'h1');
+				gui.acapo(2);
+			end if;
 
 			if p_success = 'T' then
 				gui.aggiungiPopup(false, 'Sessione scaduta o inesistente, esegui il login per continuare a utilizzare i nostri servizi');
@@ -859,8 +827,21 @@ end chiudiElementoPulsanti;
 				gui.acapo(2);
 			elsif p_success = 'S' then
 			    ruolo:=SESSIONHANDLER.GETRUOLO(idSessione);
-				gui.aggiungiPopup(true, 'Login riuscito, Benvenuto');
-			    gui.APRITABELLA(elementi =>gui.STRINGARRAY(' ',' ', ' ', ' ', ' '));
+				nome:= SessionHandler.getUsername(idSessione);
+				oraAttuale := TO_CHAR(SYSDATE, 'HH24:MI:SS');
+				ora := TO_NUMBER(SUBSTR(oraAttuale, 1, 2));
+				IF ora < 12 AND ora > 5 THEN
+					gui.aggiungiIntestazione('Buongiorno, '||nome||'');
+				ELSIF ora < 19 THEN
+					gui.aggiungiIntestazione('Buon pomeriggio, '||nome||'');
+				ELSE
+					gui.aggiungiIntestazione('Buonasera, '||nome||'');
+				END IF;
+				htp.prn('<h2 style="color: black; display: flex; justify-content: center; align-items: center;">
+						Nella barra in alto trovi tutte le operazioni disponibili, divise nei vari gruppi
+						</h2>');
+				--gui.aggiungiIntestazione('Nella barra in alto trovi tutte le operazioni disponibili, divise nei vari gruppi', 'h3');
+			    /*gui.APRITABELLA(elementi =>gui.STRINGARRAY(' ',' ', ' ', ' ', ' '));
 			    counterRowTest:=0;
 			    for url in (SELECT * FROM PERMISSIONS) loop
 				    utentiPermission:=gui.STRINGARRAY();
@@ -877,8 +858,8 @@ end chiudiElementoPulsanti;
                         end if;
 					end if;
 					end loop;
-			    gui.CHIUDITABELLA();
-				htp.prn('<img class="taxi-img" src="https://freesvg.org/img/maninclassictaxi-1920.png"/>');
+			    gui.CHIUDITABELLA();*/
+				htp.prn('<img class="taxi-img" src="https://i.imgur.com/7Enpiv9.png"/>');
 			elsif p_success = 'LOF' then
 				gui.aggiungiPopup(false, 'Logout non riuscito, qualcosa è andato storto');
 				gui.acapo(2);

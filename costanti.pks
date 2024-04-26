@@ -1,7 +1,7 @@
 SET DEFINE OFF;
 create or replace PACKAGE costanti as
 
-  URL CONSTANT VARCHAR(100) := 'http://131.114.73.203:8080/apex/g_giannessi.';
+  URL CONSTANT VARCHAR(100) := 'http://131.114.73.203:8080/apex/d_commiso.';
 
   -- Funzione Arcangelo;
   dropdownScript constant VARCHAR2(32767) := '
@@ -1171,9 +1171,11 @@ body{
   }
 
   .taxi-img{
-    height:70vh;
-    transform: translateX(-120%);
-    animation: slidein 10s linear 0s infinite;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    
   }
 
   @keyframes slidein {

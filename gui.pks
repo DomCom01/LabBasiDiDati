@@ -175,12 +175,12 @@ procedure aggiungiCampoForm (tipo VARCHAR2 default 'text', classeIcona VARCHAR2 
 procedure aggiungiSelezioneSingola(elementi StringArray, valoreEffettivo StringArray default null, titolo varchar2 default '', ident varchar2, optionSelected varchar2 default null, firstNull boolean default true);
 
 PROCEDURE aggiungiSelezioneMultipla(
-    testo VARCHAR2 DEFAULT 'testo',
-    placeholder VARCHAR2 DEFAULT 'testo',
-    ids stringArray DEFAULT emptyArray,
-    names stringArray DEFAULT emptyArray,
-    hiddenParameter VARCHAR2 DEFAULT '',
-    hiddenParameterSelected VARCHAR2 DEFAULT ''
+	testo VARCHAR2 DEFAULT 'testo',
+	placeholder VARCHAR2 DEFAULT 'testo',
+	ids stringArray DEFAULT emptyArray,
+	names stringArray DEFAULT emptyArray,
+	hiddenParameter VARCHAR2 DEFAULT '',
+	hiddenParameterSelected StringArray default gui.StringArray()
 );
 -------------------
 	procedure AggiungiCampoFormHidden(tipo VARCHAR2 default 'text', 
