@@ -818,20 +818,18 @@ end chiudiElementoPulsanti;
 
 	procedure HomePage(p_success varchar2 default ' ', cEmail VARCHAR2 default null, p_password varchar2 default null, tipo_utente varchar2 default null, p_registrazione boolean default false, idSessione varchar default '-1') is
 		idSess int;
-		ruolo varchar(2);
+		ruolo varchar(10);
 		n_ruolo int;
+        utentiPermission gui.STRINGARRAY;
+        counterRowTest int;
 	begin
-
 		gui.apriPagina('Home', idSessione);
-			if p_registrazione then --se la registrazione è andta a buon fine visualizzo il popup
+			if p_registrazione then --se la registrazione è andata a buon fine visualizzo il popup
 				gui.aggiungiPopup (True, 'Registrazione avvenuta!'); 
 				gui.acapo;
-			end if; 
+			end if;
 
-			
 			gui.aggiungiIntestazione('Home Page', 'h1');
- 
-			
 			gui.acapo(2);
 
 			if p_success = 'T' then
@@ -841,8 +839,26 @@ end chiudiElementoPulsanti;
 				gui.aggiungiPopup(false, 'Login non riuscito, Email o Password errati');
 				gui.acapo(2);
 			elsif p_success = 'S' then
+			    ruolo:=SESSIONHANDLER.GETRUOLO(idSessione);
 				gui.aggiungiPopup(true, 'Login riuscito, Benvenuto');
-				--gui.acapo(1);
+			    gui.APRITABELLA(elementi =>gui.STRINGARRAY(' ',' ', ' ', ' ', ' '));
+			    counterRowTest:=0;
+			    for url in (SELECT * FROM PERMISSIONS) loop
+				    utentiPermission:=gui.STRINGARRAY();
+				    utentiPermission:=UTILITY.STRINGTOARRAY(url.USERS);
+				    if(ruolo  member of utentiPermission) then
+				        if(counterRowTest=0) then
+                            gui.AGGIUNGIRIGATABELLA();
+                        end if;
+				        counterRowTest:=counterRowTest+1;
+					    gui.AggiungiBottoneTabella(url.name,url=>url.PROCEDUREURL||idSessione);
+					    if(counterRowTest=5) then
+                            gui.ChiudiRigaTabella();
+                            counterRowTest:=0;
+                        end if;
+					end if;
+					end loop;
+			    gui.CHIUDITABELLA();
 				htp.prn('<img class="taxi-img" src="https://freesvg.org/img/maninclassictaxi-1920.png"/>');
 			elsif p_success = 'LOF' then
 				gui.aggiungiPopup(false, 'Logout non riuscito, qualcosa è andato storto');
@@ -888,15 +904,16 @@ end chiudiElementoPulsanti;
 				
             elsif p_success <> 'S' then
 
-				if tipo_utente is null then -- in caso non venga scelto nessun ruolo per l'autenticazione 
-					gui.reindirizza(costanti.URL||'gui.homePage?p_success=L');
+				if tipo_utente is null then -- in caso non venga scelto nessun ruolo per l'autenticazione
+				    gui.reindirizza(costanti.URL||'gui.homePage?p_success=L');
 				end if;
 
 				idSess := LOGINLOGOUT.AGGIUNGISESSIONE(cEmail,p_password,tipo_utente);
 
-                if idSess is null then 
-                    gui.reindirizza(costanti.URL||'gui.homePage?p_success=L');
-				else                   
+                if idSess is null then
+				    gui.reindirizza(costanti.URL||'gui.homePage?p_success=L');
+				else
+
 					gui.reindirizza(costanti.URL||'gui.homePage?p_success=S&idSessione='||tipo_utente||idSess||'');
                 end if;
 
@@ -905,7 +922,8 @@ end chiudiElementoPulsanti;
 		gui.chiudiPagina();
 
 		EXCEPTION
-			WHEN OTHERS THEN  gui.reindirizza(costanti.URL||'gui.homePage?p_success=L');  -- errore ancora da risolvere'
+			WHEN OTHERS THEN
+			    gui.reindirizza(costanti.URL||'gui.homePage?p_success=L');  -- errore ancora da risolvere'
 	end HomePage;
 
 	procedure LogOut(idUser int, ruolo varchar2) is
