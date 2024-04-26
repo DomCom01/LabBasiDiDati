@@ -89,6 +89,7 @@ function mostraConferma(url) {
    modal.querySelector("#modal-button").innerHTML = "<button onclick=\"apriURL('" + url + "')\">Sì</button> " + 
                                 "<button onclick=\"annullaEliminazione(this.parentNode.parentNode)\">No</button>";
    modal.style.display = "block"; 
+   modal.parentNode.style.backgroundColor = "rgba(0, 0, 0, 0.8)"; 
   }
 
     function apriURL(url) {
@@ -98,6 +99,7 @@ function mostraConferma(url) {
 function annullaEliminazione(rigaConferma) {
     // Rimuove la riga di conferma se viene cliccato no
     rigaConferma.style.display = "none";
+    rigaConferma.parentNode.style.backgroundColor = "#e3e3e3";
 }
   ]';
 
@@ -117,7 +119,7 @@ function annullaEliminazione(rigaConferma) {
     padding : 1.5em; 
     background-color: rgba(black, .8);
     backdrop-filter: blur(10px); 
-    transition: all .3s;
+    transition : opacity 0.2s ease-out;
   }
 
   #modal h1{
