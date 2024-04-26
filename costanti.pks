@@ -1,7 +1,7 @@
 SET DEFINE OFF;
 create or replace PACKAGE costanti as
 
-  URL CONSTANT VARCHAR(100) := 'http://131.114.73.203:8080/apex/l_ceccotti.';
+  URL CONSTANT VARCHAR(100) := 'http://131.114.73.203:8080/apex/g_giannessi.';
 
   -- Funzione Arcangelo;
   dropdownScript constant VARCHAR2(32767) := '
@@ -82,21 +82,14 @@ create or replace PACKAGE costanti as
     }
   }
 
-function mostraConferma(riga, url) {
-    // Controlla se la riga di conferma è già presente altrimenti la crea
-    if (!riga.nextElementSibling || !riga.nextElementSibling.classList.contains('rigaConferma')) {
-        var nuovaRiga = document.createElement("tr");
-        nuovaRiga.classList.add('rigaConferma'); 
-        var nuovaCella = nuovaRiga.insertCell(0);
-        nuovaCella.colSpan = riga.cells.length; //Non funziona
-        
-        nuovaCella.innerHTML = "Confermi? " + 
-                                "<button onclick=\"apriURL('" + url + "')\">Sì</button> " + 
+function mostraConferma(url) {
+
+   var modal = document.getElementById("modal");
+
+   modal.querySelector("#modal-button").innerHTML = "<button onclick=\"apriURL('" + url + "')\">Sì</button> " + 
                                 "<button onclick=\"annullaEliminazione(this.parentNode.parentNode)\">No</button>";
-        
-        // Inserisci la nuova riga dopo la riga corrente
-        riga.parentNode.insertBefore(nuovaRiga, riga.nextSibling);
-    }
+   modal.style.display = "block"; 
+   modal.parentNode.style.backgroundColor = "rgba(0, 0, 0, 0.8)"; 
   }
 
     function apriURL(url) {
@@ -105,23 +98,52 @@ function mostraConferma(riga, url) {
 
 function annullaEliminazione(rigaConferma) {
     // Rimuove la riga di conferma se viene cliccato no
-    rigaConferma.parentNode.removeChild(rigaConferma);
+    rigaConferma.style.display = "none";
+    rigaConferma.parentNode.style.backgroundColor = "#e3e3e3";
 }
-
-  function mostraPopup() {
-      var popup = document.getElementById("popup-message");
-      popup.style.display = "block";
-  }
-
-// Funzione per nascondere il popup
-function nascondiPopup() {
-    var popup = document.getElementById("popup-message");
-    popup.style.display = "none";
-}
-
   ]';
 
   stile constant varchar(32767) := '
+   
+  #modal {
+    position : fixed; 
+    width : 30vw; 
+    height : 20vh; 
+    display : none; 
+    background-color : white; 
+    color : black; 
+    top: 50%; 
+    left : 50%; 
+    transform: translate(-50%, -50%);
+    border-radius: 30px;
+    padding : 1.5em; 
+    background-color: rgba(black, .8);
+    backdrop-filter: blur(10px); 
+    transition : opacity 0.2s ease-out;
+  }
+
+  #modal h1{
+    text-align : center; 
+  }
+
+  #modal-button{
+    display: block; 
+    height : 4em;
+    padding : 1.1em; 
+  }
+
+  #modal-button button{
+      width : 20%; 
+      height: 50%; 
+      background-color : black; 
+      color : white; 
+      text-decoration : none; 
+      border-radius : 10px; 
+    }
+
+  #modal-button button:last-child{ 
+      float:right;
+    }
 
   html{
     margin:0px;
@@ -212,7 +234,7 @@ a{
 .bottoniDestra {
   display: flex; /* Make the wrapper a flexbox container */
   flex-shrink: 0; /* Prevent wrapper from shrinking */
-  padding-right: 10px;  
+  padding-right: 10px;   
 }
 
   /* CSS */
@@ -887,7 +909,8 @@ body{
   }
 
   .topbardropdown-content {
-   /* overflow: hidden;*/
+    overflow-y: scroll;
+    max-height: 400px;
     display: none;
     position: absolute;
     background-color: #f9f9f9;
@@ -1201,6 +1224,5 @@ body{
   .datatable-wrapper.no-footer .datatable-container {
     border-bottom: 0px solid !important;
   }
-
 ';
 end costanti;

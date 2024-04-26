@@ -38,9 +38,10 @@ create or replace PACKAGE BODY gui as
 	begin
 
 		htp.print('<body>');
+		gui.modalPopup; 
 
 		if idSessione = '-1' then --Sessione ospite
-			gui.topbar(-1, '', '');
+			gui.topbar(-1, '', '');	
 
 			gui.ApriDiv('', 'container');
 				gui.ApriDiv('', 'contentContainer');
@@ -53,6 +54,9 @@ create or replace PACKAGE BODY gui as
 		end if;
 		
 		gui.TopBar(SessionHandler.getIdUser(idSessione), SessionHandler.getUsername(idSessione), SessionHandler.getRuolo(idSessione), idSessione);
+
+		-- modal popup (nascosto)
+
 		gui.ApriDiv('', 'container');
 			gui.ApriDiv('', 'contentContainer');
 
@@ -109,6 +113,21 @@ create or replace PACKAGE BODY gui as
 	begin
 		htp.prn('</a>');
 	end chiudiIndirizzo;
+
+	procedure modalPopup (
+		testo varchar2 default ''
+	)is
+	BEGIN 
+
+		gui.apriDiv (ident => 'modal');  
+			gui.aggiungiIntestazione (testo => 'Sei sicuro?');
+			gui.aCapo(); 
+				gui.apriDiv (ident => 'modal-button');  
+				gui.chiudiDiv; 
+			gui.chiudiDiv; 
+		
+		END modalPopup; 
+	
 
 	procedure BottoneTopBar(testo varchar2 default '', nome varchar2 default '', valore varchar2 default '') is
 	begin
@@ -213,7 +232,7 @@ create or replace PACKAGE BODY gui as
 				'gruppo3.visualizzaProfilo?idSess=' || idSessione || '&id=' || SESSIONHANDLER.getIDUser(idSessione) || '',
 				'gruppo3.visualizzaConvenzioni?idSess=' || idSessione || '', 
 				'gruppo3.associaConvenzione?idSess=' || idSessione || '',
-				'gruppo3.inserisciConvenzione?' || idSessione || '',
+				'gruppo3.inserisciConvenzione?idSess=' || idSessione || '',
 				'gruppo3.dettagliConvenzioni?idSess=' || idSessione || ''
 			)
 		);
@@ -253,7 +272,7 @@ create or replace PACKAGE BODY gui as
 
 			gui.bottonePrimario(testo => username ||' | '||ruolo);
 
-			gui.indirizzo('Link to logica logout');
+			--gui.indirizzo('Link to logica logout');
 				if(ruolo = 'Cliente') then
 					gui.indirizzo(costanti.URL||'gui.LogOut?idUser='||id_user||'&ruolo=00');
 				else
@@ -261,7 +280,13 @@ create or replace PACKAGE BODY gui as
 				end if;
 					gui.BottonePrimario(testo => 'Logout'); 
 				gui.chiudiIndirizzo;
-			gui.chiudiIndirizzo;
+
+				--bottone homepage
+			gui.indirizzo (costanti.URL || 'gui.homePage?p_success=S&idSessione='||idSessione||'');
+			gui.bottonePrimario(testo => 'Home');
+			gui.chiudiIndirizzo; 
+			
+			--gui.chiudiIndirizzo;
 		gui.CHIUDIDIV;
 
 		gui.ChiudiDiv();
@@ -372,7 +397,7 @@ END AggiungiPulsanteModifica;
 
 procedure AggiungiPulsanteCancellazione(collegamento VARCHAR2 DEFAULT '') IS
 BEGIN
-    htp.prn('<button onclick="mostraConferma(this.parentNode.parentNode, '||collegamento||')">
+    htp.prn('<button onclick="mostraConferma('||collegamento||')">
     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
     <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16l-1.58 14.22A2 2 0 0 1 16.432 22H7.568a2 2 0 0 1-1.988-1.78zm3.345-2.853A2 2 0 0 1 9.154 2h5.692a2 2 0 0 1 1.81 1.147L18 6H6zM2 6h20m-12 5v5m4-5v5"/>
     </svg>
@@ -381,7 +406,7 @@ END AggiungiPulsanteCancellazione;
 
 procedure AggiungiPulsanteGenerale(collegamento VARCHAR2 DEFAULT '', testo VARCHAR2) IS
 BEGIN
-    htp.prn('<button onclick="mostraConferma(this.parentNode.parentNode, '||collegamento||')">
+    htp.prn('<button onclick="mostraConferma('||collegamento||')">
     '||testo||'
     </button>');
 END AggiungiPulsanteGenerale;
@@ -812,20 +837,18 @@ end chiudiElementoPulsanti;
 
 	procedure HomePage(p_success varchar2 default ' ', cEmail VARCHAR2 default null, p_password varchar2 default null, tipo_utente varchar2 default null, p_registrazione boolean default false, idSessione varchar default '-1') is
 		idSess int;
-		ruolo varchar(2);
+		ruolo varchar(10);
 		n_ruolo int;
+        utentiPermission gui.STRINGARRAY;
+        counterRowTest int;
 	begin
-
 		gui.apriPagina('Home', idSessione);
-			if p_registrazione then --se la registrazione è andta a buon fine visualizzo il popup
+			if p_registrazione then --se la registrazione è andata a buon fine visualizzo il popup
 				gui.aggiungiPopup (True, 'Registrazione avvenuta!'); 
 				gui.acapo;
-			end if; 
+			end if;
 
-			
 			gui.aggiungiIntestazione('Home Page', 'h1');
- 
-			
 			gui.acapo(2);
 
 			if p_success = 'T' then
@@ -835,8 +858,26 @@ end chiudiElementoPulsanti;
 				gui.aggiungiPopup(false, 'Login non riuscito, Email o Password errati');
 				gui.acapo(2);
 			elsif p_success = 'S' then
+			    ruolo:=SESSIONHANDLER.GETRUOLO(idSessione);
 				gui.aggiungiPopup(true, 'Login riuscito, Benvenuto');
-				--gui.acapo(1);
+			    gui.APRITABELLA(elementi =>gui.STRINGARRAY(' ',' ', ' ', ' ', ' '));
+			    counterRowTest:=0;
+			    for url in (SELECT * FROM PERMISSIONS) loop
+				    utentiPermission:=gui.STRINGARRAY();
+				    utentiPermission:=UTILITY.STRINGTOARRAY(url.USERS);
+				    if(ruolo  member of utentiPermission) then
+				        if(counterRowTest=0) then
+                            gui.AGGIUNGIRIGATABELLA();
+                        end if;
+				        counterRowTest:=counterRowTest+1;
+					    gui.AggiungiBottoneTabella(url.name,url=>url.PROCEDUREURL||idSessione);
+					    if(counterRowTest=5) then
+                            gui.ChiudiRigaTabella();
+                            counterRowTest:=0;
+                        end if;
+					end if;
+					end loop;
+			    gui.CHIUDITABELLA();
 				htp.prn('<img class="taxi-img" src="https://freesvg.org/img/maninclassictaxi-1920.png"/>');
 			elsif p_success = 'LOF' then
 				gui.aggiungiPopup(false, 'Logout non riuscito, qualcosa è andato storto');
@@ -882,15 +923,16 @@ end chiudiElementoPulsanti;
 				
             elsif p_success <> 'S' then
 
-				if tipo_utente is null then -- in caso non venga scelto nessun ruolo per l'autenticazione 
-					gui.reindirizza(costanti.URL||'gui.homePage?p_success=L');
+				if tipo_utente is null then -- in caso non venga scelto nessun ruolo per l'autenticazione
+				    gui.reindirizza(costanti.URL||'gui.homePage?p_success=L');
 				end if;
 
 				idSess := LOGINLOGOUT.AGGIUNGISESSIONE(cEmail,p_password,tipo_utente);
 
-                if idSess is null then 
-                    gui.reindirizza(costanti.URL||'gui.homePage?p_success=L');
-				else                   
+                if idSess is null then
+				    gui.reindirizza(costanti.URL||'gui.homePage?p_success=L');
+				else
+
 					gui.reindirizza(costanti.URL||'gui.homePage?p_success=S&idSessione='||tipo_utente||idSess||'');
                 end if;
 
@@ -899,7 +941,8 @@ end chiudiElementoPulsanti;
 		gui.chiudiPagina();
 
 		EXCEPTION
-			WHEN OTHERS THEN  gui.reindirizza(costanti.URL||'gui.homePage?p_success=L');  -- errore ancora da risolvere'
+			WHEN OTHERS THEN
+			    gui.reindirizza(costanti.URL||'gui.homePage?p_success=L');  -- errore ancora da risolvere'
 	end HomePage;
 
 	procedure LogOut(idUser int, ruolo varchar2) is
