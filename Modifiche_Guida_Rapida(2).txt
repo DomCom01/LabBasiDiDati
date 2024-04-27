@@ -70,3 +70,16 @@ Esempio
 	');
 	...
 
+modificata ApriPagina, aggiunto parametro "defaultModal boolean default true" : 
+
+Chi vuole il popup "si no" normale può lasciare tutto com'è, per chi volesse fare altrimenti c'è l'esempio sotto;
+
+Esempio :
+...
+gui.ApriPagina(..., defaultModal => false);
+...
+gui.apriModalPopup(testo => 'Vuoi confermare?');
+	...
+	...
+gui.chiudiModalPopup();
+
