@@ -959,7 +959,7 @@ BEGIN
 		end if;
 	end LogOut;
 
-	procedure AggiungiChart(ident varchar2, scriptJS varchar2) is
+	procedure AggiungiChart(ident varchar2, dataObject varchar2) is
 	begin
 		gui.apriDiv;
 			htp.prn('<canvas id="'||ident||'"></canvas>');
@@ -967,9 +967,9 @@ BEGIN
 
 		htp.prn('<script>
 
-				new Chart(document.getElementById("myChart"), '||scriptJS||');
+				new Chart(document.getElementById("'||ident||'"), '||dataObject||');
 				
-				</script>');
+			</script>');
 	end;
 
 end gui;
