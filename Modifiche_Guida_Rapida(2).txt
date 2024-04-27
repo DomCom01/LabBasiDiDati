@@ -48,7 +48,7 @@ Documentazione su https://www.chartjs.org
 
 Esempio
 	...
-	aggiungiChart('myChart', '
+	gui.aggiungiChart('myChart', '
 		{
 		    type: 'bar',
 		    data: {
