@@ -234,7 +234,7 @@ PROCEDURE aggiungiSelezioneMultipla(
 
 	procedure AggiungiChart(
 		ident varchar2,
-		scriptJS varchar2
+		dataObject varchar2
 	);
 
 ----------------------- Modal
