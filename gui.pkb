@@ -6,7 +6,7 @@ create or replace PACKAGE BODY gui as
 		htp.prn('<head><meta http-equiv="refresh" content="0;url=' || indirizzo || '"></head>');
 	end Reindirizza;
 
-	procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione VARCHAR default '-1',  scriptJS VARCHAR2 default '') is
+	procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione VARCHAR default '-1',  scriptJS VARCHAR2 default '', defaultModal boolean default true) is
 	begin
 		htp.htmlOpen;
 		htp.headOpen;
@@ -29,16 +29,19 @@ create or replace PACKAGE BODY gui as
 					var dataTables = {};			   // lista di oggetti DataTables
 		
 					</script>'); -- Aggiunto script di base
-		htp.headClose; 
-		gui.ApriBody(idSessione);
+		htp.headClose;
+		gui.ApriBody(idSessione, defaultModal);
 	end Apripagina;
 
-	procedure ApriBody(idSessione varchar2) is
+	procedure ApriBody(idSessione varchar2, defaultModal boolean default true) is
 		username VARCHAR2(20);
 	begin
 
 		htp.print('<body>');
-		gui.modalPopup; 
+		
+		if defaultModal then
+			gui.modalPopup;
+		end if; 
 
 		if idSessione = '-1' then --Sessione ospite
 			gui.topbar(-1, '', '');	
@@ -121,12 +124,33 @@ create or replace PACKAGE BODY gui as
 
 		gui.apriDiv (ident => 'modal');
 			gui.aggiungiIntestazione (testo => 'Sei sicuro?');
-			gui.aCapo();
-				gui.apriDiv (ident => 'modal-button');
+			gui.aCapo(); 
+			
+			gui.apriDiv (ident => 'modal-button');  -- Bottoni si no
+			gui.chiudiDiv;
+		gui.chiudiDiv; 
+		
+	END modalPopup; 
+
+	procedure apriModalPopup (
+		testo varchar2 default ''
+	)is
+	BEGIN 
+
+		gui.apriDiv (ident => 'modal');  
+			gui.aggiungiIntestazione (testo => testo);
+			gui.aCapo();  
+		
+	END apriModalPopup;
+
+	procedure chiudiModalPopup is
+	BEGIN 
+
+			gui.apriDiv (ident => 'modal-button');  -- Bottoni si no
 			gui.chiudiDiv;
 		gui.chiudiDiv;
 		
-	END modalPopup; 
+	END chiudiModalPopup;
 	
 
 	procedure BottoneTopBar(testo varchar2 default '', nome varchar2 default '', valore varchar2 default '') is
@@ -753,39 +777,39 @@ BEGIN
 
 	end aggiungiCampoForm;	
 
-procedure aggiungiGruppoInput is
-BEGIN
-	gui.APRIDIV(classe => 'form-row');
-		gui.APRIDIV (classe => 'input-group');
-END aggiungiGruppoInput; 
+	procedure aggiungiGruppoInput is
+	BEGIN
+		gui.APRIDIV(classe => 'form-row');
+			gui.APRIDIV (classe => 'input-group');
+	END aggiungiGruppoInput; 
 
-procedure chiudiGruppoInput is
-BEGIN
-	gui.CHIUDIDIV; 
-	gui.CHIUDIDIV; 
-END chiudiGruppoInput; 
+	procedure chiudiGruppoInput is
+	BEGIN
+		gui.CHIUDIDIV; 
+		gui.CHIUDIDIV; 
+	END chiudiGruppoInput; 
 
-procedure aggiungiBottoneSubmit (value VARCHAR2 default '') is
-BEGIN
-	gui.APRIDIV(classe => 'form-submit');   
-		/*Nome è vuoto perchè altrimenti aggiunge 
-			pure il pulsante nell'url*/
-		gui.AGGIUNGIINPUT (nome => '', tipo => 'submit', value => value);
-	gui.CHIUDIDIV;
-END aggiungiBottoneSubmit; 
+	procedure aggiungiBottoneSubmit (value VARCHAR2 default '') is
+	BEGIN
+		gui.APRIDIV(classe => 'form-submit');   
+			/*Nome è vuoto perchè altrimenti aggiunge 
+				pure il pulsante nell'url*/
+			gui.AGGIUNGIINPUT (nome => '', tipo => 'submit', value => value);
+		gui.CHIUDIDIV;
+	END aggiungiBottoneSubmit; 
 
------------------- Aggiunto per fare delle prove per le procedure nel gruppo operazioni
-procedure apriElementoPulsanti is
-begin
-	htp.prn('<td>');
+	------------------ Aggiunto per fare delle prove per le procedure nel gruppo operazioni
+	procedure apriElementoPulsanti is
+	begin
+		htp.prn('<td>');
 
-end apriElementoPulsanti;
+	end apriElementoPulsanti;
 
 
-procedure chiudiElementoPulsanti is
-begin
-	htp.prn(' </td>');
-end chiudiElementoPulsanti;
+	procedure chiudiElementoPulsanti is
+	begin
+		htp.prn(' </td>');
+	end chiudiElementoPulsanti;
 
 	-----------------
 
@@ -934,6 +958,19 @@ end chiudiElementoPulsanti;
 			gui.Reindirizza(costanti.URL||'gui.homePage?p_success=LOF');
 		end if;
 	end LogOut;
+
+	procedure AggiungiChart(ident varchar2, scriptJS varchar2) is
+	begin
+		gui.apriDiv;
+			htp.prn('<canvas id="'||ident||'"></canvas>');
+		gui.chiudiDiv;
+
+		htp.prn('<script>
+
+				new Chart(document.getElementById("myChart"), '||scriptJS||');
+				
+				</script>');
+	end;
 
 end gui;
 --tipo VARCHAR2 default 'text', classeIcona VARCHAR2 default '', nome VARCHAR2, required BOOLEAN default true, ident VARCHAR2 default '', placeholder VARCHAR2 default '',tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '', placeholder VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '', readonly boolean default False, selected boolean default false, step varchar default null
