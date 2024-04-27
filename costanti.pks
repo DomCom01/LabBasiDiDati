@@ -84,22 +84,20 @@ create or replace PACKAGE costanti as
 
 function mostraConferma(url) {
 
-   var modal = document.getElementById("modal");
+   var modal = document.getElementById("modal-wrapper");
 
    modal.querySelector("#modal-button").innerHTML = "<button onclick=\"apriURL('" + url + "')\">Sì</button> " + 
                                 "<button onclick=\"annullaEliminazione(this.parentNode.parentNode)\">No</button>";
-   modal.style.display = "block"; 
-   modal.parentNode.style.backgroundColor = "rgba(0, 0, 0, 0.8)"; 
+   modal.style.display = "flex";
   }
 
-    function apriURL(url) {
-      window.location.href = url; // Apre l'URL nella stessa finestra
-    }
+  function apriURL(url) {
+    window.location.href = url; // Apre l'URL nella stessa finestra
+  }
 
-  function annullaEliminazione(rigaConferma) {
+  function annullaEliminazione(modal) {
       // Rimuove la riga di conferma se viene cliccato no
-      rigaConferma.style.display = "none";
-      rigaConferma.parentNode.style.backgroundColor = "#e3e3e3";
+      modal.parentNode.style.display = "none";
   }
 
   // Funzione per nascondere il popup
@@ -111,20 +109,27 @@ function mostraConferma(url) {
 
   stile constant varchar(32767) := '
    
-  #modal {
-    position : fixed; 
+  #modal-wrapper{
+    position : fixed;
+    display : none;
+    left: 0px;
+    top:0px;
+    height:100vh;
+    width:100vw;
+    z-index: 989;
+    background-color: rgba(0, 0, 0, 0.65);
+    justify-content: center;
+    align-items: center;
+  }
+
+
+  #modal { 
     width : 30vw; 
     height : 20vh; 
-    display : none; 
     background-color : white; 
-    color : black; 
-    top: 50%; 
-    left : 50%; 
-    transform: translate(-50%, -50%);
+    color : black;
     border-radius: 30px;
-    padding : 1.5em; 
-    background-color: rgba(black, .8);
-    backdrop-filter: blur(10px); 
+    padding : 1.5em;
     transition : opacity 0.2s ease-out;
     z-index: 990;
   }
@@ -310,6 +315,7 @@ body{
   background-color: #e3e3e3;
   box-sizing: border-box;
   overflow-x:hidden;
+  z-index : 1;
 }
 
   .container{

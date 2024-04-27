@@ -121,14 +121,15 @@ create or replace PACKAGE BODY gui as
 		testo varchar2 default ''
 	)IS
 	BEGIN 
-
-		gui.apriDiv (ident => 'modal');
-			gui.aggiungiIntestazione (testo => 'Sei sicuro?');
-			gui.aCapo(); 
-			
-			gui.apriDiv (ident => 'modal-button');  -- Bottoni si no
+		gui.apriDiv (ident => 'modal-wrapper');
+			gui.apriDiv (ident => 'modal');
+				gui.aggiungiIntestazione (testo => 'Sei sicuro?');
+				gui.aCapo(); 
+				
+				gui.apriDiv (ident => 'modal-button');  -- Bottoni si no
+				gui.chiudiDiv;
 			gui.chiudiDiv;
-		gui.chiudiDiv; 
+		gui.chiudiDiv;
 		
 	END modalPopup; 
 
