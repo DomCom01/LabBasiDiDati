@@ -120,6 +120,7 @@ function annullaEliminazione(rigaConferma) {
     background-color: rgba(black, .8);
     backdrop-filter: blur(10px); 
     transition : opacity 0.2s ease-out;
+    z-index: 990;
   }
 
   #modal h1{
@@ -213,7 +214,7 @@ function annullaEliminazione(rigaConferma) {
   padding: 1px 0px 1px 0px;
   top:0px;
   left:0px;
-  z-index:999; /*mi assicuro che la top bar sia sempre il primo elemento della pagina*/   
+  z-index:1; /*mi assicuro che la top bar sia sempre il primo elemento della pagina*/   
 }
 
 a{

@@ -6,7 +6,12 @@ type StringArray is table of varchar2(100) not null;
 
 emptyArray StringArray;
 
-procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione VARCHAR default '-1',  scriptJS VARCHAR2 default '');
+	procedure ApriPagina(
+		titolo varchar2 default 'Senza titolo',
+		idSessione VARCHAR default '-1',
+		scriptJS VARCHAR2 default '',
+		defaultModal boolean default true
+	);
 
 	procedure indirizzo(indirizzo VARCHAR2 default '');
 	procedure chiudiIndirizzo;
@@ -18,7 +23,8 @@ procedure ApriPagina(titolo varchar2 default 'Senza titolo', idSessione VARCHAR 
 		volte number default 1
 	);
 	procedure apribody (
-		idsessione varchar2
+		idsessione varchar2,
+		defaultModal boolean default true
 	);
 
 	procedure chiudipagina (
@@ -223,5 +229,20 @@ PROCEDURE aggiungiSelezioneMultipla(
 		iduser int,
 		ruolo  varchar2
 	);
+
+---------------------- Statistiche
+
+	procedure AggiungiChart(
+		ident varchar2,
+		scriptJS varchar2
+	);
+
+----------------------- Modal
+
+	procedure apriModalPopup (
+		testo varchar2 default ''
+	);
+
+	procedure chiudiModalPopup;
 
 end gui;
