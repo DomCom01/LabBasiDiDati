@@ -116,17 +116,17 @@ create or replace PACKAGE BODY gui as
 
 	procedure modalPopup (
 		testo varchar2 default ''
-	)is
+	)IS
 	BEGIN 
 
-		gui.apriDiv (ident => 'modal');  
+		gui.apriDiv (ident => 'modal');
 			gui.aggiungiIntestazione (testo => 'Sei sicuro?');
-			gui.aCapo(); 
-				gui.apriDiv (ident => 'modal-button');  
-				gui.chiudiDiv; 
-			gui.chiudiDiv; 
+			gui.aCapo();
+				gui.apriDiv (ident => 'modal-button');
+			gui.chiudiDiv;
+		gui.chiudiDiv;
 		
-		END modalPopup; 
+	END modalPopup; 
 	
 
 	procedure BottoneTopBar(testo varchar2 default '', nome varchar2 default '', valore varchar2 default '') is
@@ -562,7 +562,7 @@ END AggiungiPulsanteGenerale;
 		ids stringArray DEFAULT emptyArray,
 		names stringArray DEFAULT emptyArray,
 		hiddenParameter VARCHAR2 DEFAULT '',
-		hiddenParameterSelected StringArray default gui.StringArray()
+		parametriSelezionati StringArray default gui.StringArray()
 	) IS
 		isSelected BOOLEAN;
     BEGIN
@@ -582,8 +582,8 @@ END AggiungiPulsanteGenerale;
 
 				FOR i IN 1..ids.count LOOP
 					isSelected := FALSE;
-					FOR j IN 1..hiddenParameterSelected.count LOOP
-						IF ids(i) = hiddenParameterSelected(j) THEN
+					FOR j IN 1..parametriSelezionati.count LOOP
+						IF ids(i) = parametriSelezionati(j) THEN
 							isSelected := TRUE;
 							EXIT;
 						END IF;

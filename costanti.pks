@@ -96,11 +96,17 @@ function mostraConferma(url) {
       window.location.href = url; // Apre l'URL nella stessa finestra
     }
 
-function annullaEliminazione(rigaConferma) {
-    // Rimuove la riga di conferma se viene cliccato no
-    rigaConferma.style.display = "none";
-    rigaConferma.parentNode.style.backgroundColor = "#e3e3e3";
-}
+  function annullaEliminazione(rigaConferma) {
+      // Rimuove la riga di conferma se viene cliccato no
+      rigaConferma.style.display = "none";
+      rigaConferma.parentNode.style.backgroundColor = "#e3e3e3";
+  }
+
+  // Funzione per nascondere il popup
+  function nascondiPopup() {
+      var popup = document.getElementById("popup-message");
+      popup.style.display = "none";
+  }
   ]';
 
   stile constant varchar(32767) := '
@@ -120,6 +126,7 @@ function annullaEliminazione(rigaConferma) {
     background-color: rgba(black, .8);
     backdrop-filter: blur(10px); 
     transition : opacity 0.2s ease-out;
+    z-index: 9999;
   }
 
   #modal h1{

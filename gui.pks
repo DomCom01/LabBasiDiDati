@@ -180,7 +180,7 @@ PROCEDURE aggiungiSelezioneMultipla(
 	ids stringArray DEFAULT emptyArray,
 	names stringArray DEFAULT emptyArray,
 	hiddenParameter VARCHAR2 DEFAULT '',
-	hiddenParameterSelected StringArray default gui.StringArray()
+	parametriSelezionati StringArray default gui.StringArray()
 );
 -------------------
 	procedure AggiungiCampoFormHidden(tipo VARCHAR2 default 'text', 
