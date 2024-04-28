@@ -584,7 +584,8 @@ END AggiungiPulsanteGenerale;
 		ids stringArray DEFAULT emptyArray,
 		names stringArray DEFAULT emptyArray,
 		hiddenParameter VARCHAR2 DEFAULT '',
-		parametriSelezionati StringArray default gui.StringArray()
+		parametriSelezionati StringArray default gui.StringArray(),
+		ident VARCHAR2 default ''
 	) IS
 		isSelected BOOLEAN;
     BEGIN
@@ -612,12 +613,12 @@ END AggiungiPulsanteGenerale;
 					END LOOP;
 
 					gui.apriDiv(ident => 'option');
-						htp.prn('<input type="checkbox" id="' || ids(i) || '" value="' || ids(i) || '"');
+						htp.prn('<input type="checkbox" id="' || ident || ids(i) || '" value="' || ids(i) || '"');
 						IF isSelected THEN
 							htp.prn(' checked');
 						END IF;
 						htp.prn(' onchange="updateHiddenInput(' || chr(39) || hiddenParameter || chr(39) || ', this)"/>');
-						htp.prn('<label for="' || ids(i) || '">' || names(i) || '</label>');
+						htp.prn('<label for="' || ident || ids(i) || '">' || names(i) || '</label>');
 						IF isSelected THEN
 						
 							htp.prn('<script>updateHiddenInput(' || chr(39) || hiddenParameter || chr(39) || ', document.getElementById(' || chr(39) || ids(i) || chr(39) || '));</script>');
@@ -672,10 +673,10 @@ END AggiungiPulsanteGenerale;
 
 	/*Form*/
 
-	procedure aggiungiForm (classe VARCHAR2 default '', name VARCHAR2 default '', url VARCHAR2 default '', onsubmit varchar2 default null) IS
+	procedure aggiungiForm (classe VARCHAR2 default '', name VARCHAR2 default '', url VARCHAR2 default '', onSubmit varchar2 default '') IS
 	BEGIN
-		htp.prn ('<form method="GET" class="'||classe||'" name="'||name||'" action="'||url||'" onsubmit="'||onsubmit||'">'); 
-		gui.APRIDIV(classe => 'form-container'); 
+		htp.prn ('<form method="GET" class="'||classe||'" name="'||name||'" action="'||url||'"" onsubmit"'||onSubmit||'">'); 
+			gui.APRIDIV(classe => 'form-container'); 
 	END aggiungiForm;
 
 	procedure chiudiForm IS
