@@ -675,7 +675,7 @@ END AggiungiPulsanteGenerale;
 
 	procedure aggiungiForm (classe VARCHAR2 default '', name VARCHAR2 default '', url VARCHAR2 default '', onSubmit varchar2 default '') IS
 	BEGIN
-		htp.prn ('<form method="GET" class="'||classe||'" name="'||name||'" action="'||url||'"" onsubmit"'||onSubmit||'">'); 
+		htp.prn ('<form method="GET" class="'||classe||'" name="'||name||'" action="'||url||'"" onsubmit="'||onSubmit||'">'); 
 			gui.APRIDIV(classe => 'form-container'); 
 	END aggiungiForm;
 

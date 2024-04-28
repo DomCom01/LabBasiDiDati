@@ -294,10 +294,7 @@ create or replace PACKAGE gui as
 		p_registrazione boolean default false, 
 		idsessione  	varchar default '-1'
 	);
-	procedure logout (
-		iduser int,
-		ruolo  varchar2
-	);
+	procedure LogOut(idSessione varchar2);
 
 ---------------------- Statistiche
 
