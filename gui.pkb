@@ -288,13 +288,10 @@ create or replace PACKAGE BODY gui as
 			gui.bottonePrimario(testo => username ||' | '||ruolo);
 
 			--gui.indirizzo('Link to logica logout');
-				if(ruolo = 'Cliente') then
-					gui.indirizzo(costanti.URL||'gui.LogOut?idUser='||id_user||'&ruolo=00');
-				else
-					gui.indirizzo(costanti.URL||'gui.LogOut?idUser='||id_user||'&ruolo=01');
-				end if;
-					gui.BottonePrimario(testo => 'Logout'); 
-				gui.chiudiIndirizzo;
+				
+			gui.indirizzo(costanti.URL||'gui.LogOut?idSessione='||idSessione);
+				gui.BottonePrimario(testo => 'Logout'); 
+			gui.chiudiIndirizzo;
 
 				--bottone homepage
 			gui.indirizzo (costanti.URL || 'gui.homePage?p_success=S&idSessione='||idSessione||'');
@@ -460,7 +457,7 @@ END AggiungiPulsanteGenerale;
 
 	procedure AggiungiCampoFormHidden(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '', ident varchar2 default '') is
 	BEGIN
-		htp.prn('<input hidden type="'||tipo||'" name="'|| nome ||'" value="'||value||'" ident="'||ident||'">');
+		htp.prn('<input hidden type="'||tipo||'" name="'|| nome ||'" value="'||value||'" id="'||ident||'">');
 	end AggiungiCampoFormHidden;
 
 	procedure ApriSelectFormFiltro(nome varchar2, placeholder VARCHAR2, firstNull boolean default True) IS
@@ -675,9 +672,9 @@ END AggiungiPulsanteGenerale;
 
 	/*Form*/
 
-	procedure aggiungiForm (classe VARCHAR2 default '', name VARCHAR2 default '', url VARCHAR2 default '') IS
+	procedure aggiungiForm (classe VARCHAR2 default '', name VARCHAR2 default '', url VARCHAR2 default '', onsubmit varchar2 default null) IS
 	BEGIN
-		htp.prn ('<form method="GET" class="'||classe||'" name="'||name||'" action="'||url||'"">'); 
+		htp.prn ('<form method="GET" class="'||classe||'" name="'||name||'" action="'||url||'" onsubmit="'||onsubmit||'">'); 
 		gui.APRIDIV(classe => 'form-container'); 
 	END aggiungiForm;
 
@@ -951,9 +948,9 @@ BEGIN
 			    gui.reindirizza(costanti.URL||'gui.homePage?p_success=L');  -- errore ancora da risolvere'
 	end HomePage;
 
-	procedure LogOut(idUser int, ruolo varchar2) is
+	procedure LogOut(idSessione varchar2) is
 	begin
-		if loginlogout.terminaSessione(idUser, ruolo) THEN
+		if loginlogout.terminaSessione(idSessione) THEN
 			gui.Reindirizza(costanti.URL||'gui.homePage?p_success=LOS');
 		else
 			gui.Reindirizza(costanti.URL||'gui.homePage?p_success=LOF');

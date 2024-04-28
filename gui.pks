@@ -165,7 +165,7 @@ procedure chiudiElementoPulsanti;
 
 --Form
 
-procedure aggiungiForm(classe VARCHAR2 default '', name VARCHAR2 default '', url VARCHAR2 default '');
+procedure aggiungiForm (classe VARCHAR2 default '', name VARCHAR2 default '', url VARCHAR2 default '', onsubmit varchar2 default null);
 procedure AggiungiInput(tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '', placeholder VARCHAR2 default '', 
 	required BOOLEAN default false, classe VARCHAR2 default '', ident VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', 
 	massimo VARCHAR2 default '', readonly boolean default False, selected boolean default False, step varchar default null);
@@ -225,10 +225,8 @@ PROCEDURE aggiungiSelezioneMultipla(
 		p_registrazione boolean default false, 
 		idsessione  varchar default '-1'
 	);
-	procedure logout (
-		iduser int,
-		ruolo  varchar2
-	);
+
+	procedure LogOut(idSessione varchar2);
 
 ---------------------- Statistiche
 
