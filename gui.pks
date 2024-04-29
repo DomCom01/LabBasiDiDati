@@ -111,7 +111,8 @@ create or replace PACKAGE gui as
 	
 	procedure AggiungiPulsanteGenerale(
 		collegamento 	VARCHAR2 DEFAULT '', /*  '''collegamento'''  */
-		testo 			VARCHAR2
+		testo 			VARCHAR2,
+		ident_modal varchar2 default 'modal'
 	);
 	
 	procedure chiudiElementoPulsanti;
@@ -306,7 +307,8 @@ create or replace PACKAGE gui as
 ----------------------- Modal
 
 	procedure apriModalPopup (
-		testo 			varchar2 default ''
+		testo 			varchar2 default '',
+		ident varchar2 default 'modal'
 	);
 
 	procedure chiudiModalPopup;

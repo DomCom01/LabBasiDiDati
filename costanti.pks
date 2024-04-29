@@ -1,7 +1,7 @@
 SET DEFINE OFF;
 create or replace PACKAGE costanti as
 
-  URL CONSTANT VARCHAR(100) := 'http://131.114.73.203:8080/apex/d_commiso.';
+  URL CONSTANT VARCHAR(100) := 'http://131.114.73.203:8080/apex/l_ceccotti.';
 
   -- Funzione Arcangelo;
   dropdownScript constant VARCHAR2(32767) := '
@@ -82,12 +82,17 @@ create or replace PACKAGE costanti as
     }
   }
 
-function mostraConferma(url) {
+  function mostraConferma(url, id_modal) {
 
-   var modal = document.getElementById("modal-wrapper");
+   const modal = document.getElementById(id_modal);
 
-   modal.querySelector("#modal-button").innerHTML = "<button onclick=\"apriURL('" + url + "')\">Sì</button> " + 
-                                "<button onclick=\"annullaEliminazione(this.parentNode.parentNode)\">No</button>";
+   if (id_modal === "modal"){
+   
+   modal.querySelector(".modal-button").innerHTML = "<button onclick=\"apriURL('" + url + "')\">Sì</button> " + 
+                        "<button onclick=\"annullaEliminazione(this.parentNode.parentNode)\">No</button>";
+      
+   }
+  
    modal.style.display = "flex";
   }
 
@@ -109,7 +114,7 @@ function mostraConferma(url) {
 
   stile constant varchar(32767) := '
    
-  #modal-wrapper{
+  .modal-wrapper{
     position : fixed;
     display : none;
     left: 0px;
@@ -123,9 +128,9 @@ function mostraConferma(url) {
   }
 
 
-  #modal { 
+  .modal { 
     width : 30vw; 
-    height : 20vh; 
+    min-height : 20vh; 
     background-color : white; 
     color : black;
     border-radius: 30px;
@@ -134,17 +139,22 @@ function mostraConferma(url) {
     z-index: 990;
   }
 
-  #modal h1{
-    text-align : center; 
+  .modal .form-container{
+      box-shadow: none;
+      padding: 10px;
   }
 
-  #modal-button{
+  .modal h1{
+    text-align : center;
+  }
+
+  .modal-button{
     display: block; 
     height : 4em;
     padding : 1.1em; 
   }
 
-  #modal-button button{
+  .modal-button button{
       width : 20%; 
       height: 50%; 
       background-color : black; 
@@ -153,7 +163,7 @@ function mostraConferma(url) {
       border-radius : 10px; 
     }
 
-  #modal-button button:last-child{ 
+  .modal-button button:last-child{ 
       float:right;
     }
 

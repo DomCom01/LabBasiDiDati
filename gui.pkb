@@ -121,12 +121,12 @@ create or replace PACKAGE BODY gui as
 		testo varchar2 default ''
 	)IS
 	BEGIN 
-		gui.apriDiv (ident => 'modal-wrapper');
-			gui.apriDiv (ident => 'modal');
+		gui.apriDiv (classe => 'modal-wrapper', ident => 'modal');
+			gui.apriDiv (classe => 'modal');
 				gui.aggiungiIntestazione (testo => 'Sei sicuro?');
 				gui.aCapo(); 
 				
-				gui.apriDiv (ident => 'modal-button');  -- Bottoni si no
+				gui.apriDiv (classe => 'modal-button');  -- Bottoni si no
 				gui.chiudiDiv;
 			gui.chiudiDiv;
 		gui.chiudiDiv;
@@ -134,11 +134,12 @@ create or replace PACKAGE BODY gui as
 	END modalPopup; 
 
 	procedure apriModalPopup (
-		testo varchar2 default ''
+		testo varchar2 default '',
+		ident varchar2 default 'modal'
 	)is
 	BEGIN 
-
-		gui.apriDiv (ident => 'modal');  
+		gui.apriDiv (classe => 'modal-wrapper', ident => ident);
+		gui.apriDiv (classe => 'modal');
 			gui.aggiungiIntestazione (testo => testo);
 			gui.aCapo();  
 		
@@ -147,8 +148,7 @@ create or replace PACKAGE BODY gui as
 	procedure chiudiModalPopup is
 	BEGIN 
 
-			gui.apriDiv (ident => 'modal-button');  -- Bottoni si no
-			gui.chiudiDiv;
+		gui.chiudiDiv;
 		gui.chiudiDiv;
 		
 	END chiudiModalPopup;
@@ -416,9 +416,9 @@ BEGIN
     </button>');
 END AggiungiPulsanteCancellazione;
 
-procedure AggiungiPulsanteGenerale(collegamento VARCHAR2 DEFAULT '', testo VARCHAR2) IS
+procedure AggiungiPulsanteGenerale(collegamento VARCHAR2 DEFAULT '', testo VARCHAR2, ident_modal varchar2 default 'modal') IS
 BEGIN
-    htp.prn('<button onclick="mostraConferma('||collegamento||')">
+    htp.prn('<button onclick="mostraConferma('||collegamento||', '||CHR(39)||ident_modal||CHR(39)||')">
     '||testo||'
     </button>');
 END AggiungiPulsanteGenerale;
