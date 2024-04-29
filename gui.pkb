@@ -278,6 +278,20 @@ create or replace PACKAGE BODY gui as
 			proceduresNames => gui.StringArray ('Gruppo4.inserimentoRevisione?idSessione='||idSessione||'', 'Gruppo4.visualizzazioneRevisione?idSessione='||idSessione||'', 
 			'Gruppo4.statisticheRev?idSessione='||idSessione||'')); 
 
+		gui.dropdowntopbar(
+			titolo => 'Inserimento dati', 
+			names => gui.StringArray(
+				'Link', 
+				'Link',
+				'Link'
+			),
+			proceduresNames => gui.StringArray (
+				'Link',
+				'Link',
+				'Link'
+			)
+		);
+
 
 		gui.CHIUDIDIV;
 		
