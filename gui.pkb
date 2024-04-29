@@ -102,6 +102,17 @@ create or replace PACKAGE BODY gui as
 			}
 		}
 
+		window.onclick = function(event) {
+			const modals = document.getElementsByClassName("modal-wrapper");
+
+			for(modal of modals){
+				if (event.target == modal) {
+					modal.style.display = "none";
+				}
+			}
+
+		}
+
 		</script>');
 		htp.print('</body>');
 
