@@ -15,6 +15,7 @@ create or replace PACKAGE BODY gui as
 			<meta charset="utf-8">
 			<meta name="viewport" content="width=device-width, initial-scale=1">
 		');
+		htp.prn('<link rel="icon" type="image/x-icon" href="https://drive.google.com/thumbnail?id=1GFHoVYrWo5xBrHAO0u1NWeh0FcTISR5n">');
 		htp.prn('<link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
 				<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
 				<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>');
@@ -845,6 +846,29 @@ BEGIN
 		END LOOP;
 	end aCapo;
 
+	--Funzione del gruppo 1 per convertire una stringa in un array
+	function stringToArray(string in varchar2, delimiter in varchar2 default ';')
+		return gui.StringArray
+		is outputArray gui.StringArray:=gui.StringArray();
+		begin
+			for x in (
+				WITH rws AS (
+						SELECT string FROM dual
+					)
+					SELECT regexp_substr(
+				string,
+				'[^'||delimiter||']+',
+				1,
+				LEVEL
+			) value
+					FROM rws
+					CONNECT BY LEVEL <= LENGTH(string) - LENGTH(REPLACE(string, delimiter)) + 1
+				) loop
+					outputArray.extend;
+					outputArray(outputArray.COUNT):=x.value;
+					end loop;   
+			RETURN outputArray;
+    end stringToArray;
 
 	procedure HomePage(p_success varchar2 default ' ', cEmail VARCHAR2 default null, p_password varchar2 default null, tipo_utente varchar2 default null, p_registrazione boolean default false, idSessione varchar default '-1') is
 		idSess int;
@@ -888,26 +912,34 @@ BEGIN
 				htp.prn('<h2 style="color: black; display: flex; justify-content: center; align-items: center;">
 						Nella barra in alto trovi tutte le operazioni disponibili, divise nei vari gruppi
 						</h2>');
-				--gui.aggiungiIntestazione('Nella barra in alto trovi tutte le operazioni disponibili, divise nei vari gruppi', 'h3');
-			    /*gui.APRITABELLA(elementi =>gui.STRINGARRAY(' ',' ', ' ', ' ', ' '));
+				htp.prn('<h2 style="color: black; display: flex; justify-content: center; align-items: center;">
+				Qui, invece, trovi tutte le operazioni in base al tuo ruolo
+				</h2>');
+				htp.prn('<img class="taxi-img" src="https://i.imgur.com/7Enpiv9.png"/>');
+			    gui.APRITABELLA(elementi =>gui.STRINGARRAY(' ',' ', ' ', ' '));
 			    counterRowTest:=0;
 			    for url in (SELECT * FROM PERMISSIONS) loop
 				    utentiPermission:=gui.STRINGARRAY();
-				    utentiPermission:=UTILITY.STRINGTOARRAY(url.USERS);
+				    utentiPermission:=gui.STRINGTOARRAY(url.USERS);
 				    if(ruolo  member of utentiPermission) then
 				        if(counterRowTest=0) then
                             gui.AGGIUNGIRIGATABELLA();
-                        end if;
-				        counterRowTest:=counterRowTest+1;
-					    gui.AggiungiBottoneTabella(url.name,url=>url.PROCEDUREURL||idSessione);
-					    if(counterRowTest=5) then
+							gui.AggiungiBottoneTabella(url.name,url=>url.PROCEDUREURL||idSessione);
+							counterRowTest:=counterRowTest+1;
+							gui.aggiungiElementoTabella(' ');
+							gui.aggiungiElementoTabella(' ');
+						elsif counterRowTest = 1 then
+							gui.AggiungiBottoneTabella(url.name,url=>url.PROCEDUREURL||idSessione);
+							counterRowTest:=counterRowTest+1;
+						end if;
+					    if(counterRowTest=2) then
                             gui.ChiudiRigaTabella();
                             counterRowTest:=0;
                         end if;
 					end if;
-					end loop;
-			    gui.CHIUDITABELLA();*/
-				htp.prn('<img class="taxi-img" src="https://i.imgur.com/7Enpiv9.png"/>');
+				end loop;
+			    gui.CHIUDITABELLA();
+				
 			elsif p_success = 'LOF' then
 				gui.aggiungiPopup(false, 'Logout non riuscito, qualcosa è andato storto');
 				gui.acapo(2);
