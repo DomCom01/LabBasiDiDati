@@ -230,9 +230,9 @@ create or replace PACKAGE BODY gui as
 			gui.apriDiv(classe => 'topbar-dropdown');
 				gui.BottoneTopBar(testo => 'Gruppo 1');
 				gui.apriDiv(ident => 'topbardropdown-content', classe => 'topbardropdown-content');
-					for i in 1..3 loop
-						gui.indirizzo('Link1');
-							htp.prn('<span>Link1</span>');
+					for url in (SELECT * FROM PERMISSIONS WHERE PERMISSIONS.NUMBERGROUP=1) loop
+						gui.indirizzo(url.PROCEDUREURL||idSessione);
+							htp.prn('<span>'||url.name||'</span>');
 						gui.chiudiIndirizzo;
 					end loop;
 				gui.chiudiDiv();
@@ -243,56 +243,47 @@ create or replace PACKAGE BODY gui as
 				gui.BottoneTopBar(testo => 'Gruppo 2');
 				gui.apriDiv(ident => 'topbardropdown-content', classe => 'topbardropdown-content');
 					for i in 1..3 loop
-						gui.indirizzo('Link1');
-							htp.prn('<span>Link1</span>');
+						for url in (SELECT * FROM PERMISSIONS WHERE PERMISSIONS.NUMBERGROUP=2) loop
+						gui.indirizzo(url.PROCEDUREURL||idSessione);
+							htp.prn('<span>'||url.name||'</span>');
+						gui.chiudiIndirizzo;
+					end loop;
+					end loop;
+				gui.chiudiDiv();
+			gui.chiudiDiv();
+
+			gui.apriDiv(classe => 'topbar-dropdown');
+				gui.BottoneTopBar(testo => 'Gruppo 3');
+				gui.apriDiv(ident => 'topbardropdown-content', classe => 'topbardropdown-content');
+					for url in (SELECT * FROM PERMISSIONS WHERE PERMISSIONS.NUMBERGROUP=3) loop
+						gui.indirizzo(url.PROCEDUREURL||idSessione);
+							htp.prn('<span>'||url.name||'</span>');
 						gui.chiudiIndirizzo;
 					end loop;
 				gui.chiudiDiv();
 			gui.chiudiDiv();
 
-			gui.dropdowntopbar(
-			titolo => 'gruppo 3', 
-			names => gui.StringArray(
-				'Registrazione', 
-				'Visualizza clienti',
-				'Modifica cliente',
-				'Visualizza Profilo', 
-				'Visualizza convenzioni',
-				'Associa convenzione', 
-				'Inserisci convenzione', 
-				'Statistiche convenzioni'
-			),
-			proceduresNames => gui.StringArray (
-				'gruppo3.registrazioneCliente',
-				'gruppo3.visualizzaClienti?idSess=' || idSessione || '',
-				'gruppo3.modificaCliente?idSess=' || idSessione || '&cl_id=' || SESSIONHANDLER.getIDUser(idSessione) ||'', 
-				'gruppo3.visualizzaProfilo?idSess=' || idSessione || '&id=' || SESSIONHANDLER.getIDUser(idSessione) || '',
-				'gruppo3.visualizzaConvenzioni?idSess=' || idSessione || '', 
-				'gruppo3.associaConvenzione?idSess=' || idSessione || '',
-				'gruppo3.inserisciConvenzione?idSess=' || idSessione || '',
-				'gruppo3.dettagliConvenzioni?idSess=' || idSessione || ''
-			)
-		);
+		    gui.apriDiv(classe => 'topbar-dropdown');
+				gui.BottoneTopBar(testo => 'Gruppo 4');
+				gui.apriDiv(ident => 'topbardropdown-content', classe => 'topbardropdown-content');
+					for url in (SELECT * FROM PERMISSIONS WHERE PERMISSIONS.NUMBERGROUP=4) loop
+						gui.indirizzo(url.PROCEDUREURL||idSessione);
+							htp.prn('<span>'||url.name||'</span>');
+						gui.chiudiIndirizzo;
+					end loop;
+				gui.chiudiDiv();
+			gui.chiudiDiv();
 
-
-			gui.dropdowntopbar(titolo => 'gruppo 4', names => gui.StringArray('Inserimento Revisione', 'Visualizzazione Revisioni', 'Statistiche revisioni'),
-			proceduresNames => gui.StringArray ('Gruppo4.inserimentoRevisione?idSessione='||idSessione||'', 'Gruppo4.visualizzazioneRevisione?idSessione='||idSessione||'', 
-			'Gruppo4.statisticheRev?idSessione='||idSessione||'')); 
-
-		gui.dropdowntopbar(
-			titolo => 'Inserimento dati', 
-			names => gui.StringArray(
-				'Link', 
-				'Link',
-				'Link'
-			),
-			proceduresNames => gui.StringArray (
-				'Link',
-				'Link',
-				'Link'
-			)
-		);
-
+			gui.apriDiv(classe => 'topbar-dropdown');
+				gui.BottoneTopBar(testo => 'Gruppo Inserimento dati');
+				gui.apriDiv(ident => 'topbardropdown-content', classe => 'topbardropdown-content');
+					for url in (SELECT * FROM PERMISSIONS WHERE PERMISSIONS.NUMBERGROUP=5) loop
+						gui.indirizzo(url.PROCEDUREURL||idSessione);
+							htp.prn('<span>'||url.name||'</span>');
+						gui.chiudiIndirizzo;
+					end loop;
+				gui.chiudiDiv();
+			gui.chiudiDiv();
 
 		gui.CHIUDIDIV;
 		
