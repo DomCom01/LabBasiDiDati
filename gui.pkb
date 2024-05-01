@@ -242,12 +242,10 @@ create or replace PACKAGE BODY gui as
 			gui.apriDiv(classe => 'topbar-dropdown');
 				gui.BottoneTopBar(testo => 'Gruppo 2');
 				gui.apriDiv(ident => 'topbardropdown-content', classe => 'topbardropdown-content');
-					for i in 1..3 loop
 						for url in (SELECT * FROM PERMISSIONS WHERE PERMISSIONS.NUMBERGROUP=2) loop
 						gui.indirizzo(url.PROCEDUREURL||idSessione);
 							htp.prn('<span>'||url.name||'</span>');
 						gui.chiudiIndirizzo;
-					end loop;
 					end loop;
 				gui.chiudiDiv();
 			gui.chiudiDiv();
@@ -424,9 +422,9 @@ BEGIN
 		</button></a>');
 END AggiungiPulsanteModifica;
 
-procedure AggiungiPulsanteCancellazione(collegamento VARCHAR2 DEFAULT '') IS
+procedure AggiungiPulsanteCancellazione(collegamento VARCHAR2 DEFAULT '', ident_modal varchar2 default 'modal') IS
 BEGIN
-    htp.prn('<button onclick="mostraConferma('||collegamento||')">
+    htp.prn('<button onclick="mostraConferma('||collegamento||', '||CHR(39)||ident_modal||CHR(39)||')">
     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
     <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16l-1.58 14.22A2 2 0 0 1 16.432 22H7.568a2 2 0 0 1-1.988-1.78zm3.345-2.853A2 2 0 0 1 9.154 2h5.692a2 2 0 0 1 1.81 1.147L18 6H6zM2 6h20m-12 5v5m4-5v5"/>
     </svg>
@@ -862,7 +860,7 @@ BEGIN
     end stringToArray;
 
 	procedure HomePage(p_success varchar2 default ' ', cEmail VARCHAR2 default null, p_password varchar2 default null, tipo_utente varchar2 default null, p_registrazione boolean default false, idSessione varchar default '-1') is
-		idSess int;
+		idSess SESSIONIDIPENDENTI.IDSESSIONE%TYPE;
 		ruolo varchar(10);
 		n_ruolo int;
         utentiPermission gui.STRINGARRAY;
@@ -974,20 +972,17 @@ BEGIN
 			gui.acapo;
 				
             elsif p_success <> 'S' then
-
 				if tipo_utente is null then -- in caso non venga scelto nessun ruolo per l'autenticazione
 				    gui.reindirizza(costanti.URL||'gui.homePage?p_success=L');
 				end if;
 
 				idSess := LOGINLOGOUT.AGGIUNGISESSIONE(cEmail,p_password,tipo_utente);
-
-                if idSess is null then
+				if idSess is null then
 				    gui.reindirizza(costanti.URL||'gui.homePage?p_success=L');
 				else
 
-					gui.reindirizza(costanti.URL||'gui.homePage?p_success=S&idSessione='||tipo_utente||idSess||'');
+					gui.reindirizza(costanti.URL||'gui.homePage?p_success=S&idSessione='||idSess);
                 end if;
-
             end if;
 
 		gui.chiudiPagina();
@@ -1021,4 +1016,3 @@ BEGIN
 
 end gui;
 --tipo VARCHAR2 default 'text', classeIcona VARCHAR2 default '', nome VARCHAR2, required BOOLEAN default true, ident VARCHAR2 default '', placeholder VARCHAR2 default '',tipo VARCHAR2 default 'text', nome VARCHAR2, value VARCHAR2 default '', placeholder VARCHAR2 default '', pattern VARCHAR2 default '', minimo VARCHAR2 default '', massimo VARCHAR2 default '', readonly boolean default False, selected boolean default false, step varchar default null
-

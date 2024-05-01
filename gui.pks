@@ -102,7 +102,8 @@ create or replace PACKAGE gui as
 	procedure apriElementoPulsanti;
 
 	procedure AggiungiPulsanteCancellazione(
-		collegamento 	VARCHAR2 default ''  /*  '''collegamento'''  */
+		collegamento 	VARCHAR2 default '',  /*  '''collegamento'''  */
+		ident_modal varchar2 default 'modal'
 	);
 
 	procedure AggiungiPulsanteModifica(
